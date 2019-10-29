@@ -1,23 +1,15 @@
 import * as React from "react";
-import { Provider } from "react-redux";
-import Hello from "./components/hello";
-import { Store } from "./store/store";
+import { Hello } from "./components/hello";
 
-interface Props {
-    store: Store
-}
+interface Props {}
+
 export class App extends React.Component<Props, {}> {
-    private store: Store
-
     constructor(props: Props) {
         super(props);
-        this.store = this.props.store
     }
     public render() {
         return (
-            <Provider store={this.store} >
-                <Hello />
-            </Provider>
+            <Hello />
         );
     }
 }
