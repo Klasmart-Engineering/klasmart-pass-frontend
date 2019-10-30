@@ -44,7 +44,7 @@ interface Props {
   ) => void;
 }
 export default class DropIn extends React.Component<Props> {
-  public wrapper: HTMLElement;
+  public wrapper: HTMLElement | null;
   public instance: Dropin;
 
   constructor(props: Props) {
