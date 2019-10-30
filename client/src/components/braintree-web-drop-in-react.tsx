@@ -24,46 +24,48 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+import {Dropin, Options} from "braintree-web-drop-in";
 import * as BraintreeWebDropIn from "braintree-web-drop-in";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
-export default class DropIn extends React.Component<any, any> {
-  public static displayName = "BraintreeWebDropIn";
+interface Props {
+  options: Options;
+  onInstance?: (braintree: Dropin) => any;
+  onNoPaymentMethodRequestable?: () => void;
+  onPaymentMethodRequestable?: (
+    payload: {
+      type: "CreditCard" | "PayPalAccount";
+      paymentMethodIsSelected: boolean
+    },
+  ) => void;
+  onPaymentOptionSelected?: (
+    payload: { paymentOption: "card" | "paypal" | "paypalCredit" },
+  ) => void;
+}
+export default class DropIn extends React.Component<Props> {
+  public wrapper: HTMLElement;
+  public instance: Dropin;
 
-  public static defaultProps = {
-    preselectVaultedPaymentMethod: true,
-  };
-
-  public wrapper: any;
-  public instance: any;
+  constructor(props: Props) {
+    super(props);
+  }
 
   public async componentDidMount() {
     this.instance = await BraintreeWebDropIn.create({
       container: ReactDOM.findDOMNode(this.wrapper),
-      preselectVaultedPaymentMethod: this.props.preselectVaultedPaymentMethod,
       ...this.props.options,
     });
 
     if (this.props.onNoPaymentMethodRequestable) {
-      this.instance.on(
-        "noPaymentMethodRequestable",
-        this.props.onNoPaymentMethodRequestable,
-      );
+      this.instance.on("noPaymentMethodRequestable", this.props.onNoPaymentMethodRequestable);
     }
     if (this.props.onPaymentMethodRequestable) {
-      this.instance.on(
-        "paymentMethodRequestable",
-        this.props.onPaymentMethodRequestable,
-      );
+      this.instance.on("paymentMethodRequestable", this.props.onPaymentMethodRequestable);
     }
     if (this.props.onPaymentOptionSelected) {
-      this.instance.on(
-        "paymentOptionSelected",
-        this.props.onPaymentOptionSelected,
-      );
+      this.instance.on("paymentOptionSelected", this.props.onPaymentOptionSelected);
     }
-
     if (this.props.onInstance) {
       this.props.onInstance(this.instance);
     }
