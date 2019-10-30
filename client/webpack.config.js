@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
     mode: 'development',
-    entry: ['./src/client-entry.tsx'],
+    entry: ['babel-polyfill','./src/client-entry.tsx'],
     module: {
         rules: [
             {
