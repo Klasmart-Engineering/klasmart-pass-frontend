@@ -30,7 +30,7 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 
 interface Props {
-  options: Options & {container?: any};
+  options: Omit<Options, "container">;
   onInstance?: (braintree: Dropin) => any;
   onNoPaymentMethodRequestable?: () => void;
   onPaymentMethodRequestable?: (
