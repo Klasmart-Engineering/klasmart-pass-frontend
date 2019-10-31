@@ -21,17 +21,18 @@ export class Payment extends React.Component<IProps, IState> {
     public async componentDidMount() {
         // Get a client token for authorization from your server
         const response = await fetch("./token");
-        const clientToken = await response.json(); // If returned as JSON string
+        const { clientToken } = await response.json(); // If returned as JSON string
         console.log(clientToken);
         this.setState({ clientToken });
     }
 
     public async buy() {
+        console.log(this.state.clientToken);
         // Send the nonce to your server
         const { nonce } = await this.instance.requestPaymentMethod();
         const request = {
             method: "POST",
-            headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+            headers: { "Accept": "application/json", "Content-Type": "application/json" },
             body: JSON.stringify(nonce),
         };
         console.log(request);

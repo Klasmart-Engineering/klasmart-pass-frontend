@@ -61,7 +61,7 @@ function main() {
 
     app.post("/payment", async (req: Request, res: Response) => {
         try {
-            const paymentMethodNonce = req.body.payment_method_nonce;
+            const paymentMethodNonce = req.body.nonce;
             if (!paymentMethodNonce) {
                 res.statusCode = 400;
                 res.send({error: true});
