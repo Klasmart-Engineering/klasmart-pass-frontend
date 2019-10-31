@@ -1,4 +1,5 @@
 // tslint:disable:no-console
+import * as bodyParser from "body-parser";
 import { BraintreeGateway, Environment } from "braintree";
 import { Request, Response } from "express";
 import * as express from "express";
@@ -27,7 +28,10 @@ function main() {
     });
 
     const app = express();
+
+    app.use(bodyParser.json());
     app.on("error", (e) => console.error(e));
+
     app.get("/", (req: Request, res: Response) => {
         res.send(`Hello, ${req.ip}!`);
     });

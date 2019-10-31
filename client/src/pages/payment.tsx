@@ -33,7 +33,7 @@ export class Payment extends React.Component<IProps, IState> {
         const request = {
             method: "POST",
             headers: { "Accept": "application/json", "Content-Type": "application/json" },
-            body: JSON.stringify(nonce),
+            body: JSON.stringify({nonce}),
         };
         console.log(request);
         await fetch(`./payment`, request);
