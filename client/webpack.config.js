@@ -43,6 +43,21 @@ module.exports = {
         }),
     ],
     devServer: {
-        // disableHostCheck: true
+        proxy: { 
+            '/token': 'http://localhost:8000',
+            '/payment': 'http://localhost:8000',
+            '/auth': {
+                target: 'https://seoul-beta.auth.badanamu.net/',
+                secure: false,
+                changeOrigin: true,
+                pathRewrite: {'^/auth' : '/v1'}
+            },
+            '/api': {
+                target: 'https://seoul-beta.api.badanamu.net/',
+                secure: false,
+                changeOrigin: true,
+                pathRewrite: {'^/api' : '/v1'}
+            }
+        }
     },
 };
