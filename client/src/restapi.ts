@@ -56,7 +56,7 @@ export class RestAPI {
             }
             if (this.accessTokenExpire !== undefined && this.refreshToken !== undefined) {
                 const autoRefreshTime = this.accessTokenExpire - 5 * 60 * 1000;
-                const delay = Math.max(0, Date.now());
+                const delay = Math.max(0, autoRefreshTime - Date.now());
                 setTimeout(() => this.autoRefreshSesion(), delay);
             } else {
                 console.log("Could not schedule auto-refresh");
