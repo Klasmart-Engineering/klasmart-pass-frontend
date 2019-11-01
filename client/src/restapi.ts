@@ -1,25 +1,29 @@
-import { Store } from "redux";
+import Cookie from "js-cookie";
+interface State {
+    accessToken?: any; // string;
+    accessTokenExpire?: any; // number;
+    accountId?: any; // string;
+    deviceId?: any; // string;
+    email?: any; // string;
+    refreshToken?: any; // string;
+    refreshTokenExpire?: any; // number;
+    sessionId?: any; // string;
+}
+
 export class RestAPI {
-    private static singleton: RestAPI;
+    private static singleton?: RestAPI;
     private authPrefix = "/auth/";
     private apiPrefix = "/api/";
 
     private test: boolean = false;
 
-    // tslint:disable-next-line:variable-name
-    private _deviceId?: string;
-
-    private sessionId?: string;
-    private accountId?: string;
-    private email?: string;
-    private refreshToken?: string;
-    private refreshTokenExpire?: number;
-    private accessToken?: string;
-    private accessTokenExpire?: number;
+    private state: State;
+    private refreshSessionTimeout: NodeJS.Timeout;
 
     constructor() {
-        if (RestAPI.singleton) {return RestAPI.singleton; }
+        if (RestAPI.singleton !== undefined) {return RestAPI.singleton; }
         RestAPI.singleton = this;
+        this.state = Cookie.getJSON("rest");
     }
 
     public signup(user: string, pw: string, lang: string) {
@@ -43,36 +47,54 @@ export class RestAPI {
                 return false;
             }
             const body = await response.json();
-            if (typeof body.sessionId === "string") {this.sessionId = body.sessionId; }
-            if (typeof body.accountId === "string") {this.accountId = body.accountId; }
-            if (typeof body.email === "string") {this.email = body.email; }
-            if (typeof body.refreshToken === "string") {
-                this.refreshToken = body.refreshToken;
-                if (typeof body.refreshTokenExpire === "number") {this.refreshTokenExpire = body.refreshTokenExpire; }
-            }
-            if (typeof body.accessToken === "string") {
-                this.accessToken = body.accessToken;
-                if (typeof body.accessTokenExpire === "number") {this.accessTokenExpire = body.accessTokenExpire; }
-            }
-            if (this.accessTokenExpire !== undefined && this.refreshToken !== undefined) {
-                const autoRefreshTime = this.accessTokenExpire - 5 * 60 * 1000;
-                const delay = Math.max(0, autoRefreshTime - Date.now());
-                setTimeout(() => this.autoRefreshSesion(), delay);
+            this.saveState(body);
+
+            if (typeof this.state.accessTokenExpire === "number" &&
+                typeof this.state.refreshToken === "string") {
+                    // Try to refresh the token 5 minutes before expiry
+                    // But keep delay within range as the local clock may differ with the server's clock
+                    const longestDelay = 28 * 60 * 1000;
+                    const shortestDelay = 1 * 60 * 1000;
+                    let delay = (this.state.accessTokenExpire - Date.now()) - 5 * 60 * 1000;
+                    if (delay > longestDelay) {delay = longestDelay; }
+                    if (delay < shortestDelay) {delay = shortestDelay; }
+                    this.refreshSessionTimeout = setTimeout(() => this.autoRefreshSesion(), delay);
             } else {
-                console.log("Could not schedule auto-refresh");
+                console.log("Could not schedule automatic session refresh");
             }
             return true;
         } catch (e) {
             return false;
         }
     }
-    public refreshSession() {
-        return this.authCall("token", JSON.stringify({
-            accountId: this.accountId,
-            deviceId: this.deviceId,
-            refreshToken: this.refreshToken,
-            sessionId: this.sessionId,
+    public async refreshSession() {
+        if (typeof this.state.sessionId !== "string") {
+            throw new Error("Could not refresh session - session not started");
+        }
+        if (typeof this.state.refreshToken !== "string") {
+            throw new Error("Could not refresh session - no refresh token");
+        }
+        if (typeof this.state.accountId !== "string") {
+            throw new Error("Could not refresh session - 'accountId' is missing");
+        }
+        if (typeof this.state.deviceId !== "string") {
+            throw new Error("Could not refresh session - 'deviceId' is missing");
+        }
+        if (typeof this.state.refreshTokenExpire === "number" && this.state.refreshTokenExpire < Date.now()) {
+            console.log("It seems that the refresh token has expired, attempting to refresh session regardless.");
+        }
+        const response = await this.authCall("token", JSON.stringify({
+            accountId: this.state.accountId,
+            deviceId: this.state.deviceId,
+            refreshToken: this.state.refreshToken,
+            sessionId: this.state.sessionId,
         }));
+        if (response.status !== 200) {
+            return false;
+        }
+        const newState = await response.json();
+        this.saveState(newState);
+        return true;
     }
     public endSession(): Promise<boolean> {
         throw new Error("Method not implemented.");
@@ -115,8 +137,11 @@ export class RestAPI {
         const headers = new Headers();
         headers.append("Accept", "application/json");
         headers.append("Content-Type", "application/json");
-        if (this.accessToken !== undefined) {
-            headers.append("X-Access-Token", this.accessToken);
+        if (typeof this.state.accessToken !== "string") {
+            headers.append("X-Access-Token", this.state.accessToken);
+            if (typeof this.state.accessTokenExpire === "number" && this.state.accessTokenExpire < Date.now()) {
+                console.log("It seems like the access token has expired, attempting request regardless");
+            }
         }
         const url = prefix + route;
         return fetch(url, {
@@ -127,15 +152,19 @@ export class RestAPI {
     }
 
     private deviceId() {
-        if (this._deviceId === undefined) {
-            this._deviceId = "";
+        if (this.state.deviceId === undefined) {
+            this.state.deviceId = "";
             const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
             for (let i = 0; i < 64; i++ ) {
-                this._deviceId += characters.charAt(Math.floor(Math.random() * characters.length));
+                this.state.deviceId += characters.charAt(Math.floor(Math.random() * characters.length));
             }
         }
-        return this._deviceId;
+        return this.state.deviceId;
+    }
+
+    private saveState(stateUpdate: Partial<State>) {
+        const newState = {...this.state, ...stateUpdate};
+        Cookie.set("rest", newState);
+        this.state = newState;
     }
 }
-
-(window as any).restAPI = new RestAPI();
