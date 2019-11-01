@@ -11,6 +11,12 @@ interface State {
 }
 
 export class RestAPI {
+    public static getSingleton() {
+        if (RestAPI.singleton === undefined) {
+            RestAPI.singleton = new RestAPI();
+        }
+        return RestAPI.singleton;
+    }
     private static singleton?: RestAPI;
     private authPrefix = "/auth/";
     private apiPrefix = "/api/";
@@ -20,9 +26,7 @@ export class RestAPI {
     private state: State;
     private refreshSessionTimeout: NodeJS.Timeout;
 
-    constructor() {
-        if (RestAPI.singleton !== undefined) {return RestAPI.singleton; }
-        RestAPI.singleton = this;
+    private constructor() {
         this.state = Cookie.getJSON("rest");
     }
 
