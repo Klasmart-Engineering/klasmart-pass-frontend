@@ -11,7 +11,7 @@ export class App extends React.Component<Props, {}> {
     }
     public render() {
         return (
-            <Payment />
+            <SignUp />
         );
     }
 }

@@ -13,6 +13,7 @@ import Typography from "@material-ui/core/Typography";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import * as React from "react";
 import BadanamuButton from "../components/button";
+import BadanamuTextField from "../components/textfield";
 
 function Copyright() {
   return (
@@ -50,11 +51,6 @@ const styles = (theme: Theme) => createStyles({
   "submit": {
     margin: theme.spacing(3, 0, 2),
   },
-  "textfield": {
-      "& fieldset": {
-        borderRadius: 12,
-      },
-  },
 });
 
 interface IProps extends WithStyles<typeof styles> {}
@@ -77,28 +73,20 @@ class SignUp extends React.Component<IProps, any> {
                     <form className={this.props.classes.form} noValidate>
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
-                                <TextField
-                                    variant="outlined"
+                                <BadanamuTextField
                                     required
                                     fullWidth
                                     id="email"
-                                    label="Email"
-                                    name="email"
                                     autoComplete="email"
-                                    className={this.props.classes.textfield}
                                 />
                             </Grid>
                             <Grid item xs={12}>
-                                <TextField
-                                    variant="outlined"
+                                <BadanamuTextField
                                     required
                                     fullWidth
-                                    name="password"
-                                    label="Password"
-                                    type="password"
                                     id="password"
+                                    type="password"
                                     autoComplete="current-password"
-                                    className={this.props.classes.textfield}
                                 />
                             </Grid>
                         </Grid>
