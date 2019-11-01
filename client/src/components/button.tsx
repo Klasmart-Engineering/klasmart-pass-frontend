@@ -16,24 +16,13 @@ const styles = (theme: Theme) => createStyles({
     },
 });
 
-interface IProps extends WithStyles<typeof styles> {
-    disabled?: boolean;
-    fullWidth?: boolean;
-    onClick?: () => void;
-    size?: "small" | "medium" | "large" | undefined;
-    type?: "button" | "submit" | "reset" | undefined;
-}
+type Props = Parameters<typeof Button>[0] & WithStyles<typeof styles>;
 
-class BadanamuButton extends React.PureComponent<IProps, any> {
+class BadanamuButton extends React.PureComponent<Props, any> {
     public render() {
-        return <Button
-                    className={this.props.classes.btn}
-                    disabled={this.props.disabled === undefined ? false : this.props.disabled}
-                    onClick={this.props.onClick}
-                    size={this.props.size === undefined ? "medium" : this.props.size}
-                    fullWidth={this.props.fullWidth}
-                    variant="contained"
-                >{this.props.children}</Button>;
+        const forwardProps = {...this.props};
+        delete forwardProps.classes;
+        return <Button className={this.props.classes.btn} {...forwardProps} />;
     }
 }
 

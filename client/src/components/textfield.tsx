@@ -1,5 +1,5 @@
 import { createStyles, Theme, WithStyles, withStyles } from "@material-ui/core/styles";
-import TextField from "@material-ui/core/TextField";
+import TextField, { TextFieldProps } from "@material-ui/core/TextField";
 import * as React from "react";
 
 const styles = (theme: Theme) => createStyles({
@@ -32,23 +32,16 @@ const styles = (theme: Theme) => createStyles({
     },
 });
 
-interface IProps extends WithStyles<typeof styles> {
-    autoComplete?: string;
-    disabled?: boolean;
-    fullWidth?: boolean;
-    id: string;
-    required?: boolean;
-    type?: string | undefined;
-}
+type Props = {["id"]: string; } &
+    Omit<TextFieldProps, "id"> &
+    WithStyles<typeof styles>;
 
-class BadanamuTextField extends React.PureComponent<IProps, any> {
+class BadanamuTextField extends React.PureComponent<Props, any> {
     public render() {
-        return <TextField
-                autoComplete={this.props.autoComplete}
+        const forwardProps = {...this.props};
+        delete forwardProps.classes;
+        return <TextField {...forwardProps}
                 className={this.props.classes.txtfield}
-                disabled={this.props.disabled === undefined ? false : this.props.disabled}
-                fullWidth={this.props.fullWidth}
-                id={this.props.id}
                 InputLabelProps={{
                     classes: {
                         focused: this.props.classes.cssFocused,
@@ -64,8 +57,6 @@ class BadanamuTextField extends React.PureComponent<IProps, any> {
                 }}
                 label={this.props.id.charAt(0).toUpperCase() + this.props.id.slice(1)}
                 name={this.props.id}
-                required={this.props.required}
-                type={this.props.type === undefined ? "text" : this.props.type}
                 variant={"outlined"}/>;
     }
 }
