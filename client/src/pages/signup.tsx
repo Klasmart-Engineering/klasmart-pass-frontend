@@ -2,6 +2,7 @@ import Avatar from "@material-ui/core/Avatar";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import Checkbox from "@material-ui/core/Checkbox";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -14,6 +15,7 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import * as React from "react";
 import BadanamuButton from "../components/button";
 import BadanamuTextField from "../components/textfield";
+import {RestAPI} from "../restapi";
 
 function Copyright() {
   return (
@@ -28,6 +30,7 @@ function Copyright() {
   );
 }
 
+// tslint:disable:object-literal-sort-keys
 const styles = (theme: Theme) => createStyles({
   "@global": {
     body: {
@@ -40,7 +43,7 @@ const styles = (theme: Theme) => createStyles({
     flexDirection: "column",
     alignItems: "center",
   },
-  avatar: {
+  "avatar": {
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
   },
@@ -52,13 +55,23 @@ const styles = (theme: Theme) => createStyles({
     margin: theme.spacing(3, 0, 2),
   },
 });
+// tslint:enable:object-literal-sort-keys
 
 interface IProps extends WithStyles<typeof styles> {}
+interface State {
+  signupInFlight: boolean;
+  email?: string;
+  password?: string;
+}
 
-class SignUp extends React.Component<IProps, any> {
+class SignUp extends React.Component<IProps, State> {
+    private api: RestAPI;
     constructor(props: IProps) {
         super(props);
-        this.state = {};
+        this.state = {
+          signupInFlight: false,
+        };
+        this.api = RestAPI.getSingleton();
     }
 
     public render() {
@@ -78,6 +91,7 @@ class SignUp extends React.Component<IProps, any> {
                                     fullWidth
                                     id="email"
                                     autoComplete="email"
+                                    onChange={(e) => this.setState({email: e.target.value})}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -87,15 +101,18 @@ class SignUp extends React.Component<IProps, any> {
                                     id="password"
                                     type="password"
                                     autoComplete="current-password"
+                                    onChange={(e) => this.setState({password: e.target.value})}
                                 />
                             </Grid>
                         </Grid>
                         <BadanamuButton
-                            type="submit"
+                            // type="submit"
                             fullWidth
                             size="large"
+                            disabled={this.state.signupInFlight}
+                            onClick={() => this.signupClick()}
                         >
-                            Sign Up
+                            {this.state.signupInFlight ? <CircularProgress /> : "Sign Up"}
                         </BadanamuButton>
                         <Grid container justify="flex-end">
                             <Grid item>
@@ -111,6 +128,33 @@ class SignUp extends React.Component<IProps, any> {
                 </Box>
             </Container>
         );
+    }
+
+    private async signupClick() {
+      if (this.state.signupInFlight) {return; }
+      if (this.state.email === undefined) {return; }
+      if (this.state.password === undefined) {return; }
+      this.setState({signupInFlight: true});
+      try {
+        // TODO: Get Locale
+        const lang = "en";
+        await this.api.signup(this.state.email, this.state.password, lang);
+      } finally {
+        this.setState({signupInFlight: false});
+      }
+    }
+
+    private isEmailValid() {
+      if (this.state.email === "") {return false; }
+      // TODO: Regex check X@Y.Z
+      return true;
+    }
+
+    private isPasswordValid() {
+      if (this.state.password === "") {return false; }
+      // TODO: Has number
+      // TODO: Has capital
+      return true;
     }
 }
 
