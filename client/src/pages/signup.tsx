@@ -13,6 +13,7 @@ import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import * as React from "react";
+import { FormattedMessage } from "react-intl";
 import BadanamuButton from "../components/button";
 import BadanamuTextField from "../components/textfield";
 import {RestAPI} from "../restapi";
@@ -20,7 +21,8 @@ import {RestAPI} from "../restapi";
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
+      <FormattedMessage id="copyright" />
+      {" © "}
       <Link color="inherit" href="https://badanamu.com/">
         Badanamu.com
       </Link>{" "}
@@ -81,7 +83,10 @@ class SignUp extends React.Component<IProps, State> {
                 <div className={this.props.classes.paper}>
                     <img src="https://static-2-badanamu.akamaized.net/wp-content/uploads/2017/04/cropped-Badanamu-PNG-2.png" style={{ marginBottom: 12 }}/>
                     <Typography component="h1" variant="h5">
-                        Create your <b>Badanamu Account.</b>
+                        <FormattedMessage
+                          id="create_account"
+                          values={{b: (...chunks: string[]) => <strong>{chunks}</strong>}}
+                        />
                     </Typography>
                     <form className={this.props.classes.form} noValidate>
                         <Grid container spacing={2}>
@@ -90,6 +95,7 @@ class SignUp extends React.Component<IProps, State> {
                                     required
                                     fullWidth
                                     id="email"
+                                    label={<FormattedMessage id="email"/>}
                                     autoComplete="email"
                                     onChange={(e) => this.setState({email: e.target.value})}
                                 />
@@ -99,6 +105,7 @@ class SignUp extends React.Component<IProps, State> {
                                     required
                                     fullWidth
                                     id="password"
+                                    label={<FormattedMessage id="password"/>}
                                     type="password"
                                     autoComplete="current-password"
                                     onChange={(e) => this.setState({password: e.target.value})}
@@ -112,13 +119,17 @@ class SignUp extends React.Component<IProps, State> {
                             disabled={this.state.signupInFlight}
                             onClick={() => this.signupClick()}
                         >
-                            {this.state.signupInFlight ? <CircularProgress /> : "Sign Up"}
+                            {
+                              this.state.signupInFlight ?
+                                <CircularProgress /> :
+                                <FormattedMessage id="sign_up_button" />
+                            }
                         </BadanamuButton>
                         <Grid container justify="flex-end">
                             <Grid item>
-                            <Link href="#" variant="body2">
-                            Already have an account? Sign in
-                            </Link>
+                              <Link href="#" variant="body2">
+                                <FormattedMessage id="sign_up_already" />
+                              </Link>
                             </Grid>
                         </Grid>
                     </form>

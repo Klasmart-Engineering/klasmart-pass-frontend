@@ -32,9 +32,7 @@ const styles = (theme: Theme) => createStyles({
     },
 });
 
-type Props = {["id"]: string; } &
-    Omit<TextFieldProps, "id"> &
-    WithStyles<typeof styles>;
+type Props = TextFieldProps & WithStyles<typeof styles>;
 
 class BadanamuTextField extends React.PureComponent<Props, any> {
     public render() {
@@ -55,8 +53,6 @@ class BadanamuTextField extends React.PureComponent<Props, any> {
                         root: this.props.classes.cssOutlinedInput,
                     },
                 }}
-                label={this.props.id.charAt(0).toUpperCase() + this.props.id.slice(1)}
-                name={this.props.id}
                 variant={"outlined"}/>;
     }
 }
