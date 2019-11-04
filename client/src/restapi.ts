@@ -28,13 +28,22 @@ export class RestAPI {
 
     private constructor() {
         this.state = Cookie.getJSON("rest");
+        if (typeof this.state !== "object") {
+            this.saveState({});
+        }
     }
 
-    public signup(user: string, pw: string, lang: string) {
-        return this.apiCall("account/signup", JSON.stringify({user, pw, lang}));
+    public async signup(user: string, pw: string, lang: string) {
+        const response = await this.apiCall("account/signup", JSON.stringify({user, pw, lang}));
+        if (response.status !== 200) {return false; }
+        const body = await response.json();
+        this.saveState(body);
+        return;
     }
 
-    public verify(accountId: string, verificationCode: string) {
+    public verify(verificationCode: string) {
+        const accountId = this.state.accountId;
+        if (accountId === undefined) { throw new Error("Unknown AccountID"); }
         return this.apiCall("account/verify/email", JSON.stringify({accountId, verificationCode}));
     }
 
@@ -172,3 +181,5 @@ export class RestAPI {
         this.state = newState;
     }
 }
+
+(document as any).restAPI = RestAPI.getSingleton();
