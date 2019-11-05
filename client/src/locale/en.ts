@@ -4,7 +4,10 @@ const messages: Record<string, string> = {
     copyright: "Copyright",
     create_account:  "Create your <b>Badanamu Account.</b>",
     email: "Email",
+    login: "Login",
     password: "Password",
+    payment: "Payment",
+    sign_up: "Sign Up",
     sign_up_already: "Already have an account? Sign in",
     sign_up_button: "SIGN UP",
     sign_up_error_EMAIL_ALREADY_USED: "Your email is already in use",
@@ -14,6 +17,7 @@ const messages: Record<string, string> = {
     sign_up_error_PASSWORD_TOO_LONG: "Your password is too long",
     sign_up_error_PASSWORD_TOO_SHORT: "Your password is too short",
     sign_up_error_PASSWORD_UPPERCASE_MISSING: "Your password must contain an uppercase letter",
+    verify_email: "Verify Email",
 };
 
 export default messages;
