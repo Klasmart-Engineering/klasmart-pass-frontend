@@ -1,4 +1,6 @@
 import Cookie from "js-cookie";
+import { RestAPIError, RestAPIErrorType } from "./restapi_errors";
+// TODO: Change optional state items to nullables
 interface State {
     accessToken?: any; // string;
     accessTokenExpire?: any; // number;
@@ -33,10 +35,10 @@ export class RestAPI {
         }
     }
 
-    public async signup(user: string, pw: string, lang: string) {
-        const response = await this.apiCall("account/signup", JSON.stringify({user, pw, lang}));
-        if (response.status !== 200) {return false; }
-        const body = await response.json();
+    public async signup(email: string, pw: string, lang: string) {
+        const result = await this.apiCall("account/signup", JSON.stringify({user: email, pw, lang}));
+        if (result.status !== 200) {return false; }
+        const body = await result.json();
         this.saveState(body);
         return;
     }
@@ -47,15 +49,23 @@ export class RestAPI {
         return this.apiCall("account/verify/email", JSON.stringify({accountId, verificationCode}));
     }
 
-    public forgotPassword(user: string, lang: string) {
-        return this.apiCall("account/forgotpassword", JSON.stringify({user, lang}));
+    public forgotPassword(email: string, lang: string) {
+        return this.apiCall("account/forgotpassword", JSON.stringify({user: email, lang}));
     }
 
-    public async login(user: string, pw: string): Promise<boolean> {
+    public async login(email: string, password: string) {
         try {
             const deviceId = this.deviceId();
             const deviceName = "Webpage";
-            const response = await this.authCall("login", JSON.stringify({user, pw, deviceId, deviceName}));
+            const response = await this.authCall(
+                "login",
+                JSON.stringify({
+                    deviceId,
+                    deviceName,
+                    pw: password,
+                    user: email,
+                }),
+            );
             if (response.status !== 200) {
                 return false;
             }
@@ -71,6 +81,7 @@ export class RestAPI {
                     let delay = (this.state.accessTokenExpire - Date.now()) - 5 * 60 * 1000;
                     if (delay > longestDelay) {delay = longestDelay; }
                     if (delay < shortestDelay) {delay = shortestDelay; }
+                    if (this.refreshSessionTimeout) {clearTimeout(this.refreshSessionTimeout); }
                     this.refreshSessionTimeout = setTimeout(() => this.autoRefreshSesion(), delay);
             } else {
                 console.log("Could not schedule automatic session refresh");
@@ -144,7 +155,8 @@ export class RestAPI {
             console.log(`Delaying request to '${route}' by ${Math.round(delay).toLocaleString()}ms`);
             await new Promise((resolve) => setTimeout(resolve, delay));
             if (Math.random() <= failureRate) {
-                throw new Error(`Blocking rest request to '${route}' to simulate error`);
+                console.log(`Blocking rest request to '${route}' to simulate error`);
+                throw new RestAPIError(RestAPIErrorType.MOCK);
             }
         }
         const headers = new Headers();
@@ -157,11 +169,19 @@ export class RestAPI {
             }
         }
         const url = prefix + route;
-        return fetch(url, {
+        const response = await fetch(url, {
             body,
             headers,
             method: "POST",
         });
+        if (response.status !== 200) {
+            const responseBody = await response.json();
+            if (typeof responseBody.errCode === "number") {
+                throw new RestAPIError(responseBody.errCode);
+            }
+            throw new Error("Unknown RestAPI Error");
+        }
+        return response;
     }
 
     private deviceId() {
@@ -181,5 +201,3 @@ export class RestAPI {
         this.state = newState;
     }
 }
-
-(document as any).restAPI = RestAPI.getSingleton();

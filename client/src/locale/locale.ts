@@ -8,7 +8,7 @@ export function getIntl(locale: Locales) {
     const cache = createIntlCache();
     switch (locale) {
         case "ko":
-            return createIntl({locale: "ko", messages: korean}, cache);
+            return createIntl({locale: "ko", messages: korean, onError: () => {}}, cache);
         default:
         case "en":
             return createIntl({locale: "en", messages: english}, cache);

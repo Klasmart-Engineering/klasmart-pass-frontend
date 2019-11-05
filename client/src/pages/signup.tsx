@@ -5,6 +5,7 @@ import Checkbox from "@material-ui/core/Checkbox";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import FormControl from "@material-ui/core/FormControl/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
@@ -17,6 +18,7 @@ import { FormattedMessage } from "react-intl";
 import BadanamuButton from "../components/button";
 import BadanamuTextField from "../components/textfield";
 import {RestAPI} from "../restapi";
+import { RestAPIError } from "../restapi_errors";
 
 function Copyright() {
   return (
@@ -64,6 +66,9 @@ interface State {
   signupInFlight: boolean;
   email?: string;
   password?: string;
+  passwordErrorID: JSX.Element | null;
+  emailErrorID: JSX.Element | null;
+  generalErrorID: JSX.Element | null;
 }
 
 class SignUp extends React.Component<IProps, State> {
@@ -71,6 +76,9 @@ class SignUp extends React.Component<IProps, State> {
     constructor(props: IProps) {
         super(props);
         this.state = {
+          emailErrorID: null,
+          generalErrorID: null,
+          passwordErrorID: null,
           signupInFlight: false,
         };
         this.api = RestAPI.getSingleton();
@@ -85,10 +93,10 @@ class SignUp extends React.Component<IProps, State> {
                     <Typography component="h1" variant="h5">
                         <FormattedMessage
                           id="create_account"
-                          values={{b: (...chunks: string[]) => <strong>{chunks}</strong>}}
+                          values={{b: (...chunks: any[]) => <strong>{chunks}</strong>}}
                         />
                     </Typography>
-                    <form className={this.props.classes.form} noValidate>
+                    <FormControl className={this.props.classes.form}>
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
                                 <BadanamuTextField
@@ -96,6 +104,8 @@ class SignUp extends React.Component<IProps, State> {
                                     fullWidth
                                     id="email"
                                     label={<FormattedMessage id="email"/>}
+                                    error={this.state.emailErrorID !== null}
+                                    helperText={this.state.emailErrorID}
                                     autoComplete="email"
                                     onChange={(e) => this.setState({email: e.target.value})}
                                 />
@@ -107,6 +117,8 @@ class SignUp extends React.Component<IProps, State> {
                                     id="password"
                                     label={<FormattedMessage id="password"/>}
                                     type="password"
+                                    error={this.state.passwordErrorID !== null}
+                                    helperText={this.state.passwordErrorID}
                                     autoComplete="current-password"
                                     onChange={(e) => this.setState({password: e.target.value})}
                                 />
@@ -121,10 +133,16 @@ class SignUp extends React.Component<IProps, State> {
                         >
                             {
                               this.state.signupInFlight ?
-                                <CircularProgress /> :
+                                <CircularProgress size={25}/> :
                                 <FormattedMessage id="sign_up_button" />
                             }
                         </BadanamuButton>
+                        {
+                          this.state.generalErrorID === null ? null :
+                          <Typography color="error">
+                            {this.state.generalErrorID}
+                          </Typography>
+                        }
                         <Grid container justify="flex-end">
                             <Grid item>
                               <Link href="#" variant="body2">
@@ -132,7 +150,7 @@ class SignUp extends React.Component<IProps, State> {
                               </Link>
                             </Grid>
                         </Grid>
-                    </form>
+                      </FormControl>
                 </div>
                 <Box mt={5}>
                     <Copyright />
@@ -150,6 +168,19 @@ class SignUp extends React.Component<IProps, State> {
         // TODO: Get Locale
         const lang = "en";
         await this.api.signup(this.state.email, this.state.password, lang);
+      } catch (restAPIError) {
+        console.log(restAPIError);
+        if (restAPIError instanceof RestAPIError) {
+          const id = restAPIError.getErrorMessageID();
+          const signupErrorMessageID = <FormattedMessage id={id}/>;
+          let passwordErrorID = null;
+          let emailErrorID = null;
+          let generalErrorID = null;
+          if (id.match(/password/i)) {passwordErrorID = signupErrorMessageID; }
+          if (id.match(/email/i)) {emailErrorID = signupErrorMessageID; }
+          if (emailErrorID === null && passwordErrorID === null) {generalErrorID = signupErrorMessageID; }
+          this.setState({passwordErrorID, emailErrorID, generalErrorID});
+        }
       } finally {
         this.setState({signupInFlight: false});
       }
