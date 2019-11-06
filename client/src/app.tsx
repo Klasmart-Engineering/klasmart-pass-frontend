@@ -22,7 +22,7 @@ import * as React from "react";
 import { FormattedMessage } from "react-intl";
 import { Route, Switch, useHistory } from "react-router-dom";
 import Login from "./pages/login";
-import { Payment } from "./pages/payment";
+import Payment from "./pages/payment";
 import SignUp from "./pages/signup";
 import Verify from "./pages/verify";
 
