@@ -5,10 +5,8 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import FormControl from "@material-ui/core/FormControl/FormControl";
 import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
-import { createStyles, makeStyles, Theme, WithStyles, withStyles } from "@material-ui/core/styles";
-import TextField from "@material-ui/core/TextField";
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import React, { useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { useHistory } from "react-router-dom";
@@ -154,7 +152,11 @@ export default function SignUp() {
           }
           <Grid container justify="flex-end">
             <Grid item>
-              <Link href="#" variant="body2" onClick={(e) => {history.push("/login"); e.preventDefault(); }}>
+              <Link
+                href="#"
+                variant="body2"
+                onClick={(e: React.MouseEvent) => {history.push("/login"); e.preventDefault(); }}
+              >
                 <FormattedMessage id="sign_up_already" />
               </Link>
             </Grid>
