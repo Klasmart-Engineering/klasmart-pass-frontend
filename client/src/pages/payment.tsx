@@ -27,9 +27,9 @@ export default function Payment() {
     const [braintree, setBrainTree] = useState<Braintree.Dropin | null>(null);
     const [error, setError] = useState<JSX.Element | null>(null);
     useEffect(() => {
-        if (clientToken === "" && error === null) { getClientToken(); }
+        getClientToken();
         return;
-    });
+    }, []);
 
     async function getClientToken() {
         if (clientTokenInFlight) { return; }
@@ -64,7 +64,7 @@ export default function Payment() {
             {error === null ? null : <Typography color="error">{error}</Typography>}
             {braintree !== null ? null : <CircularProgress />}
             {
-                clientTokenInFlight && clientToken === "" ? null :
+                clientTokenInFlight || clientToken === "" ? null :
                 <div className={clsx(braintree === null && classes.hide)}>
                     <DropIn
                         options={{
