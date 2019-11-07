@@ -20,11 +20,13 @@ import clsx from "clsx";
 import { useState } from "react";
 import * as React from "react";
 import { FormattedMessage } from "react-intl";
+import { useSelector } from "react-redux";
 import { Route, Switch, useHistory } from "react-router-dom";
 import Login from "./pages/login";
 import Payment from "./pages/payment";
 import SignUp from "./pages/signup";
 import Verify from "./pages/verify";
+import { State } from "./store/store";
 
 const drawerWidth = 240;
 
@@ -91,6 +93,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export function App() {
     const classes = useStyles();
     const [open, setOpen] = useState(false);
+    const account = useSelector((state: State) => state.account);
     const history = useHistory();
     function navigate(path: string) {
         if (open) { setOpen(false); }
@@ -177,6 +180,13 @@ export function App() {
                     </ListItem>
                 </List>
                 <Divider />
+                {
+                    JSON.stringify(account).split(",").map((t) =>
+                    <Typography key={t}>
+                    {t}
+                    </Typography>,
+                    )
+                }
             </Drawer>
             <main className={clsx(classes.content, {[classes.contentShift]: open})}>
                 <div className={classes.drawerHeader} />

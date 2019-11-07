@@ -9,6 +9,7 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import React, { useState } from "react";
 import { FormattedMessage } from "react-intl";
+import { useStore } from "react-redux";
 import { useHistory } from "react-router-dom";
 import BadanamuButton from "../components/button";
 import BadanamuTextField from "../components/textfield";
@@ -67,6 +68,8 @@ export default function SignUp() {
   const [passwordError, setPasswordError] = useState<JSX.Element | null>(null);
   const [emailError, setEmailError] = useState<JSX.Element | null>(null);
   const [generalError, setGeneralError] = useState<JSX.Element | null>(null);
+
+  const store = useStore();
   const classes = useStyles();
   const history = useHistory();
 
@@ -76,7 +79,7 @@ export default function SignUp() {
     if (password === "") { return; }
     try {
       setSignupInFlight(true);
-      const api = RestAPI.getSingleton();
+      const api = new RestAPI(store);
       // TODO: Get Locale
       await api.signup(email, password, "en");
     } catch (restAPIError) {
