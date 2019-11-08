@@ -35,6 +35,7 @@ export default function Login() {
 
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
+    const restApi = useRestAPI();
 
     async function login() {
         if (loginInFlight) { return; }
@@ -42,7 +43,6 @@ export default function Login() {
         if (password === "") { return; }
         try {
             setLoginInFlight(true);
-            const restApi = useRestAPI();
             await restApi.login(email, password);
         } catch (restAPIError) {
             if (restAPIError instanceof RestAPIError) {

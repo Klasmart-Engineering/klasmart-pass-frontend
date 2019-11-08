@@ -1,4 +1,5 @@
 import AppBar from "@material-ui/core/AppBar";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
@@ -16,18 +17,18 @@ import EmailIcon from "@material-ui/icons/Email";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
 import MenuIcon from "@material-ui/icons/Menu";
 import PaymentIcon from "@material-ui/icons/Payment";
+import LogoutIcon from "@material-ui/icons/PowerSettingsNew";
 import clsx from "clsx";
 import { useState } from "react";
 import * as React from "react";
 import { FormattedMessage } from "react-intl";
-import { useSelector } from "react-redux";
 import { Route, Switch, useHistory } from "react-router-dom";
 import AccountInfo from "./components/accountInfo";
 import Login from "./pages/login";
 import Payment from "./pages/payment";
 import SignUp from "./pages/signup";
 import Verify from "./pages/verify";
-import { State } from "./store/store";
+import { useRestAPI } from "./restapi";
 
 const drawerWidth = 240;
 
@@ -93,11 +94,26 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export function App() {
     const classes = useStyles();
+
     const [open, setOpen] = useState(false);
+    const [logoutInFlight, setLogoutInFlight] = useState(false);
+
     const history = useHistory();
+    const api = useRestAPI();
+
     function navigate(path: string) {
         if (open) { setOpen(false); }
         history.push(path);
+    }
+
+    async function logout() {
+        if (logoutInFlight) { return; }
+        try {
+            setLogoutInFlight(true);
+            await api.endSession();
+        } finally {
+            setLogoutInFlight(false);
+        }
     }
 
     return (
@@ -146,7 +162,7 @@ export function App() {
                         <ListItemIcon>
                             <AccountCircleIcon />
                         </ListItemIcon>
-                        <ListItemText primary={<FormattedMessage id="sign_up"/>} />
+                        <ListItemText primary={<FormattedMessage id="sign_up" />} />
                     </ListItem>
                     <ListItem
                         button
@@ -156,7 +172,16 @@ export function App() {
                         <ListItemIcon>
                             <LockOpenIcon />
                         </ListItemIcon>
-                        <ListItemText primary={<FormattedMessage id="login"/>} />
+                        <ListItemText primary={<FormattedMessage id="login" />} />
+                    </ListItem>
+                    <ListItem
+                        button
+                        onClick={() => logout()}
+                    >
+                        <ListItemIcon>
+                            {logoutInFlight ? <CircularProgress size={25} /> : <LogoutIcon />}
+                        </ListItemIcon>
+                        <ListItemText primary={<FormattedMessage id="logout" />} />
                     </ListItem>
                     <ListItem
                         button
@@ -166,7 +191,7 @@ export function App() {
                         <ListItemIcon>
                             <PaymentIcon />
                         </ListItemIcon>
-                        <ListItemText primary={<FormattedMessage id="payment"/>} />
+                        <ListItemText primary={<FormattedMessage id="payment" />} />
                     </ListItem>
                     <ListItem
                         button
@@ -176,13 +201,13 @@ export function App() {
                         <ListItemIcon>
                             <EmailIcon />
                         </ListItemIcon>
-                        <ListItemText primary={<FormattedMessage id="verify_email"/>} />
+                        <ListItemText primary={<FormattedMessage id="verify_email" />} />
                     </ListItem>
                 </List>
                 <Divider />
                 <AccountInfo />
             </Drawer>
-            <main className={clsx(classes.content, {[classes.contentShift]: open})}>
+            <main className={clsx(classes.content, { [classes.contentShift]: open })}>
                 <div className={classes.drawerHeader} />
                 <Switch>
                     <Route path="/login" component={Login} />

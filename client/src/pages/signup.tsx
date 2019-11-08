@@ -69,6 +69,7 @@ export default function SignUp() {
 
   const classes = useStyles();
   const history = useHistory();
+  const restApi = useRestAPI();
 
   async function signupClick() {
     if (signupInFlight) { return; }
@@ -77,7 +78,6 @@ export default function SignUp() {
     try {
       setSignupInFlight(true);
       // TODO: Get Locale
-      const restApi = useRestAPI();
       await restApi.signup(email, password, "en");
     } catch (restAPIError) {
       if (restAPIError instanceof RestAPIError) {

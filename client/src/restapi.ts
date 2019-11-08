@@ -12,15 +12,13 @@ export class RestAPI {
 
     constructor(store: ReturnType<typeof useStore>) {
         this.store = store as any; // TODO: Fix types
-        console.log("Construct API");
-        console.log(this.store);
     }
 
     public async signup(email: string, pw: string, lang: string) {
-        const result = await this.apiCall("account/signup", JSON.stringify({user: email, pw, lang}));
-        if (result.status !== 200) {return false; }
+        const result = await this.apiCall("account/signup", JSON.stringify({ user: email, pw, lang }));
+        if (result.status !== 200) { return false; }
         const body = await result.json();
-        this.store.dispatch({type: ActionTypes.SIGNUP, payload: body});
+        this.store.dispatch({ type: ActionTypes.SIGNUP, payload: body });
         return;
     }
 
@@ -28,11 +26,11 @@ export class RestAPI {
         const state = this.store.getState();
         const accountId = state.account.accountId;
         if (accountId === null) { throw new Error("Unknown AccountID"); }
-        return this.apiCall("account/verify/email", JSON.stringify({accountId, verificationCode}));
+        return this.apiCall("account/verify/email", JSON.stringify({ accountId, verificationCode }));
     }
 
     public forgotPassword(email: string, lang: string) {
-        return this.apiCall( "account/forgotpassword", JSON.stringify({user: email, lang}));
+        return this.apiCall("account/forgotpassword", JSON.stringify({ user: email, lang }));
     }
 
     public async login(email: string, password: string) {
@@ -52,7 +50,7 @@ export class RestAPI {
                 return false;
             }
             const body = await response.json();
-            this.store.dispatch({type: ActionTypes.LOGIN, payload: body});
+            this.store.dispatch({ type: ActionTypes.LOGIN, payload: body });
             // if (typeof this.state.accessTokenExpire === "number" &&
             //     typeof this.state.refreshToken === "string") {
             //         // Try to refresh the token 5 minutes before expiry
@@ -69,10 +67,18 @@ export class RestAPI {
             // }
             return true;
         } catch (e) {
-            return false;
+            if (e instanceof RestAPIError) {
+                switch (e.getErrorMessageType()) {
+                    case RestAPIErrorType.EMAIL_NOT_VERIFIED:
+                        const body = e.getBody();
+                        this.store.dispatch({ type: ActionTypes.ACCOUNT_ID, payload: body });
+                }
+            }
+            throw e;
         }
     }
     public async refreshSession() {
+        // TODO: Create promise that other api calls can wait on for refresh
         const state = this.store.getState();
         const deviceId = await this.deviceId();
         if (typeof state.account.sessionId !== "string") {
@@ -100,11 +106,15 @@ export class RestAPI {
             return false;
         }
         const body = await response.json();
-        this.store.dispatch({type: ActionTypes.REFRESH_SESSION, payload: body});
+        this.store.dispatch({ type: ActionTypes.REFRESH_SESSION, payload: body });
         return true;
     }
-    public endSession(): Promise<boolean> {
-        throw new Error("Method not implemented.");
+    public async endSession(): Promise<undefined> {
+        const state = this.store.getState();
+        const deviceId = state.account.deviceId;
+        const response = await this.authCall("signout", JSON.stringify({ deviceId }));
+        this.store.dispatch({ type: ActionTypes.LOGOUT, payload: undefined });
+        return;
     }
     public getPaymentToken(): Promise<string> {
         throw new Error("Method not implemented.");
@@ -134,11 +144,17 @@ export class RestAPI {
             const response = await this.fetchRoute(prefix, route, body);
             return response;
         } catch (e) {
-            if (refresh &&
-                e instanceof RestAPIError &&
-                e.getErrorMessageType() === RestAPIErrorType.EXPIRED_ACCESS_TOKEN) {
-                await this.refreshSession();
-                return this.fetchRoute(prefix, route, body);
+            if (e instanceof RestAPIError) {
+                switch (e.getErrorMessageType()) {
+                    case RestAPIErrorType.EXPIRED_ACCESS_TOKEN:
+                        this.store.dispatch({ type: ActionTypes.EXPIRED_ACCESS_TOKEN });
+                        if (refresh) {
+                            await this.refreshSession();
+                            return this.fetchRoute(prefix, route, body);
+                        }
+                    case RestAPIErrorType.EXPIRED_REFRESH_TOKEN:
+                        this.store.dispatch({ type: ActionTypes.EXPIRED_REFRESH_TOKEN });
+                }
             }
             throw e;
         }
@@ -154,14 +170,14 @@ export class RestAPI {
             await new Promise((resolve) => setTimeout(resolve, delay));
             if (Math.random() <= failureRate) {
                 console.log(`Blocking rest request to '${route}' to simulate error`);
-                throw new RestAPIError(RestAPIErrorType.MOCK);
+                throw new RestAPIError(RestAPIErrorType.MOCK, {});
             }
         }
         const headers = new Headers();
         headers.append("Accept", "application/json");
         headers.append("Content-Type", "application/json");
         const state = this.store.getState();
-        if (typeof state.account.accessToken !== "string") {
+        if (typeof state.account.accessToken === "string") {
             headers.append("X-Access-Token", state.account.accessToken);
             if (typeof state.account.accessTokenExpire === "number" && state.account.accessTokenExpire < Date.now()) {
                 console.log("It seems like the access token has expired, attempting request regardless");
@@ -174,14 +190,18 @@ export class RestAPI {
             method: "POST",
         });
 
-        if (response.status === 200) {return response; }
+        if (response.status === 200) { return response; }
 
         const responseBody = await response.json();
+        let errCode = RestAPIErrorType.UNKNOWN;
+        let errParams;
         if (typeof responseBody.errCode === "number") {
-            throw new RestAPIError(responseBody.errCode);
-        } else  {
-            throw new RestAPIError(RestAPIErrorType.UNKNOWN);
+            errCode = responseBody.errCode;
         }
+        if (typeof responseBody.errParams === "object") {
+            errParams = responseBody.errParams;
+        }
+        throw new RestAPIError(errCode, errParams);
 
     }
 
@@ -193,10 +213,10 @@ export class RestAPI {
         return new Promise<string>(async (resolve) => {
             let deviceId = "";
             const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-            for (let i = 0; i < 64; i++ ) {
+            for (let i = 0; i < 64; i++) {
                 deviceId += characters.charAt(Math.floor(Math.random() * characters.length));
             }
-            this.store.dispatch({type: ActionTypes.DEVICE_ID, payload: deviceId});
+            this.store.dispatch({ type: ActionTypes.DEVICE_ID, payload: deviceId });
             resolve(deviceId);
         });
     }

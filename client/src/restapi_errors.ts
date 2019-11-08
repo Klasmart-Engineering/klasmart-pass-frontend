@@ -1,13 +1,16 @@
 export class RestAPIError extends Error {
     private type: RestAPIErrorType;
-    constructor(type: RestAPIErrorType) {
+    private body: { [key: string]: any };
+    constructor(type: RestAPIErrorType, body: { [key: string]: any }) {
         super();
         if (typeof RestAPIErrorType[type] === "undefined") {
             this.type = RestAPIErrorType.UNKNOWN;
         } else {
             this.type = type;
         }
+        this.body = body;
     }
+    public getBody() { return this.body; }
     public getErrorMessageType() {
         return this.type;
     }
