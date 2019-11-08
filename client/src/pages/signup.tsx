@@ -31,7 +31,6 @@ function Copyright() {
 }
 
 // tslint:disable:object-literal-sort-keys
-
 const useStyles = makeStyles((theme: Theme) => createStyles({
   "@global": {
     body: {
@@ -158,7 +157,7 @@ export default function SignUp() {
               <Link
                 href="#"
                 variant="body2"
-                onClick={(e: React.MouseEvent) => {history.push("/login"); e.preventDefault(); }}
+                onClick={(e: React.MouseEvent) => { history.push("/login"); e.preventDefault(); }}
               >
                 <FormattedMessage id="sign_up_already" />
               </Link>
