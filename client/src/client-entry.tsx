@@ -7,7 +7,7 @@ import App from "./app";
 import { getIntl } from "./locale/locale";
 import { createDefaultStore } from "./store/store";
 
-const locales = [getIntl("ko"), getIntl("en")];
+const locales = [getIntl("ko"), getIntl("en"), getIntl("id")];
 const store = createDefaultStore();
 function ClientSide() {
     const [index, setIndex] = useState(0);
