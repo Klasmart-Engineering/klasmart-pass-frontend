@@ -10,8 +10,11 @@ import { createDefaultStore } from "./store/store";
 const locales = [getIntl("ko"), getIntl("en"), getIntl("id")];
 const store = createDefaultStore();
 function ClientSide() {
-    const [index, setIndex] = useState(0);
-    setTimeout(() => setIndex((prevousIndex) => (prevousIndex + 1) % locales.length), 3000);
+    const targetDelay = 3000;
+    const firstIndex = Math.floor(Date.now() / targetDelay) % locales.length;
+    const [index, setIndex] = useState(firstIndex);
+    const delay = targetDelay - (Date.now() % targetDelay);
+    setTimeout(() => setIndex((prevousIndex) => (prevousIndex + 1) % locales.length), delay);
     return (
         <HashRouter>
             <Provider store={store}>
