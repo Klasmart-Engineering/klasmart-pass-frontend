@@ -8,10 +8,9 @@ import Typography from "@material-ui/core/Typography";
 import * as React from "react";
 import { useState } from "react";
 import { FormattedMessage } from "react-intl";
-import { useStore } from "react-redux";
 import BadanamuButton from "../components/button";
 import BadanamuTextField from "../components/textfield";
-import { RestAPI } from "../restapi";
+import { RestAPI, useRestAPI } from "../restapi";
 import { RestAPIError } from "../restapi_errors";
 
 // tslint:disable:object-literal-sort-keys
@@ -36,7 +35,6 @@ export default function Login() {
 
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
-    const store = useStore();
 
     async function login() {
         if (loginInFlight) { return; }
@@ -44,15 +42,14 @@ export default function Login() {
         if (password === "") { return; }
         try {
             setLoginInFlight(true);
-            const api = new RestAPI(store);
-            // TODO: Get Locale
-            await api.login(email, password);
+            const restApi = useRestAPI();
+            await restApi.login(email, password);
         } catch (restAPIError) {
-          if (restAPIError instanceof RestAPIError) {
-            const id = restAPIError.getErrorMessageID();
-            const errorMessage = <FormattedMessage id={id} />;
-            console.log(id);
-          }
+            if (restAPIError instanceof RestAPIError) {
+                const id = restAPIError.getErrorMessageID();
+                const errorMessage = <FormattedMessage id={id} />;
+                console.log(id);
+            }
         } finally {
             setLoginInFlight(false);
         }
