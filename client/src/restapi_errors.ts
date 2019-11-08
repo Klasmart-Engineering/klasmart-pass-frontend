@@ -8,6 +8,9 @@ export class RestAPIError extends Error {
             this.type = type;
         }
     }
+    public getErrorMessageType() {
+        return this.type;
+    }
     public getErrorMessageID() {
         return errorCodeToMessageID[this.type];
     }

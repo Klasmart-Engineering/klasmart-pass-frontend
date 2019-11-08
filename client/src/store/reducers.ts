@@ -70,6 +70,7 @@ export function refreshTokenExpire(state= null, action: Actions) {
 export function accessToken(state= null, action: Actions) {
     switch (action.type) {
     case ActionTypes.LOGIN:
+    case ActionTypes.REFRESH_SESSION:
         if (typeof action.payload === "object" &&
             typeof action.payload.accessToken === "string") {
             return action.payload.accessToken;
@@ -83,6 +84,7 @@ export function accessToken(state= null, action: Actions) {
 export function accessTokenExpire(state= null, action: Actions) {
     switch (action.type) {
     case ActionTypes.LOGIN:
+    case ActionTypes.REFRESH_SESSION:
         if (typeof action.payload === "object" &&
             typeof action.payload.accessTokenExpire === "number") {
             return action.payload.accessTokenExpire;

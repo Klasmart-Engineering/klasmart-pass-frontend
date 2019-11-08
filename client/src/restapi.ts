@@ -95,7 +95,7 @@ export class RestAPI {
             deviceId,
             refreshToken: state.account.refreshToken,
             sessionId: state.account.sessionId,
-        }));
+        }), false);
         if (response.status !== 200) {
             return false;
         }
@@ -122,14 +122,29 @@ export class RestAPI {
         }
     }
 
-    private authCall(route: string, body: string) {
-        return this.call(this.authPrefix, route, body);
+    private authCall(route: string, body: string, refresh = true) {
+        return this.call(this.authPrefix, route, body, refresh);
     }
-    private apiCall(route: string, body: string) {
-        return this.call(this.apiPrefix, route, body);
+    private apiCall(route: string, body: string, refresh = true) {
+        return this.call(this.apiPrefix, route, body, refresh);
     }
 
-    private async call(prefix: string, route: string, body: string) {
+    private async call(prefix: string, route: string, body: string, refresh: boolean) {
+        try {
+            const response = await this.fetchRoute(prefix, route, body);
+            return response;
+        } catch (e) {
+            if (refresh &&
+                e instanceof RestAPIError &&
+                e.getErrorMessageType() === RestAPIErrorType.EXPIRED_ACCESS_TOKEN) {
+                await this.refreshSession();
+                return this.fetchRoute(prefix, route, body);
+            }
+            throw e;
+        }
+    }
+
+    private async fetchRoute(prefix: string, route: string, body: string) {
         if (this.test) {
             const maxDelay = 10000;
             const delaySkew = 5;
@@ -158,14 +173,16 @@ export class RestAPI {
             headers,
             method: "POST",
         });
-        if (response.status !== 200) {
-            const responseBody = await response.json();
-            if (typeof responseBody.errCode === "number") {
-                throw new RestAPIError(responseBody.errCode);
-            }
-            throw new Error("Unknown RestAPI Error");
+
+        if (response.status === 200) {return response; }
+
+        const responseBody = await response.json();
+        if (typeof responseBody.errCode === "number") {
+            throw new RestAPIError(responseBody.errCode);
+        } else  {
+            throw new RestAPIError(RestAPIErrorType.UNKNOWN);
         }
-        return response;
+
     }
 
     private async deviceId() {
@@ -183,4 +200,9 @@ export class RestAPI {
             resolve(deviceId);
         });
     }
+}
+
+export function useRestAPI() {
+    const store = useStore();
+    return new RestAPI(store);
 }

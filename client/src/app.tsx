@@ -22,6 +22,7 @@ import * as React from "react";
 import { FormattedMessage } from "react-intl";
 import { useSelector } from "react-redux";
 import { Route, Switch, useHistory } from "react-router-dom";
+import AccountInfo from "./components/accountInfo";
 import Login from "./pages/login";
 import Payment from "./pages/payment";
 import SignUp from "./pages/signup";
@@ -93,7 +94,6 @@ const useStyles = makeStyles((theme: Theme) =>
 export function App() {
     const classes = useStyles();
     const [open, setOpen] = useState(false);
-    const account = useSelector((state: State) => state.account);
     const history = useHistory();
     function navigate(path: string) {
         if (open) { setOpen(false); }
@@ -180,13 +180,7 @@ export function App() {
                     </ListItem>
                 </List>
                 <Divider />
-                {
-                    JSON.stringify(account).split(",").map((t) =>
-                    <Typography key={t}>
-                    {t}
-                    </Typography>,
-                    )
-                }
+                <AccountInfo />
             </Drawer>
             <main className={clsx(classes.content, {[classes.contentShift]: open})}>
                 <div className={classes.drawerHeader} />
