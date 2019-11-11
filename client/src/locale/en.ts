@@ -1,4 +1,5 @@
 const messages: Record<string, string> = {
+    ERROR_INVALID_VERIFICATION_CODE: "Invalid verification code",
     ERROR_MOCK: "The restapi simulated a mock error",
     ERROR_UNKOWN: "An unexpected error occurred",
     copyright: "Copyright",
@@ -19,7 +20,9 @@ const messages: Record<string, string> = {
     sign_up_error_PASSWORD_TOO_LONG: "Your password is too long",
     sign_up_error_PASSWORD_TOO_SHORT: "Your password is too short",
     sign_up_error_PASSWORD_UPPERCASE_MISSING: "Your password must contain an uppercase letter",
-    verify_email: "Verify Email",
+    verify_email: "Please enter the verification code from your Email",
+    verify_email_button: "Verify Email",
+    verify_email_code: "Email verification code",
 };
 
 export default messages;
