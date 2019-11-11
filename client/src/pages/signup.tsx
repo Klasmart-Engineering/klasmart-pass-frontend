@@ -14,20 +14,7 @@ import BadanamuButton from "../components/button";
 import BadanamuTextField from "../components/textfield";
 import { useRestAPI } from "../restapi";
 import { RestAPIError } from "../restapi_errors";
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      <FormattedMessage id="copyright" />
-      {" © "}
-      <Link color="inherit" href="https://badanamu.com/">
-        Badanamu.com
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+import Copyright from "../components/copyright";
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme: Theme) => createStyles({
