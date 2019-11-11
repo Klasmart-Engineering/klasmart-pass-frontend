@@ -1,4 +1,5 @@
 import AppBar from "@material-ui/core/AppBar";
+import Box from "@material-ui/core/Box";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Divider from "@material-ui/core/Divider";
@@ -24,10 +25,13 @@ import * as React from "react";
 import { FormattedMessage } from "react-intl";
 import { Route, Switch, useHistory } from "react-router-dom";
 import AccountInfo from "./components/accountInfo";
-import Login from "./pages/login";
-import Payment from "./pages/payment";
-import SignUp from "./pages/signup";
-import Verify from "./pages/verify";
+import { isLoggedIn } from "./components/authorized";
+import Copyright from "./components/copyright";
+import { Landing } from "./pages/landing";
+import { Login } from "./pages/login";
+import { Payment } from "./pages/payment";
+import { Signup } from "./pages/signup";
+import { Verify } from "./pages/verify";
 import { useRestAPI } from "./restapi";
 
 const drawerWidth = 240;
@@ -100,6 +104,7 @@ export function App() {
 
     const history = useHistory();
     const api = useRestAPI();
+    const authorized = isLoggedIn();
 
     function navigate(path: string) {
         if (open) { setOpen(false); }
@@ -155,9 +160,10 @@ export function App() {
                 <Divider />
                 <List>
                     <ListItem
+                        className={clsx({ [classes.hide]: !authorized })}
                         button
-                        selected={history.location.pathname === "/"}
-                        onClick={() => navigate("/")}
+                        selected={history.location.pathname === "/signup"}
+                        onClick={() => navigate("/signup")}
                     >
                         <ListItemIcon>
                             <AccountCircleIcon />
@@ -165,6 +171,7 @@ export function App() {
                         <ListItemText primary={<FormattedMessage id="sign_up" />} />
                     </ListItem>
                     <ListItem
+                        className={clsx({ [classes.hide]: !authorized })}
                         button
                         selected={history.location.pathname === "/login"}
                         onClick={() => navigate("/login")}
@@ -175,6 +182,7 @@ export function App() {
                         <ListItemText primary={<FormattedMessage id="login" />} />
                     </ListItem>
                     <ListItem
+                        className={clsx({ [classes.hide]: authorized })}
                         button
                         onClick={() => logout()}
                     >
@@ -193,28 +201,21 @@ export function App() {
                         </ListItemIcon>
                         <ListItemText primary={<FormattedMessage id="payment" />} />
                     </ListItem>
-                    <ListItem
-                        button
-                        selected={history.location.pathname === "/verify"}
-                        onClick={() => navigate("/verify")}
-                    >
-                        <ListItemIcon>
-                            <EmailIcon />
-                        </ListItemIcon>
-                        <ListItemText primary={<FormattedMessage id="verify_email" />} />
-                    </ListItem>
                 </List>
                 <Divider />
-                <AccountInfo />
             </Drawer>
             <main className={clsx(classes.content, { [classes.contentShift]: open })}>
                 <div className={classes.drawerHeader} />
                 <Switch>
                     <Route path="/login" component={Login} />
-                    <Route path="/payment" component={Payment} />
+                    <Route path="/signup" component={Signup} />
                     <Route path="/verify" component={Verify} />
-                    <Route path="/" component={SignUp} />
+                    <Route path="/payment" component={Payment} />
+                    <Route path="/" component={Landing} />
                 </Switch>
+                <Box mt={5}>
+                    <Copyright />
+                </Box>
             </main>
         </div>
     );

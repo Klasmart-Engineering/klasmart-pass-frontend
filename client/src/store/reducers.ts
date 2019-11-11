@@ -1,12 +1,10 @@
 import { combineReducers } from "redux";
 import { Actions, ActionTypes } from "./actions";
 
-export function loggedIn(state = false, action: Actions) {
+export function postAuthorizationRoute(state = null, action: Actions) {
     switch (action.type) {
-        case ActionTypes.LOGIN:
-            return true;
-        case ActionTypes.LOGOUT:
-            return false;
+        case ActionTypes.POST_AUTHORIZATION_ROUTE:
+            return action.payload;
         default:
             return state;
     }

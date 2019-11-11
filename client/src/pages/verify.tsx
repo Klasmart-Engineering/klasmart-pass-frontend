@@ -7,6 +7,7 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import * as React from "react";
 import { FormattedMessage } from "react-intl";
+import { redirectIfAuthorized, redirectIfUnverifiable } from "../components/authorized";
 import BadanamuButton from "../components/button";
 import BadanamuTextField from "../components/textfield";
 import { useRestAPI } from "../restapi";
@@ -40,11 +41,13 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 );
 // tslint:enable:object-literal-sort-keys
 
-function Verify() {
+export function Verify() {
     const [verificationCode, setVerificationCode] = React.useState("");
     const [error, setError] = React.useState<JSX.Element | null>(null);
     const [verifyInFlight, setVerifyInFlight] = React.useState(false);
     const restApi = useRestAPI();
+
+    redirectIfUnverifiable();
 
     async function verify(code: string) {
         if (verificationCode === "") { return; }
@@ -52,6 +55,7 @@ function Verify() {
         try {
             setVerifyInFlight(true);
             await restApi.verify(code);
+            redirectIfAuthorized();
         } catch (e) {
             if (e instanceof RestAPIError) {
                 const id = e.getErrorMessageID();
@@ -104,5 +108,3 @@ function Verify() {
         </Container>
     );
 }
-
-export default Verify;

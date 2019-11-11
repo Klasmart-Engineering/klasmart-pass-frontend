@@ -6,6 +6,7 @@ import clsx from "clsx";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
+import { redirectIfUnauthorized } from "../components/authorized";
 import DropIn from "../components/braintree-web-drop-in-react";
 import BadanamuButton from "../components/button";
 
@@ -19,7 +20,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 // tslint:enable:object-literal-sort-keys
 
-export default function Payment() {
+export function Payment() {
     const classes = useStyles();
     const [clientToken, setClientToken] = useState("");
     const [clientTokenInFlight, setClientTokenInFlight] = useState(false);
@@ -30,6 +31,7 @@ export default function Payment() {
         getClientToken();
         return;
     }, []);
+    redirectIfUnauthorized("/payment");
 
     async function getClientToken() {
         if (clientTokenInFlight) { return; }
@@ -65,17 +67,17 @@ export default function Payment() {
             {braintree !== null ? null : <CircularProgress />}
             {
                 clientTokenInFlight || clientToken === "" ? null :
-                <div className={clsx(braintree === null && classes.hide)}>
-                    <DropIn
-                        options={{
-                            authorization: clientToken,
-                            paypal: { flow: "checkout" },
-                        }}
-                        onInstance={(b) => setBrainTree(b)}
-                        onPaymentMethodRequestable={(p) => setPaymentReady(true)}
-                        onNoPaymentMethodRequestable={() => setPaymentReady(false)}
+                    <div className={clsx(braintree === null && classes.hide)}>
+                        <DropIn
+                            options={{
+                                authorization: clientToken,
+                                paypal: { flow: "checkout" },
+                            }}
+                            onInstance={(b) => setBrainTree(b)}
+                            onPaymentMethodRequestable={(p) => setPaymentReady(true)}
+                            onNoPaymentMethodRequestable={() => setPaymentReady(false)}
                         />
-                </div>
+                    </div>
             }
             {
                 paymentReady ?

@@ -28,6 +28,7 @@ export type DeviceIdAction = Action<ActionTypes.DEVICE_ID, string>;
 export type AccountIdAction = Action<ActionTypes.ACCOUNT_ID, {
     accountId?: string | any,
 } | any | undefined>;
+export type PostAuthorizationRouteAction = Action<ActionTypes.POST_AUTHORIZATION_ROUTE, string>;
 
 export enum ActionTypes {
     LOGIN,
@@ -38,6 +39,7 @@ export enum ActionTypes {
     EXPIRED_REFRESH_TOKEN,
     ACCOUNT_ID,
     DEVICE_ID,
+    POST_AUTHORIZATION_ROUTE,
 }
 
 export type Actions =
@@ -49,4 +51,5 @@ export type Actions =
     | RefreshTokenExpiredAction
     | DeviceIdAction
     | AccountIdAction
+    | PostAuthorizationRouteAction
     | never;

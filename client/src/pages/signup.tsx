@@ -1,4 +1,3 @@
-import Box from "@material-ui/core/Box";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -10,11 +9,11 @@ import Typography from "@material-ui/core/Typography";
 import React, { useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { useHistory } from "react-router-dom";
+import { redirectIfAuthorized } from "../components/authorized";
 import BadanamuButton from "../components/button";
 import BadanamuTextField from "../components/textfield";
 import { useRestAPI } from "../restapi";
-import { RestAPIError } from "../restapi_errors";
-import Copyright from "../components/copyright";
+import { RestAPIError, RestAPIErrorType } from "../restapi_errors";
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -44,11 +43,12 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 );
 // tslint:enable:object-literal-sort-keys
 
-export default function SignUp() {
-  const [signupInFlight, setSignupInFlight] = useState(false);
+export function Signup() {
+  const [inFlight, setInFlight] = useState(false);
 
-  const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordConfirmation, setPasswordConfirmation] = useState("");
 
   const [passwordError, setPasswordError] = useState<JSX.Element | null>(null);
   const [emailError, setEmailError] = useState<JSX.Element | null>(null);
@@ -58,24 +58,47 @@ export default function SignUp() {
   const history = useHistory();
   const restApi = useRestAPI();
 
+  redirectIfAuthorized();
+
   async function signupClick() {
-    if (signupInFlight) { return; }
+    if (inFlight) { return; }
     if (email === "") { return; }
     if (password === "") { return; }
     try {
-      setSignupInFlight(true);
+      setInFlight(true);
       // TODO: Get Locale
       await restApi.signup(email, password, "en");
-    } catch (restAPIError) {
-      if (restAPIError instanceof RestAPIError) {
-        const id = restAPIError.getErrorMessageID();
-        const errorMessage = <FormattedMessage id={id} />;
-        if (id.match(/password/i)) { setPasswordError(errorMessage); }
-        if (id.match(/email/i)) { setEmailError(errorMessage); }
-        if (!(id.match(/password|email/i))) { setGeneralError(errorMessage); }
-      }
+      history.push("/verify");
+    } catch (e) {
+      handleError(e);
     } finally {
-      setSignupInFlight(false);
+      setInFlight(false);
+    }
+  }
+
+  function handleError(e: RestAPIError | Error) {
+    if (!(e instanceof RestAPIError)) {
+      console.error(e);
+      return;
+    }
+    const id = e.getErrorMessageID();
+    const errorMessage = <FormattedMessage id={id} />;
+    switch (e.getErrorMessageType()) {
+      case RestAPIErrorType.EMAIL_ALREADY_USED:
+      case RestAPIErrorType.INVALID_EMAIL_FORMAT:
+      case RestAPIErrorType.INVALID_EMAIL_HOST:
+        setEmailError(errorMessage);
+        break;
+      case RestAPIErrorType.PASSWORD_LOWERCASE_MISSING:
+      case RestAPIErrorType.PASSWORD_NUMBER_MISSING:
+      case RestAPIErrorType.PASSWORD_TOO_LONG:
+      case RestAPIErrorType.PASSWORD_TOO_SHORT:
+      case RestAPIErrorType.PASSWORD_UPPERCASE_MISSING:
+        setPasswordError(errorMessage);
+        break;
+      default:
+        setGeneralError(errorMessage);
+        break;
     }
   }
 
@@ -96,11 +119,11 @@ export default function SignUp() {
               <BadanamuTextField
                 required
                 fullWidth
-                id="email"
+                autoComplete="email"
                 label={<FormattedMessage id="email" />}
+                value={email}
                 error={emailError !== null}
                 helperText={emailError}
-                autoComplete="email"
                 onChange={(e) => setEmail(e.target.value)}
               />
             </Grid>
@@ -108,25 +131,35 @@ export default function SignUp() {
               <BadanamuTextField
                 required
                 fullWidth
-                id="password"
+                type="password"
                 label={<FormattedMessage id="password" />}
+                value={password}
+                error={passwordError !== null}
+                helperText={passwordError}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <BadanamuTextField
+                required
+                fullWidth
+                value={passwordConfirmation}
+                label={<FormattedMessage id="password_confirmation" />}
                 type="password"
                 error={passwordError !== null}
                 helperText={passwordError}
-                autoComplete="current-password"
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => setPasswordConfirmation(e.target.value)}
               />
             </Grid>
           </Grid>
           <BadanamuButton
-            // type="submit"
             fullWidth
             size="large"
-            disabled={signupInFlight}
+            disabled={inFlight}
             onClick={() => signupClick()}
           >
             {
-              signupInFlight ?
+              inFlight ?
                 <CircularProgress size={25} /> :
                 <FormattedMessage id="sign_up_button" />
             }
@@ -150,9 +183,6 @@ export default function SignUp() {
           </Grid>
         </FormControl>
       </div>
-      <Box mt={5}>
-        <Copyright />
-      </Box>
     </Container>
   );
 }
