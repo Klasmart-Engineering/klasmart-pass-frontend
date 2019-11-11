@@ -112,7 +112,18 @@ export class RestAPI {
     public async endSession(): Promise<undefined> {
         const state = this.store.getState();
         const deviceId = state.account.deviceId;
-        const response = await this.authCall("signout", JSON.stringify({ deviceId }));
+        try {
+            const response = await this.authCall("signout", JSON.stringify({ deviceId }));
+        } catch (e) {
+            if (!(e instanceof RestAPIError)) { throw e; }
+            switch (e.getErrorMessageType()) {
+                case RestAPIErrorType.ITEM_NOT_FOUND:
+                case RestAPIErrorType.DEVICE_NOT_FOUND:
+                    break;
+                default:
+                    throw e;
+            }
+        }
         this.store.dispatch({ type: ActionTypes.LOGOUT, payload: undefined });
         return;
     }
