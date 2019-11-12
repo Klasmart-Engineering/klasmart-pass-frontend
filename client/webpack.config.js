@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
     mode: 'development',
-    entry: ['babel-polyfill','./src/client-entry.tsx'],
+    entry: ['babel-polyfill', './src/client-entry.tsx'],
     module: {
         rules: [
             {
@@ -21,10 +21,10 @@ module.exports = {
                     },
                     'css-modules-typescript-loader',
                     {
-                      loader: 'css-loader',
-                      options: {
-                        modules: true
-                      }
+                        loader: 'css-loader',
+                        options: {
+                            modules: true
+                        }
                     }
                 ],
             },
@@ -43,20 +43,21 @@ module.exports = {
         }),
     ],
     devServer: {
-        proxy: { 
+        host: "0.0.0.0",
+        proxy: {
             '/token': 'http://localhost:8000',
             '/payment': 'http://localhost:8000',
             '/auth': {
                 target: 'https://seoul-beta.auth.badanamu.net/',
                 secure: false,
                 changeOrigin: true,
-                pathRewrite: {'^/auth' : '/v1'}
+                pathRewrite: { '^/auth': '/v1' }
             },
             '/api': {
                 target: 'https://seoul-beta.api.badanamu.net/',
                 secure: false,
                 changeOrigin: true,
-                pathRewrite: {'^/api' : '/v1'}
+                pathRewrite: { '^/api': '/v1' }
             }
         }
     },

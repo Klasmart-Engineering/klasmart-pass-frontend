@@ -29,6 +29,7 @@ export type AccountIdAction = Action<ActionTypes.ACCOUNT_ID, {
     accountId?: string | any,
 } | any | undefined>;
 export type PostAuthorizationRouteAction = Action<ActionTypes.POST_AUTHORIZATION_ROUTE, string>;
+export type ProductIdAction = Action<ActionTypes.PRODUCT_ID, string>;
 
 export enum ActionTypes {
     LOGIN,
@@ -40,6 +41,7 @@ export enum ActionTypes {
     ACCOUNT_ID,
     DEVICE_ID,
     POST_AUTHORIZATION_ROUTE,
+    PRODUCT_ID,
 }
 
 export type Actions =
@@ -52,4 +54,5 @@ export type Actions =
     | DeviceIdAction
     | AccountIdAction
     | PostAuthorizationRouteAction
+    | ProductIdAction
     | never;

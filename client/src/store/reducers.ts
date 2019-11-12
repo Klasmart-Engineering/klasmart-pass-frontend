@@ -130,12 +130,22 @@ export function deviceId(state = null, action: Actions) {
     }
 }
 
+export function productId(state = null, action: Actions) {
+    switch (action.type) {
+        case ActionTypes.PRODUCT_ID:
+            return action.payload;
+        default:
+            return state;
+    }
+}
+
 export const account = combineReducers({
     accessToken,
     accessTokenExpire,
     accountId,
     deviceId,
     email,
+    productId,
     refreshToken,
     refreshTokenExpire,
     sessionId,
