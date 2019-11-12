@@ -12,11 +12,11 @@ const persistConfig = {
 const accountPersisted = persistReducer(persistConfig, account);
 const rootReducer = combineReducers({ account: accountPersisted, postAuthorizationRoute });
 
-export function createDefaultStore() {
-
-  const store = createStore(rootReducer);
-  const persistor = persistStore(store, {});
-  return store;
+export async function createDefaultStore() {
+  return new Promise<Store>((resolve) => {
+    const store = createStore(rootReducer);
+    const persistor = persistStore(store, {}, () => resolve(store));
+  });
 }
 export type State = ReturnType<typeof rootReducer>;
 export type Store = Store<State, Actions>;
