@@ -50,14 +50,15 @@ export function Login() {
 
     redirectIfAuthorized();
 
-    async function loginClick() {
+    async function login(e: React.FormEvent) {
+        e.preventDefault();
         if (inFlight) { return; }
         if (defaultEmail === "") { return; }
         if (password === "") { return; }
         try {
             setInFlight(true);
             await restApi.login(defaultEmail, password);
-            redirectIfAuthorized();
+            // redirectIfAuthorized();
         } catch (e) {
             handleError(e);
         } finally {
@@ -99,7 +100,7 @@ export function Login() {
                         values={{ b: (...chunks: any[]) => <strong>{chunks}</strong> }}
                     />
                 </Typography>
-                <FormControl className={classes.form} >
+                <form className={classes.form} onSubmit={(e) => login(e)} >
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <BadanamuTextField
@@ -129,9 +130,9 @@ export function Login() {
                     </Grid>
                     <BadanamuButton
                         fullWidth
+                        type="submit"
                         size="large"
                         disabled={inFlight}
-                        onClick={() => loginClick()}
                     >
                         {
                             inFlight ?
@@ -156,7 +157,7 @@ export function Login() {
                             </Link>
                         </Grid>
                     </Grid>
-                </FormControl>
+                </form>
             </div>
         </Container>
     );

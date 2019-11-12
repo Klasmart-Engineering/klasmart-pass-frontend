@@ -59,7 +59,8 @@ export function Signup() {
 
   redirectIfAuthorized();
 
-  async function signupClick() {
+  async function signup(e: React.FormEvent) {
+    e.preventDefault();
     if (inFlight) { return; }
     if (email === "") { return; }
     if (password === "") { return; }
@@ -111,7 +112,7 @@ export function Signup() {
             values={{ b: (...chunks: any[]) => <strong>{chunks}</strong> }}
           />
         </Typography>
-        <FormControl className={classes.form}>
+        <form className={classes.form} onSubmit={(e) => signup(e)}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <BadanamuTextField
@@ -151,10 +152,10 @@ export function Signup() {
             </Grid>
           </Grid>
           <BadanamuButton
+            type="submit"
             fullWidth
             size="large"
             disabled={inFlight}
-            onClick={() => signupClick()}
           >
             {
               inFlight ?
@@ -179,7 +180,7 @@ export function Signup() {
               </Link>
             </Grid>
           </Grid>
-        </FormControl>
+        </form>
       </div>
     </Container>
   );
