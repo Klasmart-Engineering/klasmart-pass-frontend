@@ -1,9 +1,11 @@
+import CssBaseline from "@material-ui/core/CssBaseline";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import React, { useState } from "react";
 import * as ReactDOM from "react-dom";
 import { RawIntlProvider } from "react-intl";
 import { Provider } from "react-redux";
 import { BrowserRouter, HashRouter } from "react-router-dom";
+import NavBar from "./components/navbar"
 import App from "./app";
 import { getIntl } from "./locale/locale";
 import { createDefaultStore } from "./store/store";
@@ -42,6 +44,8 @@ function ClientSide() {
             <Provider store={store}>
                 <RawIntlProvider value={locales[index]}>
                     <ThemeProvider theme={theme}>
+                        <CssBaseline />
+                        <NavBar />
                         <App />
                     </ThemeProvider>
                 </RawIntlProvider>

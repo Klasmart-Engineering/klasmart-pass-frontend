@@ -24,17 +24,18 @@ import { useState } from "react";
 import * as React from "react";
 import { FormattedMessage } from "react-intl";
 import { Route, Switch, useHistory } from "react-router-dom";
-import AccountInfo from "./components/accountInfo";
-import { isLoggedIn } from "./components/authorized";
-import Copyright from "./components/copyright";
-import { Landing } from "./pages/landing";
-import { Login } from "./pages/login";
-import { Payment } from "./pages/payment";
-import { Signup } from "./pages/signup";
-import { Verify } from "./pages/verify";
-import { useRestAPI } from "./restapi";
+import AccountInfo from "./accountInfo";
+import { isLoggedIn } from "./authorized";
+import Copyright from "./copyright";
+import { Landing } from "../pages/landing";
+import { Login } from "../pages/login";
+import { Payment } from "../pages/payment";
+import { Signup } from "../pages/signup";
+import { Verify } from "../pages/verify";
+import { useRestAPI } from "../restapi";
 
 const drawerWidth = 240;
+
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme: Theme) =>
@@ -94,9 +95,8 @@ const useStyles = makeStyles((theme: Theme) =>
         },
     }),
 );
-// tslint:enable:object-literal-sort-keys
 
-export function App() {
+export default function NavBar() {
     const classes = useStyles();
 
     const [open, setOpen] = useState(false);
@@ -122,22 +122,87 @@ export function App() {
     }
 
     return (
-        <Grid container direction={"column"} justify="flex-start">
-            <main className={clsx(classes.content, { [classes.contentShift]: open })}>
-                <div className={classes.drawerHeader} />
-                <Switch>
-                    <Route path="/login" component={Login} />
-                    <Route path="/signup" component={Signup} />
-                    <Route path="/verify" component={Verify} />
-                    <Route path="/payment" component={Payment} />
-                    <Route path="/" component={Landing} />
-                </Switch>
-                <Box mt={5}>
-                    <Copyright />
-                </Box>
-            </main>
-        </Grid>
+        <nav>
+            <AppBar
+                position="fixed"
+                className={clsx(classes.appBar, { [classes.appBarShift]: open })}
+            >
+                <Toolbar>
+                    <IconButton
+                        color="inherit"
+                        aria-label="open drawer"
+                        onClick={() => setOpen(true)}
+                        edge="start"
+                        className={clsx(classes.menuButton, open && classes.hide)}
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                    <Typography variant="h6" noWrap>
+                        Badanamu
+                    </Typography>
+                </Toolbar>
+            </AppBar>
+            <Drawer
+                className={classes.drawer}
+                variant="persistent"
+                anchor="left"
+                open={open}
+                classes={{
+                    paper: classes.drawerPaper,
+                }}
+            >
+                <div className={classes.drawerHeader}>
+                    <IconButton onClick={() => setOpen(false)}>
+                        <ChevronLeftIcon />
+                    </IconButton>
+                </div>
+                <Divider />
+                <List>
+                    <ListItem
+                        className={clsx({ [classes.hide]: !authorized })}
+                        button
+                        selected={history.location.pathname === "/signup"}
+                        onClick={() => navigate("/signup")}
+                    >
+                        <ListItemIcon>
+                            <AccountCircleIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={<FormattedMessage id="sign_up" />} />
+                    </ListItem>
+                    <ListItem
+                        className={clsx({ [classes.hide]: !authorized })}
+                        button
+                        selected={history.location.pathname === "/login"}
+                        onClick={() => navigate("/login")}
+                    >
+                        <ListItemIcon>
+                            <LockOpenIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={<FormattedMessage id="login" />} />
+                    </ListItem>
+                    <ListItem
+                        className={clsx({ [classes.hide]: authorized })}
+                        button
+                        onClick={() => logout()}
+                    >
+                        <ListItemIcon>
+                            {logoutInFlight ? <CircularProgress size={25} /> : <LogoutIcon />}
+                        </ListItemIcon>
+                        <ListItemText primary={<FormattedMessage id="logout" />} />
+                    </ListItem>
+                    <ListItem
+                        button
+                        selected={history.location.pathname === "/payment"}
+                        onClick={() => navigate("/payment")}
+                    >
+                        <ListItemIcon>
+                            <PaymentIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={<FormattedMessage id="payment" />} />
+                    </ListItem>
+                </List>
+                <Divider />
+            </Drawer>
+        </nav>
     );
 }
-
-export default App;

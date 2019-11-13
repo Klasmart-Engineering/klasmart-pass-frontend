@@ -1,6 +1,5 @@
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Container from "@material-ui/core/Container";
-import CssBaseline from "@material-ui/core/CssBaseline";
 import FormControl from "@material-ui/core/FormControl";
 import Grid from "@material-ui/core/Grid";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
@@ -67,7 +66,6 @@ export function Verify() {
     }
     return (
         <Container component="main" maxWidth="xs" >
-            <CssBaseline />
             <Typography component="h1" variant="h5">
                 <FormattedMessage id="verify_email" />
             </Typography>

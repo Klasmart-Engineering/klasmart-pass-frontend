@@ -11,15 +11,15 @@ import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
 import CheckRoundedIcon from "@material-ui/icons/CheckRounded";
 import ClearRoundedIcon from "@material-ui/icons/ClearRounded";
+import DevicesIcon from '@material-ui/icons/Devices';
+import LaptopIcon from '@material-ui/icons/Laptop';
+import TabletIcon from '@material-ui/icons/Tablet';
 import React, { useState } from "react";
 import { useStore } from "react-redux";
 import { useHistory } from "react-router";
 import BadanamuButton from "../components/button";
 import { ActionTypes } from "../store/actions";
 import { Store } from "../store/store";
-import TabletIcon from '@material-ui/icons/Tablet';
-import DevicesIcon from '@material-ui/icons/Devices';
-import LaptopIcon from '@material-ui/icons/Laptop';
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme) => createStyles({

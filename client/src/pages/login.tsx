@@ -1,6 +1,5 @@
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Container from "@material-ui/core/Container";
-import CssBaseline from "@material-ui/core/CssBaseline";
 import FormControl from "@material-ui/core/FormControl/FormControl";
 import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
@@ -92,7 +91,6 @@ export function Login() {
 
     return (
         <Container component="main" maxWidth="xs" >
-            <CssBaseline />
             <div className={classes.paper}>
                 <img src="https://static-2-badanamu.akamaized.net/wp-content/uploads/2017/04/cropped-Badanamu-PNG-2.png" style={{ marginBottom: 12 }} />
                 <Typography component="h1" variant="h5">
