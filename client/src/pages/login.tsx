@@ -53,12 +53,11 @@ export function Login() {
     async function login(e: React.FormEvent) {
         e.preventDefault();
         if (inFlight) { return; }
-        if (defaultEmail === "") { return; }
+        if (email === "") { return; }
         if (password === "") { return; }
         try {
             setInFlight(true);
-            await restApi.login(defaultEmail, password);
-            // redirectIfAuthorized();
+            await restApi.login(email, password);
         } catch (e) {
             handleError(e);
         } finally {
