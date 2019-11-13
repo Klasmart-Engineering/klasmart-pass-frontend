@@ -9,6 +9,7 @@ import { FormattedMessage } from "react-intl";
 import { redirectIfUnauthorized } from "../components/authorized";
 import DropIn from "../components/braintree-web-drop-in-react";
 import BadanamuButton from "../components/button";
+import { useRestAPI } from "../restapi";
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme: Theme) =>
@@ -27,6 +28,9 @@ export function Payment() {
     const [paymentReady, setPaymentReady] = useState(false);
     const [braintree, setBrainTree] = useState<Braintree.Dropin | null>(null);
     const [error, setError] = useState<JSX.Element | null>(null);
+
+    const restApi = useRestAPI();
+
     useEffect(() => {
         getClientToken();
         return;
@@ -37,9 +41,8 @@ export function Payment() {
         if (clientTokenInFlight) { return; }
         try {
             setClientTokenInFlight(true);
-            const response = await fetch("./token");
-            const body = await response.json(); // If returned as JSON string
-            setClientToken(body.clientToken);
+            const newClientToken = await restApi.getPaymentToken();
+            setClientToken(newClientToken);
         } catch (e) {
             setError(<FormattedMessage id={"ERROR_UNKOWN"} />);
         } finally {
@@ -52,13 +55,7 @@ export function Payment() {
         if (braintree === null) { return; }
         // Send the nonce to your server
         const { nonce } = await braintree.requestPaymentMethod();
-        const request = {
-            body: JSON.stringify({ nonce }),
-            headers: { "Accept": "application/json", "Content-Type": "application/json" },
-            method: "POST",
-        };
-        console.log(request);
-        await fetch(`./payment`, request);
+        await restApi.reportPaymentNonce(nonce);
     }
 
     return (

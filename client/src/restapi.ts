@@ -4,6 +4,7 @@ import { ActionTypes } from "./store/actions";
 import { Store } from "./store/store";
 
 export class RestAPI {
+    private paymentPrefix = "/payment/";
     private authPrefix = "/auth/";
     private apiPrefix = "/api/";
 
@@ -127,11 +128,27 @@ export class RestAPI {
         this.store.dispatch({ type: ActionTypes.LOGOUT, payload: undefined });
         return;
     }
-    public getPaymentToken(): Promise<string> {
-        throw new Error("Method not implemented.");
+    public async getPaymentToken() {
+        const response = await this.paymentCall("GET", "token");
+        const body = await response.json();
+        if (typeof body === "object") {
+            const { clientToken } = body;
+            if (typeof clientToken === "string") {
+                return clientToken;
+            }
+        }
+        throw new RestAPIError(RestAPIErrorType.UNKNOWN, body);
     }
-    public reportPaymentNonce(): Promise<void> {
-        throw new Error("Method not implemented.");
+    public async reportPaymentNonce(nonce: string) {
+        const response = await this.paymentCall("POST", "payment", JSON.stringify({ nonce }));
+        const body = await response.json();
+        if (typeof body === "object") {
+            const { transactionId } = body;
+            if (typeof transactionId === "string") {
+                return transactionId;
+            }
+        }
+        throw new RestAPIError(RestAPIErrorType.UNKNOWN, body);
     }
 
     private async autoRefreshSesion() {
@@ -143,16 +160,20 @@ export class RestAPI {
         }
     }
 
-    private authCall(route: string, body: string, refresh = true) {
-        return this.call(this.authPrefix, route, body, refresh);
-    }
-    private apiCall(route: string, body: string, refresh = true) {
-        return this.call(this.apiPrefix, route, body, refresh);
+    private paymentCall(method: "POST" | "GET", route: string, body?: string, refresh = true) {
+        return this.call(method, this.paymentPrefix, route, body, refresh);
     }
 
-    private async call(prefix: string, route: string, body: string, refresh: boolean) {
+    private authCall(route: string, body: string, refresh = true) {
+        return this.call("POST", this.authPrefix, route, body, refresh);
+    }
+    private apiCall(route: string, body: string, refresh = true) {
+        return this.call("POST", this.apiPrefix, route, body, refresh);
+    }
+
+    private async call(method: string, prefix: string, route: string, body: string | undefined, refresh: boolean) {
         try {
-            const response = await this.fetchRoute(prefix, route, body);
+            const response = await this.fetchRoute(method, prefix, route, body);
             return response;
         } catch (e) {
             if (e instanceof RestAPIError) {
@@ -161,7 +182,7 @@ export class RestAPI {
                         this.store.dispatch({ type: ActionTypes.EXPIRED_ACCESS_TOKEN });
                         if (refresh) {
                             await this.refreshSession();
-                            return this.fetchRoute(prefix, route, body);
+                            return this.fetchRoute(method, prefix, route, body);
                         }
                     case RestAPIErrorType.EXPIRED_REFRESH_TOKEN:
                         this.store.dispatch({ type: ActionTypes.EXPIRED_REFRESH_TOKEN });
@@ -171,7 +192,7 @@ export class RestAPI {
         }
     }
 
-    private async fetchRoute(prefix: string, route: string, body: string) {
+    private async fetchRoute(method: string, prefix: string, route: string, body?: string) {
         if (this.test) {
             const maxDelay = 10000;
             const delaySkew = 5;
@@ -198,7 +219,7 @@ export class RestAPI {
         const response = await fetch(url, {
             body,
             headers,
-            method: "POST",
+            method,
         });
 
         if (response.status === 200) { return response; }

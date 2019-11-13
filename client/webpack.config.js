@@ -45,8 +45,12 @@ module.exports = {
     devServer: {
         host: "0.0.0.0",
         proxy: {
-            '/token': 'http://localhost:8000',
-            '/payment': 'http://localhost:8000',
+            '/payment': {
+                target: 'http://localhost:8092/',
+                secure: false,
+                changeOrigin: true,
+                pathRewrite: { '^/payment': '/v1' }
+            },
             '/auth': {
                 target: 'https://seoul-beta.auth.badanamu.net/',
                 secure: false,
