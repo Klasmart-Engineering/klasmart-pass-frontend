@@ -129,7 +129,7 @@ export class RestAPI {
         return;
     }
     public async getPaymentToken() {
-        const response = await this.paymentCall("GET", "token");
+        const response = await this.paymentCall("GET", "braintree/token");
         const body = await response.json();
         if (typeof body === "object") {
             const { clientToken } = body;
@@ -140,7 +140,7 @@ export class RestAPI {
         throw new RestAPIError(RestAPIErrorType.UNKNOWN, body);
     }
     public async reportPaymentNonce(nonce: string) {
-        const response = await this.paymentCall("POST", "payment", JSON.stringify({ nonce }));
+        const response = await this.paymentCall("POST", "braintree/payment", JSON.stringify({ nonce }));
         const body = await response.json();
         if (typeof body === "object") {
             const { transactionId } = body;
