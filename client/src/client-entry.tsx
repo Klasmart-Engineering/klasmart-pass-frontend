@@ -7,6 +7,7 @@ import { RawIntlProvider } from "react-intl";
 import { Provider } from "react-redux";
 import { BrowserRouter, HashRouter } from "react-router-dom";
 import App from "./app";
+import { Dev } from "./components/dev/dev";
 import NavBar from "./components/navbar";
 import { getIntl } from "./locale/locale";
 import { createDefaultStore } from "./store/store";
@@ -51,6 +52,7 @@ async function main() {
                             <CssBaseline />
                             <NavBar />
                             <App />
+                            {window.location.hostname === "localhost" ? <Dev /> : null}
                         </ThemeProvider>
                     </RawIntlProvider>
                 </Provider>
