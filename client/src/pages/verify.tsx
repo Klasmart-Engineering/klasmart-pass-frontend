@@ -2,45 +2,22 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import Container from "@material-ui/core/Container";
 import FormControl from "@material-ui/core/FormControl";
 import Grid from "@material-ui/core/Grid";
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
+import * as QueryString from "query-string";
 import * as React from "react";
+import { useEffect } from "react";
 import { FormattedMessage } from "react-intl";
-import { redirectIfAuthorized, redirectIfUnverifiable } from "../components/authorized";
+import { useStore } from "react-redux";
+import { RouteComponentProps } from "react-router-dom";
+import { redirectIfUnverifiable } from "../components/authorized";
 import BadanamuButton from "../components/button";
 import BadanamuTextField from "../components/textfield";
 import { useRestAPI } from "../restapi";
 import { RestAPIError } from "../restapi_errors";
+import { ActionTypes } from "../store/actions";
 
-// tslint:disable:object-literal-sort-keys
-const useStyles = makeStyles((theme: Theme) => createStyles({
-    "@global": {
-        body: {
-            backgroundColor: theme.palette.common.white,
-        },
-    },
-    "paper": {
-        marginTop: theme.spacing(8),
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-    },
-    "avatar": {
-        margin: theme.spacing(1),
-        backgroundColor: theme.palette.secondary.main,
-    },
-    "form": {
-        width: "100%", // Fix IE 11 issue.
-        marginTop: theme.spacing(3),
-    },
-    "submit": {
-        margin: theme.spacing(3, 0, 2),
-    },
-}),
-);
-// tslint:enable:object-literal-sort-keys
-
-export function Verify() {
+export function Verify(props: RouteComponentProps) {
+    const store = useStore();
     const [verificationCode, setVerificationCode] = React.useState("");
     const [error, setError] = React.useState<JSX.Element | null>(null);
     const [verifyInFlight, setVerifyInFlight] = React.useState(false);
@@ -48,13 +25,12 @@ export function Verify() {
 
     redirectIfUnverifiable();
 
-    async function verify(code: string) {
-        if (verificationCode === "") { return; }
+    async function verify(code = verificationCode) {
+        if (code === "") { return; }
         if (verifyInFlight) { return; }
         try {
             setVerifyInFlight(true);
             await restApi.verify(code);
-            redirectIfAuthorized();
         } catch (e) {
             if (e instanceof RestAPIError) {
                 const id = e.getErrorMessageID();
@@ -64,6 +40,18 @@ export function Verify() {
             setVerifyInFlight(false);
         }
     }
+
+    useEffect(() => {
+        const params = QueryString.parse(props.location.search);
+        if (typeof params.accountId === "string") {
+            store.dispatch({ type: ActionTypes.ACCOUNT_ID, payload: params.accountId });
+        }
+        if (typeof params.code === "string") {
+            setVerificationCode(params.code);
+            verify(params.code);
+        }
+    }, []);
+
     return (
         <Container maxWidth="xs" >
             <Typography component="h1" variant="h5">
@@ -88,7 +76,7 @@ export function Verify() {
                     fullWidth
                     size="large"
                     disabled={verifyInFlight}
-                    onClick={() => verify(verificationCode)}
+                    onClick={() => verify()}
                 >
                     {
                         verifyInFlight ?

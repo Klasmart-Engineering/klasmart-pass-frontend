@@ -40,6 +40,7 @@
     "@material-ui/icons": "^4.5.1",
     "braintree-web-drop-in": "^1.20.4",
     "cookies-js": "^1.2.3",
+    "query-string": "^6.9.0",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
     "react-intl": "^3.4.0",
