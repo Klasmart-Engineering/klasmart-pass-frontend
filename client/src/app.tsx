@@ -27,12 +27,14 @@ import { Route, Switch, useHistory } from "react-router-dom";
 import AccountInfo from "./components/accountInfo";
 import { isLoggedIn } from "./components/authorized";
 import Copyright from "./components/copyright";
+import { Introduction } from "./pages/introduction";
 import { Landing } from "./pages/landing";
 import { Login } from "./pages/login";
 import { Payment } from "./pages/payment";
 import { Signup } from "./pages/signup";
 import { Verify } from "./pages/verify";
 import { useRestAPI } from "./restapi";
+;
 
 const drawerWidth = 240;
 
@@ -128,6 +130,7 @@ export function App() {
                 <Route path="/signup" component={Signup} />
                 <Route path="/verify" component={Verify} />
                 <Route path="/payment" component={Payment} />
+                <Route path="/introduction" component={Introduction} />
                 <Route path="/" component={Landing} />
             </Switch>
             <Box mt={5}>
