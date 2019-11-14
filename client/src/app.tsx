@@ -122,21 +122,18 @@ export function App() {
     }
 
     return (
-        <Grid container direction={"column"} justify="flex-start">
-            <main className={clsx(classes.content, { [classes.contentShift]: open })}>
-                <div className={classes.drawerHeader} />
-                <Switch>
-                    <Route path="/login" component={Login} />
-                    <Route path="/signup" component={Signup} />
-                    <Route path="/verify" component={Verify} />
-                    <Route path="/payment" component={Payment} />
-                    <Route path="/" component={Landing} />
-                </Switch>
-                <Box mt={5}>
-                    <Copyright />
-                </Box>
-            </main>
-        </Grid>
+        <main className={clsx(classes.content, { [classes.contentShift]: open })}>
+            <Switch>
+                <Route path="/login" component={Login} />
+                <Route path="/signup" component={Signup} />
+                <Route path="/verify" component={Verify} />
+                <Route path="/payment" component={Payment} />
+                <Route path="/" component={Landing} />
+            </Switch>
+            <Box mt={5}>
+                <Copyright />
+            </Box>
+        </main>
     );
 }
 

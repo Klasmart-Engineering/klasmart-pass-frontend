@@ -27,8 +27,8 @@ async function main() {
                 textTransform: "none",
             },
             fontFamily: index === 1 ?
-                ["Nanum Gothic", "Source Sans Pro", "Helvetica", "-apple-system", "sans-serif"].join(",") :
-                ["Source Sans Pro", "Helvetica", "-apple-system", "sans-serif"].join(","),
+                ["Nanum Gothic", "Open Sans", "Helvetica", "-apple-system", "sans-serif"].join(",") :
+                ["Open Sans", "Helvetica", "-apple-system", "sans-serif"].join(","),
             fontWeightLight: 400,
             fontWeightMedium: 400,
             fontWeightRegular: index === 1 ? 400 : 400,

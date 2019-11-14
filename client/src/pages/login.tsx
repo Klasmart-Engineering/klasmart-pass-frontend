@@ -90,7 +90,7 @@ export function Login() {
     }
 
     return (
-        <Container component="main" maxWidth="xs" >
+        <Container maxWidth="xs" >
             <div className={classes.paper}>
                 <img src="https://static-2-badanamu.akamaized.net/wp-content/uploads/2017/04/cropped-Badanamu-PNG-2.png" style={{ marginBottom: 12 }} />
                 <Typography component="h1" variant="h5">

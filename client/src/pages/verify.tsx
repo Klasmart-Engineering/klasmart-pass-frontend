@@ -65,7 +65,7 @@ export function Verify() {
         }
     }
     return (
-        <Container component="main" maxWidth="xs" >
+        <Container maxWidth="xs" >
             <Typography component="h1" variant="h5">
                 <FormattedMessage id="verify_email" />
             </Typography>

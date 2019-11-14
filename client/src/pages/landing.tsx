@@ -1,6 +1,7 @@
 import Button from "@material-ui/core/Button";
 import Chip from "@material-ui/core/Chip";
 import Container from "@material-ui/core/Container";
+import Hidden from "@material-ui/core/Hidden";
 import Slide from "@material-ui/core/Slide";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -11,9 +12,10 @@ import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
 import CheckRoundedIcon from "@material-ui/icons/CheckRounded";
 import ClearRoundedIcon from "@material-ui/icons/ClearRounded";
-import DevicesIcon from '@material-ui/icons/Devices';
-import LaptopIcon from '@material-ui/icons/Laptop';
-import TabletIcon from '@material-ui/icons/Tablet';
+import DevicesIcon from "@material-ui/icons/Devices";
+import LaptopIcon from "@material-ui/icons/Laptop";
+import TabletIcon from "@material-ui/icons/Tablet";
+import clsx from "clsx";
 import React, { useState } from "react";
 import { useStore } from "react-redux";
 import { useHistory } from "react-router";
@@ -30,12 +32,31 @@ const useStyles = makeStyles((theme) => createStyles({
         alignItems: "left",
     },
     planSelectBtn: {
-        width: 100,
-        height: 100,
-        fontSize: 19,
-        fontWeight: 600,
-        color: "white",
+        "width": 100,
+        "height": 100,
+        "fontSize": 19,
+        "fontWeight": 600,
+        "color": "white",
+        "backgroundColor": "#aedaf3",
+        "&:hover": {
+            color: "white",
+            backgroundColor: "#58bcf5",
+            boxShadow: "0px 0px 10px 0px rgba(24,150,234,1)",
+            transform: "translateY(-1px)",
+        },
+    },
+    planSelectedBtn: {
         backgroundColor: "#1896ea",
+        boxShadow: "0px 0px 10px 0px rgba(24,150,234,1)",
+    },
+    smTableTitle: {
+        borderBottom: 0,
+    },
+    selected: {
+        color: "#1896ea",
+    },
+    notSelected: {
+        color: "gray",
     },
 }),
 );
@@ -68,8 +89,9 @@ export function Landing() {
         createData("Badanamu: Books", <ClearRoundedIcon />, <CheckRoundedIcon />),
     ];
 
+    console.log(selectedPlan);
     return (
-        <Container component="main" maxWidth="lg">
+        <Container maxWidth="lg">
             <Slide direction="left" in={step === 1} timeout={{ exit: 10 }} mountOnEnter unmountOnExit>
                 <Container>
                     <div className={classes.paper}>
@@ -78,32 +100,80 @@ export function Landing() {
                         <Typography>Passes are valid for one year and billed annually</Typography>
                     </div>
                     <div className={classes.paper}>
-                        <Table aria-label="simple table">
+                        <Table aria-label="plan table">
                             <TableHead>
                                 <TableRow>
-                                    <TableCell></TableCell>
+                                    <Hidden smDown>
+                                        <TableCell></TableCell>
+                                    </Hidden>
                                     <TableCell align="center">
-                                        <Button className={classes.planSelectBtn} value="BLP" onClick={(e) => setPlan("BLP")}>BLP</Button>
+                                        <Button
+                                            className={clsx(classes.planSelectBtn, selectedPlan === "BLP" && classes.planSelectedBtn)}
+                                            value="BLP"
+                                            onClick={(e) => {
+                                                store.dispatch({ type: ActionTypes.PRODUCT_ID, payload: "BLP" });
+                                                setPlan("BLP");
+                                            }}
+                                        >
+                                            BLP
+                                        </Button>
                                     </TableCell>
                                     <TableCell align="center">
-                                        <Button className={classes.planSelectBtn} value="BLP+" onClick={(e) => setPlan("BLP+")}>BLP+</Button>
+                                        <Button
+                                            className={clsx(classes.planSelectBtn, selectedPlan === "BLP+" && classes.planSelectedBtn)}
+                                            value="BLP+"
+                                            onClick={(e) => {
+                                                store.dispatch({ type: ActionTypes.PRODUCT_ID, payload: "BLP+" });
+                                                setPlan("BLP+");
+                                            }}
+                                        >
+                                            BLP+
+                                        </Button>
                                     </TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {rows.map((row) => (
-                                    <TableRow key={row.name}>
-                                        <TableCell component="th" scope="row">
-                                            <Typography variant="subtitle1">{row.name}</Typography>
-                                        </TableCell>
-                                        <TableCell align="center">
-                                            {row.blp}
-                                        </TableCell>
-                                        <TableCell align="center">
-                                            {row.blpPlus}
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
+                                <Hidden smDown>
+                                    {rows.map((row) => (
+                                        <TableRow key={row.name}>
+                                            <TableCell component="th" scope="row">
+                                                <Typography variant="subtitle1">{row.name}</Typography>
+                                            </TableCell>
+                                            <TableCell align="center" className={selectedPlan === "BLP" ? classes.selected : classes.notSelected}>
+                                                {row.blp}
+                                            </TableCell>
+                                            <TableCell align="center" className={selectedPlan === "BLP+" ? classes.selected : classes.notSelected}>
+                                                {row.blpPlus}
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </Hidden>
+                                <Hidden mdUp>
+                                    {rows.map((row) => (
+                                        <React.Fragment>
+                                            <TableRow key={row.name}>
+                                                <TableCell
+                                                    align="center"
+                                                    size="small"
+                                                    component="th"
+                                                    scope="row"
+                                                    colSpan={2}
+                                                    className={classes.smTableTitle}
+                                                >
+                                                    <Typography variant="subtitle1">{row.name}</Typography>
+                                                </TableCell>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableCell align="center" className={selectedPlan === "BLP" ? classes.selected : classes.notSelected}>
+                                                    {row.blp}
+                                                </TableCell>
+                                                <TableCell align="center" className={selectedPlan === "BLP+" ? classes.selected : classes.notSelected}>
+                                                    {row.blpPlus}
+                                                </TableCell>
+                                            </TableRow>
+                                        </React.Fragment>
+                                    ))}
+                                </Hidden>
                             </TableBody>
                         </Table>
                     </div>
@@ -125,10 +195,7 @@ export function Landing() {
                         <Typography align="center" variant="h4">Create your account.</Typography>
                         <Typography align="center">Use your email and create a password to access your KidsApps on any device at any time.</Typography>
                     </div>
-                    <BadanamuButton fullWidth size="large" onClick={(e) => {
-                        store.dispatch({ type: ActionTypes.PRODUCT_ID, payload: selectedPlan });
-                        history.push("/signup");
-                    }}>
+                    <BadanamuButton fullWidth size="large" onClick={(e) => { history.push("/signup"); }}>
                         Continue with {selectedPlan}
                     </BadanamuButton>
                 </Container>
