@@ -9,18 +9,7 @@ import BadanamuButton from "../button";
 
 export default function AccountInfo() {
     const account = useSelector((state: State) => state.account);
-    const [inFlight, setInFlight] = useState(false);
-    const restApi = useRestAPI();
 
-    async function refresh() {
-        if (inFlight) { return; }
-        try {
-            setInFlight(true);
-            await restApi.refreshSession();
-        } finally {
-            setInFlight(false);
-        }
-    }
     const items = [];
     // tslint:disable-next-line:forin
     for (const item in account) {
@@ -28,7 +17,6 @@ export default function AccountInfo() {
     }
     return (
         <div>
-            <BadanamuButton disabled={inFlight} onClick={() => refresh()}>Refresh</BadanamuButton>
             <List>
                 {items}
             </List>

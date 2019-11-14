@@ -13,6 +13,7 @@ import EmailIcon from "@material-ui/icons/Email";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
 import PaymentIcon from "@material-ui/icons/Payment";
 import LogoutIcon from "@material-ui/icons/PowerSettingsNew";
+import RefreshIcon from "@material-ui/icons/Refresh";
 import { useState } from "react";
 import * as React from "react";
 import { FormattedMessage } from "react-intl";
@@ -89,6 +90,7 @@ export function DeveloperDrawer(props: Props) {
     const classes = useStyles();
 
     const [logoutInFlight, setLogoutInFlight] = useState(false);
+    const [refreshInFlight, setRefreshInFlight] = useState(false);
 
     const history = useHistory();
     const api = useRestAPI();
@@ -105,6 +107,16 @@ export function DeveloperDrawer(props: Props) {
             await api.endSession();
         } finally {
             setLogoutInFlight(false);
+        }
+    }
+
+    async function refresh() {
+        if (refreshInFlight) { return; }
+        try {
+            setRefreshInFlight(true);
+            await api.refreshSession();
+        } finally {
+            setRefreshInFlight(false);
         }
     }
 
@@ -153,6 +165,15 @@ export function DeveloperDrawer(props: Props) {
                         {logoutInFlight ? <CircularProgress size={25} /> : <LogoutIcon />}
                     </ListItemIcon>
                     <ListItemText primary={<FormattedMessage id="logout" />} />
+                </ListItem>
+                <ListItem
+                    button
+                    onClick={() => refresh()}
+                >
+                    <ListItemIcon>
+                        {refreshInFlight ? <CircularProgress size={25} /> : <RefreshIcon />}
+                    </ListItemIcon>
+                    <ListItemText primary="refresh" />
                 </ListItem>
                 <ListItem
                     button
