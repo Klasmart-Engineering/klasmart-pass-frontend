@@ -1,5 +1,6 @@
 import AppBar from "@material-ui/core/AppBar";
 import Box from "@material-ui/core/Box";
+import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
@@ -9,33 +10,55 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
+import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import EmailIcon from "@material-ui/icons/Email";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
 import MenuIcon from "@material-ui/icons/Menu";
 import PaymentIcon from "@material-ui/icons/Payment";
 import LogoutIcon from "@material-ui/icons/PowerSettingsNew";
+import LanguageIcon from "@material-ui/icons/Translate";
 import clsx from "clsx";
 import { useState } from "react";
 import * as React from "react";
 import { FormattedMessage } from "react-intl";
 import { Route, Switch, useHistory } from "react-router-dom";
-import AccountInfo from "./accountInfo";
-import { isLoggedIn } from "./authorized";
-import Copyright from "./copyright";
 import { Landing } from "../pages/landing";
 import { Login } from "../pages/login";
 import { Payment } from "../pages/payment";
 import { Signup } from "../pages/signup";
 import { Verify } from "../pages/verify";
 import { useRestAPI } from "../restapi";
+import AccountInfo from "./accountInfo";
+import { isLoggedIn } from "./authorized";
+import Copyright from "./copyright";
 
 const drawerWidth = 240;
-
+const LANGUAGES_LABEL = [
+    {
+        code: "en",
+        text: "English",
+    },
+    {
+        code: "ko",
+        text: "Korean",
+    },
+    {
+        code: "id",
+        text: "Indonesian",
+    },
+    {
+        code: "vi",
+        text: "Vietnamese",
+    },
+];
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme: Theme) =>
@@ -43,19 +66,23 @@ const useStyles = makeStyles((theme: Theme) =>
         root: {
             display: "flex",
         },
-        appBar: {
-            transition: theme.transitions.create(["margin", "width"], {
-                easing: theme.transitions.easing.sharp,
-                duration: theme.transitions.duration.leavingScreen,
-            }),
+        grow: {
+            flexGrow: 1,
         },
-        appBarShift: {
-            width: `calc(100% - ${drawerWidth}px)`,
-            marginLeft: drawerWidth,
-            transition: theme.transitions.create(["margin", "width"], {
-                easing: theme.transitions.easing.easeOut,
-                duration: theme.transitions.duration.enteringScreen,
-            }),
+        appBar: {
+            backgroundColor: "white",
+            color: "black",
+        },
+        appBarBtn: {
+            fontSize: 19,
+            margin: "0 10px",
+        },
+        language: {
+            margin: theme.spacing(0, 0.5, 0, 1),
+            display: "none",
+            [theme.breakpoints.up("md")]: {
+                display: "block",
+            },
         },
         menuButton: {
             marginRight: theme.spacing(2),
@@ -93,6 +120,10 @@ const useStyles = makeStyles((theme: Theme) =>
             }),
             marginRight: -drawerWidth,
         },
+        vl: {
+            borderLeft: "2px solid black",
+            height: 30,
+        },
     }),
 );
 
@@ -101,6 +132,14 @@ export default function NavBar() {
 
     const [open, setOpen] = useState(false);
     const [logoutInFlight, setLogoutInFlight] = useState(false);
+    const [userLanguage, setUserLanguage] = useState("en");
+    const [languageMenu, setLanguageMenu] = useState<null | HTMLElement>(null);
+    const handleLanguageIconClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+        setLanguageMenu(e.currentTarget);
+    };
+    const handleLanguageMenuClose = (e: any) => {
+        setLanguageMenu(null);
+    };
 
     const history = useHistory();
     const api = useRestAPI();
@@ -124,85 +163,62 @@ export default function NavBar() {
     return (
         <nav>
             <AppBar
-                position="fixed"
-                className={clsx(classes.appBar, { [classes.appBarShift]: open })}
+                elevation={1}
+                position="static"
+                className={classes.appBar}
             >
                 <Toolbar>
-                    <IconButton
+                    <Button color="inherit" onClick={() => navigate("/")}>
+                        <img src="https://static-2-badanamu.akamaized.net/wp-content/uploads/2017/04/cropped-Badanamu-PNG-2.png" style={{ height: 50, marginRight: 8 }} />
+                        <Typography variant="h4" className={classes.language} noWrap>
+                            Learning Pass
+                        </Typography>
+                    </Button>
+                    <div className={classes.grow} />
+                    <Tooltip title="Change Language" enterDelay={300}>
+                        <Button
+                            color="inherit"
+                            aria-owns={languageMenu ? "language-menu" : undefined}
+                            aria-haspopup="true"
+                            className={classes.appBarBtn}
+                            data-ga-event-category="AppBar"
+                            data-ga-event-action="language"
+                            onClick={handleLanguageIconClick}
+                        >
+                            <LanguageIcon />
+                            <span className={classes.language}>
+                                {LANGUAGES_LABEL.filter((language) => language.code === userLanguage)[0].text}
+                            </span>
+                            <ExpandMoreIcon fontSize="small" />
+                        </Button>
+                    </Tooltip>
+                    <Menu
+                        id="language-menu"
+                        anchorEl={languageMenu}
+                        keepMounted
+                        open={Boolean(languageMenu)}
+                        onClose={handleLanguageMenuClose}
+                    >
+                        {LANGUAGES_LABEL.map((language) => (
+                            <MenuItem
+                                key={language.code}
+                                selected={userLanguage === language.code}
+                                onClick={handleLanguageMenuClose}
+                            >
+                                {language.text}
+                            </MenuItem>
+                        ))}
+                    </Menu>
+                    <div className={classes.vl}></div>
+                    <Button
                         color="inherit"
-                        aria-label="open drawer"
-                        onClick={() => setOpen(true)}
-                        edge="start"
-                        className={clsx(classes.menuButton, open && classes.hide)}
-                    >
-                        <MenuIcon />
-                    </IconButton>
-                    <Typography variant="h6" noWrap>
-                        Badanamu
-                    </Typography>
-                </Toolbar>
-            </AppBar>
-            <Drawer
-                className={classes.drawer}
-                variant="persistent"
-                anchor="left"
-                open={open}
-                classes={{
-                    paper: classes.drawerPaper,
-                }}
-            >
-                <div className={classes.drawerHeader}>
-                    <IconButton onClick={() => setOpen(false)}>
-                        <ChevronLeftIcon />
-                    </IconButton>
-                </div>
-                <Divider />
-                <List>
-                    <ListItem
-                        className={clsx({ [classes.hide]: !authorized })}
-                        button
-                        selected={history.location.pathname === "/signup"}
-                        onClick={() => navigate("/signup")}
-                    >
-                        <ListItemIcon>
-                            <AccountCircleIcon />
-                        </ListItemIcon>
-                        <ListItemText primary={<FormattedMessage id="sign_up" />} />
-                    </ListItem>
-                    <ListItem
-                        className={clsx({ [classes.hide]: !authorized })}
-                        button
-                        selected={history.location.pathname === "/login"}
+                        className={classes.appBarBtn}
                         onClick={() => navigate("/login")}
                     >
-                        <ListItemIcon>
-                            <LockOpenIcon />
-                        </ListItemIcon>
-                        <ListItemText primary={<FormattedMessage id="login" />} />
-                    </ListItem>
-                    <ListItem
-                        className={clsx({ [classes.hide]: authorized })}
-                        button
-                        onClick={() => logout()}
-                    >
-                        <ListItemIcon>
-                            {logoutInFlight ? <CircularProgress size={25} /> : <LogoutIcon />}
-                        </ListItemIcon>
-                        <ListItemText primary={<FormattedMessage id="logout" />} />
-                    </ListItem>
-                    <ListItem
-                        button
-                        selected={history.location.pathname === "/payment"}
-                        onClick={() => navigate("/payment")}
-                    >
-                        <ListItemIcon>
-                            <PaymentIcon />
-                        </ListItemIcon>
-                        <ListItemText primary={<FormattedMessage id="payment" />} />
-                    </ListItem>
-                </List>
-                <Divider />
-            </Drawer>
+                        Sign In
+                    </Button>
+                </Toolbar>
+            </AppBar>
         </nav>
     );
 }

@@ -1,5 +1,6 @@
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+import { Typography } from "@material-ui/core/styles/createTypography";
 import React, { useState } from "react";
 import * as ReactDOM from "react-dom";
 import { RawIntlProvider } from "react-intl";
@@ -22,14 +23,16 @@ async function main() {
 
         const [paletteType, setPalette] = useState("light");
         const typography = {
+            button: {
+                textTransform: "none",
+            },
             fontFamily: index === 1 ?
                 ["Nanum Gothic", "Source Sans Pro", "Helvetica", "-apple-system", "sans-serif"].join(",") :
                 ["Source Sans Pro", "Helvetica", "-apple-system", "sans-serif"].join(","),
             fontWeightLight: 400,
             fontWeightMedium: 400,
             fontWeightRegular: index === 1 ? 400 : 400,
-            useNextVariants: true,
-        };
+        } as any; // TODO: Seems like a bug in materialUI's types
 
         const overrides = {};
 

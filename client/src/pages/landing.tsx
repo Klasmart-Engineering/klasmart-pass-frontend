@@ -29,6 +29,14 @@ const useStyles = makeStyles((theme) => createStyles({
         flexDirection: "column",
         alignItems: "left",
     },
+    planSelectBtn: {
+        width: 100,
+        height: 100,
+        fontSize: 19,
+        fontWeight: 600,
+        color: "white",
+        backgroundColor: "#1896ea",
+    },
 }),
 );
 
@@ -44,7 +52,7 @@ export function Landing() {
     const history = useHistory();
     const classes = useStyles();;
     const [step, setStep] = useState(1);
-    const [selectedPlan, setPlan] = useState("blp");
+    const [selectedPlan, setPlan] = useState("BLP");
     const rows = [
         createData("Bada Rhyme 1", <CheckRoundedIcon />, <CheckRoundedIcon />),
         createData("Bada Rhyme 2", <CheckRoundedIcon />, <CheckRoundedIcon />),
@@ -75,10 +83,10 @@ export function Landing() {
                                 <TableRow>
                                     <TableCell></TableCell>
                                     <TableCell align="center">
-                                        <Button value="blp" onClick={(e) => setPlan("blp")}>BLP</Button>
+                                        <Button className={classes.planSelectBtn} value="BLP" onClick={(e) => setPlan("BLP")}>BLP</Button>
                                     </TableCell>
                                     <TableCell align="center">
-                                        <Button value="blpPlus" onClick={(e) => setPlan("blp+")}>BLP+</Button>
+                                        <Button className={classes.planSelectBtn} value="BLP+" onClick={(e) => setPlan("BLP+")}>BLP+</Button>
                                     </TableCell>
                                 </TableRow>
                             </TableHead>
