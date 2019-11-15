@@ -24,9 +24,11 @@ const messages: Record<string, string> = {
     sign_up_error_PASSWORD_TOO_LONG: "Your password is too long",
     sign_up_error_PASSWORD_TOO_SHORT: "Your password is too short",
     sign_up_error_PASSWORD_UPPERCASE_MISSING: "Your password must contain an uppercase letter",
-    verify_email: "Please enter the verification code from your Email",
+    verify_email: "Email Verification",
     verify_email_button: "Verify Email",
     verify_email_code: "Email verification code",
+    verify_email_input: "Please enter the verification code from your Email",
+    verify_email_success: "Your email has been verified",
 };
 
 export default messages;

@@ -11,8 +11,9 @@ const messages: Record<string, string> = {
     sign_up: "가입",
     sign_up_already: "이미 계정이 있습니까? 로그인",
     sign_up_button: "가입하기",
-    verify_email: "이메일에서 인증 코드를 입력하십시오",
+    verify_email: "이메일 인증",
     verify_email_button: "확인하기",
     verify_email_code: "이메일 인증 코드",
+    verify_email_input: "이메일에서 인증 코드를 입력하십시오",
 };
 export default messages;
