@@ -10,6 +10,7 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import EmailIcon from "@material-ui/icons/Email";
+import LockIcon from "@material-ui/icons/Lock";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
 import PaymentIcon from "@material-ui/icons/Payment";
 import LogoutIcon from "@material-ui/icons/PowerSettingsNew";
@@ -177,6 +178,16 @@ export function DeveloperDrawer(props: Props) {
                 </ListItem>
                 <ListItem
                     button
+                    selected={history.location.pathname === "/password-change"}
+                    onClick={() => navigate("/password-change")}
+                >
+                    <ListItemIcon>
+                        <LockIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={<FormattedMessage id="password_change" />} />
+                </ListItem>
+                <ListItem
+                    button
                     selected={history.location.pathname === "/payment"}
                     onClick={() => navigate("/payment")}
                 >
@@ -193,7 +204,7 @@ export function DeveloperDrawer(props: Props) {
                     <ListItemIcon>
                         <EmailIcon />
                     </ListItemIcon>
-                    <ListItemText primary={<FormattedMessage id="verify" />} />
+                    <ListItemText primary={<FormattedMessage id="verify_email" />} />
                 </ListItem>
             </List>
             <Divider />

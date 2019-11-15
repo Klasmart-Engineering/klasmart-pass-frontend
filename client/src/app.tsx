@@ -1,20 +1,17 @@
 import Box from "@material-ui/core/Box";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import clsx from "clsx";
-import { useState } from "react";
 import * as React from "react";
-import { Route, Switch, useHistory } from "react-router-dom";
-import { isLoggedIn } from "./components/authorized";
+import { Route, Switch } from "react-router-dom";
 import Copyright from "./components/copyright";
 import { Introduction } from "./pages/introduction";
 import { Landing } from "./pages/landing";
 import { Login } from "./pages/login";
+import { PasswordChange } from "./pages/password-change";
+import { PasswordChanged } from "./pages/password-changed";
 import { Payment } from "./pages/payment";
 import { Signup } from "./pages/signup";
 import { Verify } from "./pages/verify";
 import { VerifyLink } from "./pages/verify-link";
-import { useRestAPI } from "./restapi";
-;
 
 const drawerWidth = 240;
 
@@ -81,14 +78,8 @@ const useStyles = makeStyles((theme: Theme) =>
 export function App() {
     const classes = useStyles();
 
-    const [open, setOpen] = useState(false);
-    const [logoutInFlight, setLogoutInFlight] = useState(false);
-
-    const history = useHistory();
-    const api = useRestAPI();
-
     return (
-        <main className={clsx(classes.content, { [classes.contentShift]: open })}>
+        <main className={classes.content}>
             <Switch>
                 <Route path="/login" component={Login} />
                 <Route path="/signup" component={Signup} />
@@ -96,6 +87,8 @@ export function App() {
                 <Route path="/verify_email" component={VerifyLink} />
                 <Route path="/payment" component={Payment} />
                 <Route path="/introduction" component={Introduction} />
+                <Route path="/password-change" component={PasswordChange} />
+                <Route path="/password-changed" component={PasswordChanged} />
                 <Route path="/" component={Landing} />
             </Switch>
             <Box mt={5}>

@@ -34,6 +34,13 @@ export class RestAPI {
         return this.apiCall("account/forgotpassword", JSON.stringify({ user: email, lang }));
     }
 
+    public changePassword(currentPassword: string, newPassword: string) {
+        return this.apiCall("account/self/password", JSON.stringify({
+            currPass: currentPassword,
+            newPass: newPassword,
+        }));
+    }
+
     public async login(email: string, password: string) {
         try {
             const deviceId = await this.deviceId();
