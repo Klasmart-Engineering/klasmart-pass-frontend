@@ -5,7 +5,7 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import * as QueryString from "query-string";
 import * as React from "react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { useStore } from "react-redux";
 import { RouteComponentProps } from "react-router-dom";
@@ -18,10 +18,15 @@ import { ActionTypes } from "../store/actions";
 
 export function Verify(props: RouteComponentProps) {
     const store = useStore();
-    const [verificationCode, setVerificationCode] = React.useState("");
-    const [error, setError] = React.useState<JSX.Element | null>(null);
-    const [verifyInFlight, setVerifyInFlight] = React.useState(false);
+    const [verificationCode, setVerificationCode] = useState("");
+    const [error, setError] = useState<JSX.Element | null>(null);
+    const [verifyInFlight, setVerifyInFlight] = useState(false);
     const restApi = useRestAPI();
+
+    const params = QueryString.parse(props.location.search);
+    if (typeof params.accountId === "string") {
+        store.dispatch({ type: ActionTypes.ACCOUNT_ID, payload: { accountId: params.accountId } });
+    }
 
     redirectIfUnverifiable();
 
@@ -42,10 +47,6 @@ export function Verify(props: RouteComponentProps) {
     }
 
     useEffect(() => {
-        const params = QueryString.parse(props.location.search);
-        if (typeof params.accountId === "string") {
-            store.dispatch({ type: ActionTypes.ACCOUNT_ID, payload: params.accountId });
-        }
         if (typeof params.code === "string") {
             setVerificationCode(params.code);
             verify(params.code);
