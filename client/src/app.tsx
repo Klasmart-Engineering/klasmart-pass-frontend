@@ -106,22 +106,6 @@ export function App() {
 
     const history = useHistory();
     const api = useRestAPI();
-    const authorized = isLoggedIn();
-
-    function navigate(path: string) {
-        if (open) { setOpen(false); }
-        history.push(path);
-    }
-
-    async function logout() {
-        if (logoutInFlight) { return; }
-        try {
-            setLogoutInFlight(true);
-            await api.endSession();
-        } finally {
-            setLogoutInFlight(false);
-        }
-    }
 
     return (
         <main className={clsx(classes.content, { [classes.contentShift]: open })}>

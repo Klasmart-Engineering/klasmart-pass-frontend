@@ -213,9 +213,11 @@ export default function NavBar() {
                     <Button
                         color="inherit"
                         className={classes.appBarBtn}
-                        onClick={() => navigate("/login")}
+                        onClick={() => {
+                            authorized ? navigate("/login") : logout();
+                        }}
                     >
-                        Sign In
+                        {authorized ? "Sign In" : "Sign Out"}
                     </Button>
                 </Toolbar>
             </AppBar>
