@@ -8,6 +8,8 @@ import { Landing } from "./pages/landing";
 import { Login } from "./pages/login";
 import { PasswordChange } from "./pages/password-change";
 import { PasswordChanged } from "./pages/password-changed";
+import { PasswordForgot } from "./pages/password-forgot";
+import { PasswordRestore } from "./pages/password-restore";
 import { Payment } from "./pages/payment";
 import { Signup } from "./pages/signup";
 import { Verify } from "./pages/verify";
@@ -89,6 +91,8 @@ export function App() {
                 <Route path="/introduction" component={Introduction} />
                 <Route path="/password-change" component={PasswordChange} />
                 <Route path="/password-changed" component={PasswordChanged} />
+                <Route path="/password-forgot" component={PasswordForgot} />
+                <Route path="/password-restore" component={PasswordRestore} />
                 <Route path="/" component={Landing} />
             </Switch>
             <Box mt={5}>

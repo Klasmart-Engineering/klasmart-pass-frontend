@@ -188,6 +188,26 @@ export function DeveloperDrawer(props: Props) {
                 </ListItem>
                 <ListItem
                     button
+                    selected={history.location.pathname === "/password-forgot"}
+                    onClick={() => navigate("/password-forgot")}
+                >
+                    <ListItemIcon>
+                        <LockIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={<FormattedMessage id="password_forgot" />} />
+                </ListItem>
+                <ListItem
+                    button
+                    selected={history.location.pathname === "/password-retore"}
+                    onClick={() => navigate("/password-restore")}
+                >
+                    <ListItemIcon>
+                        <LockIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={<FormattedMessage id="password_restore" />} />
+                </ListItem>
+                <ListItem
+                    button
                     selected={history.location.pathname === "/payment"}
                     onClick={() => navigate("/payment")}
                 >

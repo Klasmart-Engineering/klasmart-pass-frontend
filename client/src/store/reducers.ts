@@ -49,6 +49,8 @@ export function email(state = null, action: Actions) {
                 return action.payload.email;
             }
             return null;
+        case ActionTypes.EMAIL:
+            return action.payload;
         case ActionTypes.LOGOUT:
         default:
             return state;

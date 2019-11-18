@@ -34,6 +34,14 @@ export class RestAPI {
         return this.apiCall("account/forgotpassword", JSON.stringify({ user: email, lang }));
     }
 
+    public restorePassword(email: string, password: string, resetCode: string) {
+        return this.apiCall("account/restorepassword", JSON.stringify({
+            accountEmail: email,
+            pw: password,
+            verificationCode: resetCode,
+        }));
+    }
+
     public changePassword(currentPassword: string, newPassword: string) {
         return this.apiCall("account/self/password", JSON.stringify({
             currPass: currentPassword,
