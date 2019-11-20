@@ -13,7 +13,7 @@ export default function AccountInfo() {
     const items = [];
     // tslint:disable-next-line:forin
     for (const item in account) {
-        items.push(<Typography noWrap > {`${item}: ${account[item as keyof typeof account]}`}</Typography>);
+        items.push(<Typography key={item} noWrap > {`${item}: ${account[item as keyof typeof account]}`}</Typography>);
     }
     return (
         <div>
