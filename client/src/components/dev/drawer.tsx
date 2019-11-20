@@ -141,7 +141,7 @@ export function DeveloperDrawer(props: Props) {
                 <ListItem
                     button
                     selected={history.location.pathname === "/"}
-                    onClick={() => navigate("/")}
+                    onClick={() => navigate("/signup")}
                 >
                     <ListItemIcon>
                         <AccountCircleIcon />
