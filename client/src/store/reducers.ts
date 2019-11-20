@@ -1,4 +1,5 @@
 import { combineReducers } from "redux";
+import { getDefaultLanguageCode } from "../utils/locale";
 import { Actions, ActionTypes } from "./actions";
 
 export function postAuthorizationRoute(state = null, action: Actions) {
@@ -141,12 +142,22 @@ export function productId(state = null, action: Actions) {
     }
 }
 
+export function locale(state = getDefaultLanguageCode(), action: Actions) {
+    switch (action.type) {
+        case ActionTypes.LOCALE:
+            return action.payload;
+        default:
+            return state;
+    }
+}
+
 export const account = combineReducers({
     accessToken,
     accessTokenExpire,
     accountId,
     deviceId,
     email,
+    locale,
     productId,
     refreshToken,
     refreshTokenExpire,

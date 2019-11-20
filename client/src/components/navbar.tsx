@@ -29,6 +29,7 @@ import clsx from "clsx";
 import { useState } from "react";
 import * as React from "react";
 import { FormattedMessage } from "react-intl";
+import { useSelector, useStore } from "react-redux";
 import { Route, Switch, useHistory } from "react-router-dom";
 import { Landing } from "../pages/landing";
 import { Login } from "../pages/login";
@@ -36,7 +37,8 @@ import { Payment } from "../pages/payment";
 import { Signup } from "../pages/signup";
 import { Verify } from "../pages/verify";
 import { useRestAPI } from "../restapi";
-import AccountInfo from "./accountInfo";
+import { ActionTypes } from "../store/actions";
+import { State } from "../store/store";
 import { isLoggedIn } from "./authorized";
 import Copyright from "./copyright";
 
@@ -129,25 +131,19 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function NavBar() {
     const classes = useStyles();
+    const store = useStore();
 
-    const [open, setOpen] = useState(false);
+    const locale = useSelector((state: State) => state.account.locale || "");
     const [logoutInFlight, setLogoutInFlight] = useState(false);
-    const [userLanguage, setUserLanguage] = useState("en");
-    const [languageMenu, setLanguageMenu] = useState<null | HTMLElement>(null);
-    const handleLanguageIconClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-        setLanguageMenu(e.currentTarget);
-    };
-    const handleLanguageMenuClose = (e: any) => {
-        setLanguageMenu(null);
-    };
+    const [languageMenuElement, setLanguageMenuElement] = useState<null | HTMLElement>(null);
 
     const history = useHistory();
     const api = useRestAPI();
     const authorized = isLoggedIn();
 
-    function navigate(path: string) {
-        if (open) { setOpen(false); }
-        history.push(path);
+    function languageSelect(code: string) {
+        store.dispatch({ type: ActionTypes.LOCALE, payload: code });
+        setLanguageMenuElement(null);
     }
 
     async function logout() {
@@ -168,7 +164,7 @@ export default function NavBar() {
                 className={classes.appBar}
             >
                 <Toolbar>
-                    <Button color="inherit" onClick={() => navigate("/")}>
+                    <Button color="inherit" onClick={() => history.push("/")}>
                         <img src="https://static-2-badanamu.akamaized.net/wp-content/uploads/2017/04/cropped-Badanamu-PNG-2.png" style={{ height: 50, marginRight: 8 }} />
                         <Typography variant="h4" className={classes.language} noWrap>
                             Learning Pass
@@ -178,47 +174,57 @@ export default function NavBar() {
                     <Tooltip title="Change Language" enterDelay={300}>
                         <Button
                             color="inherit"
-                            aria-owns={languageMenu ? "language-menu" : undefined}
+                            aria-owns={languageMenuElement ? "language-menu" : undefined}
                             aria-haspopup="true"
                             className={classes.appBarBtn}
                             data-ga-event-category="AppBar"
                             data-ga-event-action="language"
-                            onClick={handleLanguageIconClick}
+                            onClick={(e) => setLanguageMenuElement(e.currentTarget)}
                         >
                             <LanguageIcon />
                             <span className={classes.language}>
-                                {LANGUAGES_LABEL.filter((language) => language.code === userLanguage)[0].text}
+                                {LANGUAGES_LABEL.filter((language) => language.code === locale)[0].text}
                             </span>
                             <ExpandMoreIcon fontSize="small" />
                         </Button>
                     </Tooltip>
                     <Menu
                         id="language-menu"
-                        anchorEl={languageMenu}
+                        anchorEl={languageMenuElement}
                         keepMounted
-                        open={Boolean(languageMenu)}
-                        onClose={handleLanguageMenuClose}
+                        open={Boolean(languageMenuElement)}
+                        onClose={() => setLanguageMenuElement(null)}
                     >
-                        {LANGUAGES_LABEL.map((language) => (
-                            <MenuItem
-                                key={language.code}
-                                selected={userLanguage === language.code}
-                                onClick={handleLanguageMenuClose}
-                            >
-                                {language.text}
-                            </MenuItem>
-                        ))}
+                        {
+                            LANGUAGES_LABEL.map((language) => (
+                                <MenuItem
+                                    key={language.code}
+                                    selected={locale === language.code}
+                                    onClick={() => languageSelect(language.code)}
+                                >
+                                    {language.text}
+                                </MenuItem>
+                            ))
+                        }
                     </Menu>
                     <div className={classes.vl}></div>
-                    <Button
-                        color="inherit"
-                        className={classes.appBarBtn}
-                        onClick={() => {
-                            authorized ? navigate("/login") : logout();
-                        }}
-                    >
-                        {authorized ? "Sign In" : "Sign Out"}
-                    </Button>
+                    {
+                        authorized ?
+                            <Button
+                                color="inherit"
+                                className={classes.appBarBtn}
+                                onClick={() => history.push("/login")}
+                            >
+                                Sign  In
+                            </Button> :
+                            <Button
+                                color="inherit"
+                                className={classes.appBarBtn}
+                                onClick={() => logout()}
+                            >
+                                Sign Out
+                            </Button>
+                    }
                 </Toolbar>
             </AppBar>
         </nav>

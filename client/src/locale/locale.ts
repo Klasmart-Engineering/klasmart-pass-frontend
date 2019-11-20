@@ -1,19 +1,18 @@
-import { createIntl, createIntlCache, defineMessages } from "react-intl";
+import { createIntl, createIntlCache } from "react-intl";
 import english from "./en";
 import indonesian from "./id";
 import korean from "./ko";
 
-type Locales = "en" | "ko" | "id";
-
-export function getIntl(locale: Locales) {
-    const cache = createIntlCache();
+export const localeCodes = ["en", "ko", "id"];
+const intlCache = createIntlCache();
+export const fallbackLocale = createIntl({ locale: "en", messages: english }, intlCache);
+export function getIntl(locale: string) {
     switch (locale) {
         case "id":
-            return createIntl({ locale: "id", messages: indonesian, onError: () => { } }, cache);
+            return createIntl({ locale: "id", messages: indonesian, onError: () => { } }, intlCache);
         case "ko":
-            return createIntl({ locale: "ko", messages: korean, onError: () => { } }, cache);
-        default:
+            return createIntl({ locale: "ko", messages: korean, onError: () => { } }, intlCache);
         case "en":
-            return createIntl({ locale: "en", messages: english }, cache);
+            return createIntl({ locale: "en", messages: english }, intlCache);
     }
 }
