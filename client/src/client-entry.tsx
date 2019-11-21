@@ -1,5 +1,6 @@
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+import * as QueryString from "query-string";
 import React, { useState } from "react";
 import * as ReactDOM from "react-dom";
 import { RawIntlProvider } from "react-intl";
@@ -12,6 +13,8 @@ import { createDefaultStore, State } from "./store/store";
 import { getLanguage } from "./utils/locale";
 
 function ClientSide() {
+    const params = QueryString.parse(window.location.search);
+    const testing = (params.test !== undefined) !== (window.location.hostname === "localhost");
     const languageCode = useSelector((state: State) => state.account.locale || "");
     const locale = getLanguage(languageCode);
     const [paletteType, setPalette] = useState("light");
@@ -42,7 +45,7 @@ function ClientSide() {
                 <CssBaseline />
                 <NavBar />
                 <App />
-                {window.location.hostname === "localhost" ? <Dev /> : null}
+                {testing ? <Dev /> : null}
             </ThemeProvider>
         </RawIntlProvider>
     );
