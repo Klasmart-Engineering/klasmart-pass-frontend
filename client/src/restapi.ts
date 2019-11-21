@@ -3,6 +3,14 @@ import { RestAPIError, RestAPIErrorType } from "./restapi_errors";
 import { ActionTypes } from "./store/actions";
 import { Store } from "./store/store";
 
+function phoneOrEmail(str: string): { phoneNr?: string, email?: string } {
+    if (str.indexOf("@") === -1) {
+        return { phoneNr: str };
+    } else {
+        return { email: str };
+    }
+}
+
 export class RestAPI {
     private paymentPrefix = "/payment/";
     private authPrefix = "/auth/";
@@ -15,8 +23,14 @@ export class RestAPI {
         this.store = store as any; // TODO: Fix types
     }
 
-    public async signup(email: string, pw: string, lang: string) {
-        const result = await this.apiCall("account/signup", JSON.stringify({ user: email, pw, lang }));
+    public async signup(id: string, pw: string, lang: string) {
+        const { phoneNr, email } = phoneOrEmail(id);
+        const result = await this.apiCall("account/signup", JSON.stringify({
+            email,
+            lang,
+            phoneNr,
+            pw,
+        }));
         if (result.status !== 200) { return false; }
         const body = await result.json();
         this.store.dispatch({ type: ActionTypes.SIGNUP, payload: body });
@@ -30,13 +44,21 @@ export class RestAPI {
         return this.apiCall("account/verify/email", JSON.stringify({ accountId, verificationCode }));
     }
 
-    public forgotPassword(email: string, lang: string) {
-        return this.apiCall("account/forgotpassword", JSON.stringify({ user: email, lang }));
+    public forgotPassword(id: string, lang: string) {
+        const { phoneNr, email } = phoneOrEmail(id);
+        return this.apiCall("account/forgotpassword", JSON.stringify({
+            email,
+            lang,
+            phoneNr,
+        }));
     }
 
-    public restorePassword(email: string, password: string, resetCode: string) {
+    public restorePassword(id: string, password: string, resetCode: string) {
+        const { phoneNr, email } = phoneOrEmail(id);
+
         return this.apiCall("account/restorepassword", JSON.stringify({
             accountEmail: email,
+            accountPhoneNr: phoneNr,
             pw: password,
             verificationCode: resetCode,
         }));
@@ -49,8 +71,9 @@ export class RestAPI {
         }));
     }
 
-    public async login(email: string, password: string) {
+    public async login(id: string, password: string) {
         try {
+            const { phoneNr, email } = phoneOrEmail(id);
             const deviceId = await this.deviceId();
             const deviceName = "Webpage";
             const response = await this.authCall(
@@ -58,8 +81,9 @@ export class RestAPI {
                 JSON.stringify({
                     deviceId,
                     deviceName,
+                    email,
+                    phoneNr,
                     pw: password,
-                    user: email,
                 }),
             );
             if (response.status !== 200) {
