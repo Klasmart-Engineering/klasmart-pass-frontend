@@ -11,6 +11,7 @@ import { redirectIfUnverifiable } from "../components/authorized";
 import { useRestAPI } from "../restapi";
 import { RestAPIError } from "../restapi_errors";
 import { ActionTypes } from "../store/actions";
+import { IdentityType } from "../utils/accountType";
 
 export function VerifyLink(props: RouteComponentProps) {
     const store = useStore();
@@ -28,7 +29,7 @@ export function VerifyLink(props: RouteComponentProps) {
         if (verifyInFlight) { return; }
         try {
             setVerifyInFlight(true);
-            await restApi.verify(code);
+            await restApi.verify(code, IdentityType.Email);
         } catch (e) {
             if (e instanceof RestAPIError) {
                 const id = e.getErrorMessageID();

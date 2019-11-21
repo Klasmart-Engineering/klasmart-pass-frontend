@@ -13,6 +13,7 @@ import BadanamuButton from "../components/button";
 import BadanamuTextField from "../components/textfield";
 import { useRestAPI } from "../restapi";
 import { RestAPIError, RestAPIErrorType } from "../restapi_errors";
+import { getIdentityType, IdentityType } from "../utils/accountType";
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -64,11 +65,22 @@ export function Signup() {
     if (inFlight) { return; }
     if (email === "") { return; }
     if (password === "") { return; }
+    const accountType = getIdentityType(email);
+    if (accountType === undefined) { return; }
     try {
       setInFlight(true);
       // TODO: Get Locale
       await restApi.signup(email, password, "en");
-      history.push("/verify");
+      switch (accountType) {
+        case IdentityType.Email:
+          history.push("/verify-email");
+          break;
+        case IdentityType.Phone:
+          history.push("/verify-phone");
+          break;
+        default:
+          throw new Error("Unknown Account Type");
+      }
     } catch (e) {
       handleError(e);
     } finally {

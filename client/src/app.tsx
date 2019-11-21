@@ -14,6 +14,7 @@ import { Payment } from "./pages/payment";
 import { Signup } from "./pages/signup";
 import { Verify } from "./pages/verify";
 import { VerifyLink } from "./pages/verify-link";
+import { IdentityType } from "./utils/accountType";
 
 const drawerWidth = 240;
 
@@ -85,7 +86,8 @@ export function App() {
             <Switch>
                 <Route path="/login" component={Login} />
                 <Route path="/signup" component={Signup} />
-                <Route path="/verify" component={Verify} />
+                <Route path="/verify-phone" render={(props) => <Verify type={IdentityType.Phone} {...props} />} />
+                <Route path="/verify-email" render={(props) => <Verify type={IdentityType.Email} {...props} />} />
                 <Route path="/verify_email" component={VerifyLink} />
                 <Route path="/payment" component={Payment} />
                 <Route path="/introduction" component={Introduction} />

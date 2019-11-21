@@ -2,6 +2,7 @@ import { useStore } from "react-redux";
 import { RestAPIError, RestAPIErrorType } from "./restapi_errors";
 import { ActionTypes } from "./store/actions";
 import { Store } from "./store/store";
+import { IdentityType } from "./utils/accountType";
 
 function phoneOrEmail(str: string): { phoneNr?: string, email?: string } {
     if (str.indexOf("@") === -1) {
@@ -37,11 +38,18 @@ export class RestAPI {
         return;
     }
 
-    public verify(verificationCode: string) {
+    public verify(verificationCode: string, type: IdentityType) {
         const state = this.store.getState();
         const accountId = state.account.accountId;
         if (accountId === null) { throw new Error("Unknown AccountID"); }
-        return this.apiCall("account/verify/email", JSON.stringify({ accountId, verificationCode }));
+        switch (type) {
+            case IdentityType.Phone:
+                return this.apiCall("account/verify/phonenumber", JSON.stringify({ accountId, verificationCode }));
+            case IdentityType.Email:
+                return this.apiCall("account/verify/email", JSON.stringify({ accountId, verificationCode }));
+            default:
+                throw new Error("Unknown Account Type");
+        }
     }
 
     public forgotPassword(id: string, lang: string) {

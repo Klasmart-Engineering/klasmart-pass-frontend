@@ -13,6 +13,7 @@ import EmailIcon from "@material-ui/icons/Email";
 import LockIcon from "@material-ui/icons/Lock";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
 import PaymentIcon from "@material-ui/icons/Payment";
+import PhoneAndroidIcon from "@material-ui/icons/PhoneAndroid";
 import LogoutIcon from "@material-ui/icons/PowerSettingsNew";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import { useState } from "react";
@@ -218,13 +219,23 @@ export function DeveloperDrawer(props: Props) {
                 </ListItem>
                 <ListItem
                     button
-                    selected={history.location.pathname === "/verify"}
-                    onClick={() => navigate("/verify")}
+                    selected={history.location.pathname === "/verify-email"}
+                    onClick={() => navigate("/verify-email")}
                 >
                     <ListItemIcon>
                         <EmailIcon />
                     </ListItemIcon>
                     <ListItemText primary={<FormattedMessage id="verify_email" />} />
+                </ListItem>
+                <ListItem
+                    button
+                    selected={history.location.pathname === "/verify-phone"}
+                    onClick={() => navigate("/verify-phone")}
+                >
+                    <ListItemIcon>
+                        <PhoneAndroidIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={<FormattedMessage id="verify_phone" />} />
                 </ListItem>
             </List>
             <Divider />

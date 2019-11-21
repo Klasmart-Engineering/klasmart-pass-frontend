@@ -15,8 +15,11 @@ import BadanamuTextField from "../components/textfield";
 import { useRestAPI } from "../restapi";
 import { RestAPIError } from "../restapi_errors";
 import { ActionTypes } from "../store/actions";
+import { IdentityType } from "../utils/accountType";
 
-export function Verify(props: RouteComponentProps) {
+interface Props { type: IdentityType; }
+
+export function Verify(props: Props & RouteComponentProps) {
     const store = useStore();
     const [verificationCode, setVerificationCode] = useState("");
     const [error, setError] = useState<JSX.Element | null>(null);
@@ -35,7 +38,7 @@ export function Verify(props: RouteComponentProps) {
         if (verifyInFlight) { return; }
         try {
             setVerifyInFlight(true);
-            await restApi.verify(code);
+            await restApi.verify(code, props.type);
         } catch (e) {
             if (e instanceof RestAPIError) {
                 const id = e.getErrorMessageID();
@@ -53,10 +56,12 @@ export function Verify(props: RouteComponentProps) {
         }
     }, []);
 
+    const type = IdentityType[props.type].toLowerCase();
+
     return (
         <Container maxWidth="xs" >
             <Typography component="h1" variant="h5">
-                <FormattedMessage id="verify_email" />
+                <FormattedMessage id={`verify_${type}`} />
             </Typography>
             <FormControl >
                 <Grid container spacing={2}>
@@ -65,10 +70,8 @@ export function Verify(props: RouteComponentProps) {
                             required
                             fullWidth
                             id="verify_code"
-                            label={<FormattedMessage id="verify_email_code" />}
+                            label={<FormattedMessage id={`verify_${type}_code`} />}
                             value={verificationCode}
-                            // helperText={emailError}
-                            autoComplete="email"
                             onChange={(e) => setVerificationCode(e.target.value)}
                         />
                     </Grid>
@@ -82,7 +85,7 @@ export function Verify(props: RouteComponentProps) {
                     {
                         verifyInFlight ?
                             <CircularProgress size={25} /> :
-                            <FormattedMessage id="verify_email_button" />
+                            <FormattedMessage id={`verify_${type}_button`} />
                     }
                 </BadanamuButton>
                 {

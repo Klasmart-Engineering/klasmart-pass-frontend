@@ -39,10 +39,15 @@ const messages: Record<string, string> = {
     sign_up_error_PASSWORD_TOO_SHORT: "Your password is too short",
     sign_up_error_PASSWORD_UPPERCASE_MISSING: "Your password must contain an uppercase letter",
     verify_email: "Email Verification",
-    verify_email_button: "Verify Email",
+    verify_email_button: "VERIFY",
     verify_email_code: "Email verification code",
     verify_email_input: "Please enter the verification code from your Email",
     verify_email_success: "Your email has been verified",
+    verify_phone: "Phone Verification",
+    verify_phone_button: "VERIFY",
+    verify_phone_code: "Phone verification code",
+    verify_phone_input: "Please enter the SMS verification code",
+    verify_phone_success: "Your phone has been verified",
 };
 
 export default messages;
