@@ -1,27 +1,25 @@
 import Button from "@material-ui/core/Button";
-import Chip from "@material-ui/core/Chip";
 import Container from "@material-ui/core/Container";
-import Hidden from "@material-ui/core/Hidden";
-import Slide from "@material-ui/core/Slide";
+import Divider from "@material-ui/core/Divider";
+import ExpansionPanel from "@material-ui/core/ExpansionPanel";
+import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import Grid from "@material-ui/core/Grid";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
 import CheckRoundedIcon from "@material-ui/icons/CheckRounded";
 import ClearRoundedIcon from "@material-ui/icons/ClearRounded";
-import DevicesIcon from "@material-ui/icons/Devices";
-import LaptopIcon from "@material-ui/icons/Laptop";
-import TabletIcon from "@material-ui/icons/Tablet";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import clsx from "clsx";
 import React, { useState } from "react";
+import { FormattedDate } from "react-intl";
 import { useStore } from "react-redux";
 import { useHistory } from "react-router";
 import BadanamuButton from "../components/button";
+import BLP from "../img/learning_pass_b.01.png";
+import BLPPremium from "../img/learning_pass_premium_b.01.png";
 import { ActionTypes } from "../store/actions";
-import { Store } from "../store/store";
+import { getExpiration } from "../utils/date";
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme) => createStyles({
@@ -32,8 +30,8 @@ const useStyles = makeStyles((theme) => createStyles({
         alignItems: "left",
     },
     planSelectBtn: {
-        "width": 100,
-        "height": 100,
+        "minWidth": 140,
+        "height": "auto",
         "fontSize": 19,
         "fontWeight": 600,
         "color": "white",
@@ -53,15 +51,58 @@ const useStyles = makeStyles((theme) => createStyles({
         borderBottom: 0,
     },
     selected: {
+        textAlign: "center",
         color: "#1896ea",
+        fontWeight: 600,
     },
     notSelected: {
+        textAlign: "center",
         color: "gray",
+    },
+    heading: {
+        [theme.breakpoints.down("sm")]: {
+            textAlign: "center",
+        },
+    },
+    icon: {
+        verticalAlign: "bottom",
+        height: 20,
+        width: 20,
+    },
+    details: {
+        alignItems: "center",
+        [theme.breakpoints.up("md")]: {
+            padding: "0 24px",
+        },
+    },
+    columnHead: {
+        flexBasis: "50%",
+    },
+    headingInner: {
+        [theme.breakpoints.up("md")]: {
+            paddingLeft: 20,
+        },
+    },
+    column: {
+        flexBasis: "25%",
+        textAlign: "center",
+    },
+    noIconPadding: {
+        paddingRight: 28,
+    },
+    noIconMargin: {
+        [theme.breakpoints.up("md")]: {
+            marginRight: 48,
+        },
+    },
+    row: {
+        alignItems: "center",
+        padding: "12px 56px 12px 24px",
     },
 }),
 );
 
-type Plan = JSX.Element | string | number | null;
+type Plan = JSX.Element | string | number;
 
 // tslint:enable:object-literal-sort-keys
 function createData(name: string, blp: Plan, blpPlus: Plan) {
@@ -74,7 +115,7 @@ export function Landing() {
     const classes = useStyles();
     const [step, setStep] = useState(1);
     const [selectedPlan, setPlan] = useState("BLP");
-    const rows = [
+    const learningApps = [
         createData("Bada Rhyme 1", <CheckRoundedIcon />, <CheckRoundedIcon />),
         createData("Bada Rhyme 2", <CheckRoundedIcon />, <CheckRoundedIcon />),
         createData("Bada Genius", <CheckRoundedIcon />, <CheckRoundedIcon />),
@@ -88,97 +129,137 @@ export function Landing() {
         createData("Badanamu: Songs", <ClearRoundedIcon />, <CheckRoundedIcon />),
         createData("Badanamu: Books", <ClearRoundedIcon />, <CheckRoundedIcon />),
     ];
+    const details = [
+        createData("Additonal learning apps (coming soon)", 9, 11),
+        createData("Digital ESL lessons", "300+", "300+"),
+        createData("5 ESL program levels", <CheckRoundedIcon />, <CheckRoundedIcon />),
+        createData("HD content", <CheckRoundedIcon />, <CheckRoundedIcon />),
+        createData("Ad free", <CheckRoundedIcon />, <CheckRoundedIcon />),
+        createData("Animated series", <ClearRoundedIcon />, "52 episodes"),
+        createData("Premium songs", <ClearRoundedIcon />, "500+ minutes"),
+        createData("Premium apps", <ClearRoundedIcon />, 5),
+        createData("One-time purchase", "$20.00", "$50.00"),
+    ];
+
+    function createPlanButton(plan: string) {
+        return (
+            <React.Fragment>
+                <Grid item xs={6} md={3}>
+                    <Grid item xs={12} style={{ textAlign: "center", minHeight: 80 }}>
+                        <img src={plan === "BLP" ? BLP : BLPPremium} style={{ maxWidth: 50 }} />
+                    </Grid>
+                    <Grid item xs={12} style={{ textAlign: "center" }}>
+                        <Button
+                            className={clsx(classes.planSelectBtn, selectedPlan === plan && classes.planSelectedBtn)}
+                            value={plan}
+                            onClick={(e) => setPlan(plan)}
+                        >
+                            Buy Now
+                        </Button>
+                    </Grid>
+                </Grid>
+            </React.Fragment>
+        );
+    }
+
+    function createDetailsRow(detail: { name: string, blp: Plan, blpPlus: Plan }) {
+        return (
+            <React.Fragment>
+                <Grid container spacing={2} className={classes.row}>
+                    <Grid item xs={12} md={6}>
+                        <Typography className={classes.heading}>{detail.name}</Typography>
+                    </Grid>
+                    <Grid item xs={6} md={3}>
+                        <Typography className={selectedPlan === "BLP" ? classes.selected : classes.notSelected}>{detail.blp}</Typography>
+                    </Grid>
+                    <Grid item xs={6} md={3}>
+                        <Typography className={selectedPlan === "BLPPremium" ? classes.selected : classes.notSelected}>{detail.blpPlus}</Typography>
+                    </Grid>
+                </Grid>
+                <Divider />
+            </React.Fragment>
+        );
+    }
 
     return (
         <Container maxWidth="lg">
-            {/* <Container> */}
-            <div className={classes.paper}>
-                <Typography>STEP <b>{step}</b> OF <b>3</b></Typography>
-                <Typography variant="h4">Choose the pass that's right for you</Typography>
-                <Typography>Passes are valid for one year and billed annually</Typography>
-            </div>
-            <div className={classes.paper}>
-                <Table aria-label="plan table">
-                    <TableHead>
-                        <TableRow>
-                            <Hidden smDown>
-                                <TableCell></TableCell>
-                            </Hidden>
-                            <TableCell align="center">
-                                <Button
-                                    className={clsx(classes.planSelectBtn, selectedPlan === "BLP" && classes.planSelectedBtn)}
-                                    value="BLP"
-                                    onClick={(e) => setPlan("BLP")}
-                                >
-                                    BLP
-                                        </Button>
-                            </TableCell>
-                            <TableCell align="center">
-                                <Button
-                                    className={clsx(classes.planSelectBtn, selectedPlan === "BLP+" && classes.planSelectedBtn)}
-                                    value="BLP+"
-                                    onClick={(e) => setPlan("BLP+")}
-                                >
-                                    BLP+
-                                        </Button>
-                            </TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        <Hidden smDown>
-                            {rows.map((row) => (
-                                <TableRow key={row.name}>
-                                    <TableCell component="th" scope="row">
-                                        <Typography variant="subtitle1">{row.name}</Typography>
-                                    </TableCell>
-                                    <TableCell align="center" className={selectedPlan === "BLP" ? classes.selected : classes.notSelected}>
-                                        {row.blp}
-                                    </TableCell>
-                                    <TableCell align="center" className={selectedPlan === "BLP+" ? classes.selected : classes.notSelected}>
-                                        {row.blpPlus}
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </Hidden>
-                        <Hidden mdUp>
-                            {rows.map((row) => (
-                                <React.Fragment>
-                                    <TableRow key={row.name}>
-                                        <TableCell
-                                            align="center"
-                                            size="small"
-                                            component="th"
-                                            scope="row"
-                                            colSpan={2}
-                                            className={classes.smTableTitle}
-                                        >
-                                            <Typography variant="subtitle1">{row.name}</Typography>
-                                        </TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell align="center" className={selectedPlan === "BLP" ? classes.selected : classes.notSelected}>
-                                            {row.blp}
-                                        </TableCell>
-                                        <TableCell align="center" className={selectedPlan === "BLP+" ? classes.selected : classes.notSelected}>
-                                            {row.blpPlus}
-                                        </TableCell>
-                                    </TableRow>
-                                </React.Fragment>
-                            ))}
-                        </Hidden>
-                    </TableBody>
-                </Table>
-            </div>
-            <BadanamuButton
-                fullWidth
-                size="large"
-                onClick={(e) => {
-                    store.dispatch({ type: ActionTypes.PRODUCT_ID, payload: selectedPlan });
-                    history.push("/introduction")
-                }}
-            >
-                Continue with {selectedPlan}
-            </BadanamuButton>
+            {/* Onboarding */}
+            <Grid container spacing={2} style={{ margin: "32px 0" }}>
+                <Grid item xs={12}>
+                    <Typography>STEP <b>{step}</b> OF <b>3</b></Typography>
+                </Grid>
+                <Grid item xs={12}>
+                    <Typography variant="h4">Choose the pass that's right for you!</Typography>
+                </Grid>
+                <Grid item xs={12}>
+                    <Typography>Your pass will be valid until <FormattedDate value={getExpiration(1)} />.</Typography>
+                </Grid>
+            </Grid>
+            {/* Plan Selection Button */}
+            <Grid container spacing={2}>
+                <Grid container item xs={12} className={classes.noIconMargin}>
+                    <Grid item xs={12} md={6} />
+                    {createPlanButton("BLP")}
+                    {createPlanButton("BLPPremium")}
+                </Grid>
+                {/* Plan comparison */}
+                <Grid item xs={12}>
+                    <Divider />
+                    <ExpansionPanel elevation={0}>
+                        <ExpansionPanelSummary
+                            expandIcon={<ExpandMoreIcon fontSize={"small"} />}
+                            aria-controls="learning-apps"
+                            id="learning-apps"
+                        >
+                            <Grid container spacing={2}>
+                                <Grid item xs={12} md={6}>
+                                    <Typography className={classes.heading}>Learning apps</Typography>
+                                </Grid>
+                                <Grid item xs={6} md={3}>
+                                    <Typography className={selectedPlan === "BLP" ? classes.selected : classes.notSelected}>9</Typography>
+                                </Grid>
+                                <Grid item xs={6} md={3}>
+                                    <Typography className={selectedPlan === "BLPPremium" ? classes.selected : classes.notSelected}>12</Typography>
+                                </Grid>
+                            </Grid>
+                        </ExpansionPanelSummary>
+                        <ExpansionPanelDetails className={classes.details}>
+                            <Grid container spacing={1} className={classes.noIconPadding}>
+                                {learningApps.map((app) => (
+                                    <React.Fragment>
+                                        <Grid item xs={12} md={6}>
+                                            <Typography className={clsx(classes.heading, classes.headingInner)}>{app.name}</Typography>
+                                        </Grid>
+                                        <Grid item xs={6} md={3}>
+                                            <Typography className={selectedPlan === "BLP" ? classes.selected : classes.notSelected}>{app.blp}</Typography>
+                                        </Grid>
+                                        <Grid item xs={6} md={3}>
+                                            <Typography className={selectedPlan === "BLPPremium" ? classes.selected : classes.notSelected}>{app.blpPlus}</Typography>
+                                        </Grid>
+                                    </React.Fragment>
+                                ))}
+                            </Grid>
+
+                        </ExpansionPanelDetails>
+                    </ExpansionPanel>
+                    <Divider />
+                    {details.map((detail) => (
+                        createDetailsRow(detail)
+                    ))}
+                </Grid>
+                <Grid item xs={12}>
+                    <BadanamuButton
+                        fullWidth
+                        size="large"
+                        onClick={(e) => {
+                            store.dispatch({ type: ActionTypes.PRODUCT_ID, payload: selectedPlan });
+                            history.push("/introduction");
+                        }}
+                    >
+                        Continue with {selectedPlan}
+                    </BadanamuButton>
+                </Grid>
+            </Grid>
         </Container>
     );
 }
