@@ -26,7 +26,7 @@ const styles = (theme: Theme) => createStyles({
     notchedOutline: {},
     txtfield: {
         "& fieldset": {
-          borderRadius: 12,
+            borderRadius: 12,
         },
         "borderColor": "black",
     },
@@ -36,24 +36,25 @@ type Props = TextFieldProps & WithStyles<typeof styles>;
 
 class BadanamuTextField extends React.PureComponent<Props, any> {
     public render() {
-        const forwardProps = {...this.props};
+        const forwardProps = { ...this.props };
         delete forwardProps.classes;
         return <TextField {...forwardProps}
-                className={this.props.classes.txtfield}
-                InputLabelProps={{
-                    classes: {
-                        focused: this.props.classes.cssFocused,
-                        root: this.props.classes.cssLabel,
-                    },
-                }}
-                InputProps={{
-                    classes: {
-                        focused: this.props.classes.cssFocused,
-                        notchedOutline: this.props.classes.notchedOutline,
-                        root: this.props.classes.cssOutlinedInput,
-                    },
-                }}
-                variant={"outlined"}/>;
+            className={this.props.classes.txtfield}
+            InputLabelProps={{
+                classes: {
+                    focused: this.props.classes.cssFocused,
+                    root: this.props.classes.cssLabel,
+                },
+            }}
+            InputProps={{
+                classes: {
+                    focused: this.props.classes.cssFocused,
+                    notchedOutline: this.props.classes.notchedOutline,
+                    root: this.props.classes.cssOutlinedInput,
+                },
+                endAdornment: this.props.InputProps === undefined ? "" : this.props.InputProps.endAdornment,
+            }}
+            variant={"outlined"} />;
     }
 }
 

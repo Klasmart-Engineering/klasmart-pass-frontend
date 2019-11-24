@@ -34,7 +34,7 @@ function ClientSide() {
 
     let theme = {};
     if (paletteType === "light") {
-        theme = createMuiTheme({ overrides, palette: { type: "light" }, typography });
+        theme = createMuiTheme({ overrides, palette: { type: "light", background: { default: "white" } }, typography });
     } else {
         theme = createMuiTheme({ overrides, palette: { type: "dark" }, typography });
     }

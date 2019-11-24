@@ -1,12 +1,19 @@
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Container from "@material-ui/core/Container";
+import Divider from "@material-ui/core/Divider";
 import FormControl from "@material-ui/core/FormControl";
 import Grid from "@material-ui/core/Grid";
+import IconButton from "@material-ui/core/IconButton";
+import InputBase from "@material-ui/core/InputBase";
+import Paper from "@material-ui/core/Paper";
+import { createStyles, makeStyles } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
+import ExitToAppRoundedIcon from "@material-ui/icons/ExitToAppRounded";
 import * as QueryString from "query-string";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { FormattedMessage } from "react-intl";
+import { FormattedHTMLMessage, FormattedMessage } from "react-intl";
 import { useStore } from "react-redux";
 import { RouteComponentProps } from "react-router-dom";
 import { redirectIfUnverifiable } from "../components/authorized";
@@ -17,10 +24,34 @@ import { RestAPIError } from "../restapi_errors";
 import { ActionTypes } from "../store/actions";
 import { IdentityType } from "../utils/accountType";
 
+const useStyles = makeStyles((theme) => createStyles({
+    root: {
+        padding: "2px 4px",
+        display: "flex",
+        alignItems: "center",
+        borderBottom: "1px solid gray",
+        borderRadius: 0,
+        width: 200,
+    },
+    input: {
+        marginLeft: theme.spacing(1),
+        flex: 1,
+    },
+    iconButton: {
+        padding: 10,
+    },
+    divider: {
+        height: 28,
+        margin: 4,
+    },
+}),
+);
+
 interface Props { type: IdentityType; }
 
 export function Verify(props: Props & RouteComponentProps) {
     const store = useStore();
+    const classes = useStyles();
     const [verificationCode, setVerificationCode] = useState("");
     const [error, setError] = useState<JSX.Element | null>(null);
     const [verifyInFlight, setVerifyInFlight] = useState(false);
@@ -59,13 +90,20 @@ export function Verify(props: Props & RouteComponentProps) {
     const type = IdentityType[props.type].toLowerCase();
 
     return (
-        <Container maxWidth="xs" >
-            <Typography component="h1" variant="h5">
-                <FormattedMessage id={`verify_${type}`} />
-            </Typography>
-            <FormControl >
-                <Grid container spacing={2}>
-                    <Grid item xs={12}>
+        <Container maxWidth="sm" >
+            <Grid container justify="center" spacing={4}>
+                <Grid item xs={12}>
+                    <Typography variant="h5" align="center">
+                        <FormattedMessage id={`verify_${type}`} />
+                    </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                    <Typography variant="body1" align="center">
+                        <FormattedMessage id={`verify_${type}_directions`} />
+                    </Typography>
+                </Grid>
+                <Grid item xs={8}>
+                    <FormControl fullWidth>
                         <BadanamuTextField
                             required
                             fullWidth
@@ -73,28 +111,41 @@ export function Verify(props: Props & RouteComponentProps) {
                             label={<FormattedMessage id={`verify_${type}_code`} />}
                             value={verificationCode}
                             onChange={(e) => setVerificationCode(e.target.value)}
+                            inputProps={{ style: { verticalAlign: "center", fontFamily: "monospace" } }}
+                            InputProps={{
+                                endAdornment:
+                                    <IconButton
+                                        className={classes.iconButton}
+                                        disabled={verifyInFlight}
+                                        onClick={() => verify()}
+                                        aria-label="submit"
+                                    >
+                                        {verifyInFlight ? <CircularProgress size={25} /> : <ExitToAppRoundedIcon />}
+                                    </IconButton>,
+                            }}
                         />
-                    </Grid>
+                        {
+                            error === null ? null :
+                                <Typography color="error">
+                                    {error}
+                                </Typography>
+                        }
+                    </FormControl>
                 </Grid>
-                <BadanamuButton
-                    fullWidth
-                    size="large"
-                    disabled={verifyInFlight}
-                    onClick={() => verify()}
-                >
-                    {
-                        verifyInFlight ?
-                            <CircularProgress size={25} /> :
-                            <FormattedMessage id={`verify_${type}_button`} />
-                    }
-                </BadanamuButton>
-                {
-                    error === null ? null :
-                        <Typography color="error">
-                            {error}
-                        </Typography>
+                {type === "email" ?
+                    <React.Fragment>
+                        <Grid item xs={12} style={{ textAlign: "center" }}>
+                            <CircularProgress size={25} />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Typography variant="body1" align="center">
+                                <FormattedMessage id={`verify_${type}_waiting`} />
+                            </Typography>
+                        </Grid>
+                    </React.Fragment> :
+                    null
                 }
-            </FormControl>
+            </Grid>
         </Container>
     );
 }

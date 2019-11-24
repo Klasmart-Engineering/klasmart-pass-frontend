@@ -12,7 +12,7 @@ import ClearRoundedIcon from "@material-ui/icons/ClearRounded";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import clsx from "clsx";
 import React, { useState } from "react";
-import { FormattedDate } from "react-intl";
+import { FormattedDate, FormattedMessage } from "react-intl";
 import { useStore } from "react-redux";
 import { useHistory } from "react-router";
 import BadanamuButton from "../components/button";
@@ -154,7 +154,7 @@ export function Landing() {
                             value={plan}
                             onClick={(e) => setPlan(plan)}
                         >
-                            Buy Now
+                            <FormattedMessage id="button_select" />
                         </Button>
                     </Grid>
                 </Grid>
@@ -189,10 +189,14 @@ export function Landing() {
                     <Typography>STEP <b>{step}</b> OF <b>3</b></Typography>
                 </Grid>
                 <Grid item xs={12}>
-                    <Typography variant="h4">Choose the pass that's right for you!</Typography>
+                    <Typography variant="h4">
+                        <FormattedMessage id="landing_select_header" />
+                    </Typography>
                 </Grid>
                 <Grid item xs={12}>
-                    <Typography>Your pass will be valid until <FormattedDate value={getExpiration(1)} />.</Typography>
+                    <Typography variant="body1">
+                        <FormattedMessage id="landing_select_subheader" /><FormattedDate value={getExpiration(1)} />.
+                    </Typography>
                 </Grid>
             </Grid>
             {/* Plan Selection Button */}
@@ -256,7 +260,10 @@ export function Landing() {
                             history.push("/introduction");
                         }}
                     >
-                        Continue with {selectedPlan}
+                        Continue with {selectedPlan === "BLP" ?
+                            <FormattedMessage id="learning_pass" /> :
+                            <FormattedMessage id="learning_pass_premium" />
+                        }
                     </BadanamuButton>
                 </Grid>
             </Grid>

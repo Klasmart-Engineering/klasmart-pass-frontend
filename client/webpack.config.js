@@ -28,12 +28,6 @@ module.exports = {
                     }
                 ],
             },
-            // {
-            //     test: /\.(jpg|png)$/,
-            //     use: {
-            //         loader: 'url-loader',
-            //     },
-            // },
             {
                 test: /\.(gif|png|jpe?g|svg)$/i,
                 use: [
