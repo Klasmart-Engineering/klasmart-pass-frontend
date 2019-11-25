@@ -22,6 +22,7 @@ const messages: Record<string, string> = {
     login_privacy: "Privacy",
     login_terms: "Terms",
     logout: "Logout",
+    LocaleName: "English",
     navbar_signin: "Sign In",
     navbar_signup: "Sign Up",
     password: "Password",

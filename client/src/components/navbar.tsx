@@ -30,14 +30,6 @@ const LANGUAGES_LABEL = [
         code: "ko",
         text: "한국어",
     },
-    // {
-    //     code: "id",
-    //     text: "Indonesian",
-    // },
-    // {
-    //     code: "vi",
-    //     text: "Vietnamese",
-    // },
 ];
 
 // tslint:disable:object-literal-sort-keys
@@ -69,7 +61,7 @@ const useStyles = makeStyles((theme: Theme) =>
             [theme.breakpoints.down("sm")]: {
                 height: 36,
             },
-        }
+        },
     }),
 );
 
@@ -124,7 +116,7 @@ export default function NavBar() {
                         >
                             <LanguageIcon />
                             <span className={classes.language}>
-                                {LANGUAGES_LABEL.filter((language) => language.code === locale)[0].text}
+                                <FormattedMessage id="LocaleName" />
                             </span>
                             <ExpandMoreIcon fontSize="small" />
                         </Button>
