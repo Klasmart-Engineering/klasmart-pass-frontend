@@ -13,6 +13,7 @@ const styles = (theme: Theme) => createStyles({
         "border-radius": "12px",
         "color": "white",
         "margin": theme.spacing(3, 0, 2),
+        "padding": theme.spacing(1, 2),
     },
 });
 
@@ -20,7 +21,7 @@ type Props = Parameters<typeof Button>[0] & WithStyles<typeof styles>;
 
 class BadanamuButton extends React.PureComponent<Props, any> {
     public render() {
-        const forwardProps = {...this.props};
+        const forwardProps = { ...this.props };
         delete forwardProps.classes;
         return <Button className={this.props.classes.btn} {...forwardProps} />;
     }

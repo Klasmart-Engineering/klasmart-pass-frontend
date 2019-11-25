@@ -1,5 +1,7 @@
+import blue from "@material-ui/core/colors/blue";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+import { createMuiTheme, responsiveFontSizes, ThemeProvider } from "@material-ui/core/styles";
+import { PaletteOptions } from "@material-ui/core/styles/createPalette";
 import * as QueryString from "query-string";
 import React, { useState } from "react";
 import * as ReactDOM from "react-dom";
@@ -23,20 +25,31 @@ function ClientSide() {
             textTransform: "none",
         },
         fontFamily: languageCode === "en" ?
-            ["Nanum Gothic", "Open Sans", "Helvetica", "-apple-system", "sans-serif"].join(",") :
-            ["Open Sans", "Helvetica", "-apple-system", "sans-serif"].join(","),
+            ["Open Sans", "Helvetica", "-apple-system", "sans-serif"].join(",") :
+            ["Nanum Gothic", "Open Sans", "Helvetica", "-apple-system", "sans-serif"].join(","),
         fontWeightLight: 400,
-        fontWeightMedium: 400,
+        fontWeightMedium: 600,
         fontWeightRegular: languageCode === "en" ? 400 : 400,
     } as any; // TODO: Seems like a bug in materialUI's types
 
     const overrides = {};
+    const palette: PaletteOptions = {
+        primary: {
+            light: "#0E78D5",
+            main: "#0E78D5",
+            dark: "#1896ea",
+            contrastText: "#fff",
+        },
+    };
 
     let theme = {};
     if (paletteType === "light") {
-        theme = createMuiTheme({ overrides, palette: { type: "light", background: { default: "white" } }, typography });
+        palette.type = "light";
+        palette.background = { default: "white" };
+        theme = createMuiTheme({ overrides, palette, typography });
     } else {
-        theme = createMuiTheme({ overrides, palette: { type: "dark" }, typography });
+        palette.type = "dark";
+        theme = createMuiTheme({ overrides, palette, typography });
     }
 
     return (

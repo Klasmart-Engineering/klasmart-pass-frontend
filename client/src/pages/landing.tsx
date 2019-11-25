@@ -23,16 +23,21 @@ import { getExpiration } from "../utils/date";
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme) => createStyles({
-    paper: {
-        marginTop: theme.spacing(8),
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "left",
+    productImgContainer: {
+        textAlign: "center",
+        minHeight: 96,
+        [theme.breakpoints.down("sm")]: {
+            minHeight: 72,
+        },
+    },
+    productImg: {
+        maxWidth: 64,
+        [theme.breakpoints.down("sm")]: {
+            maxWidth: 48,
+        },
     },
     planSelectBtn: {
-        "minWidth": 140,
-        "height": "auto",
-        "fontSize": 19,
+        "padding": theme.spacing(1, 2),
         "fontWeight": 600,
         "color": "white",
         "backgroundColor": "#aedaf3",
@@ -145,8 +150,8 @@ export function Landing() {
         return (
             <React.Fragment>
                 <Grid item xs={6} md={3}>
-                    <Grid item xs={12} style={{ textAlign: "center", minHeight: 80 }}>
-                        <img src={plan === "BLP" ? BLP : BLPPremium} style={{ maxWidth: 50 }} />
+                    <Grid item xs={12} className={classes.productImgContainer}>
+                        <img src={plan === "BLP" ? BLP : BLPPremium} className={classes.productImg} />
                     </Grid>
                     <Grid item xs={12} style={{ textAlign: "center" }}>
                         <Button
@@ -186,11 +191,11 @@ export function Landing() {
             {/* Onboarding */}
             <Grid container spacing={2} style={{ margin: "32px 0" }}>
                 <Grid item xs={12}>
-                    <Typography>STEP <b>{step}</b> OF <b>3</b></Typography>
+                    <Typography variant="body1">STEP <b>{step}</b> OF <b>3</b></Typography>
                 </Grid>
                 <Grid item xs={12}>
                     <Typography variant="h4">
-                        <FormattedMessage id="landing_select_header" />
+                        <FormattedMessage id="landing_select_header" values={{ b: (...chunks: any[]) => <strong>{chunks}</strong> }} />
                     </Typography>
                 </Grid>
                 <Grid item xs={12}>

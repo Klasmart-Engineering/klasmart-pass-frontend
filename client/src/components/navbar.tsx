@@ -14,6 +14,7 @@ import * as React from "react";
 import { FormattedMessage } from "react-intl";
 import { useSelector, useStore } from "react-redux";
 import { Route, Switch, useHistory } from "react-router-dom";
+import Logo from "../img/learning_pass_color_b.01.png";
 import { useRestAPI } from "../restapi";
 import { ActionTypes } from "../store/actions";
 import { State } from "../store/store";
@@ -27,24 +28,21 @@ const LANGUAGES_LABEL = [
     },
     {
         code: "ko",
-        text: "Korean",
+        text: "한국어",
     },
-    {
-        code: "id",
-        text: "Indonesian",
-    },
-    {
-        code: "vi",
-        text: "Vietnamese",
-    },
+    // {
+    //     code: "id",
+    //     text: "Indonesian",
+    // },
+    // {
+    //     code: "vi",
+    //     text: "Vietnamese",
+    // },
 ];
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
-        root: {
-            display: "flex",
-        },
         grow: {
             flexGrow: 1,
         },
@@ -53,7 +51,6 @@ const useStyles = makeStyles((theme: Theme) =>
             color: theme.palette.type === "light" ? "black" : "white",
         },
         appBarBtn: {
-            fontSize: 19,
             margin: "0 10px",
         },
         language: {
@@ -63,46 +60,16 @@ const useStyles = makeStyles((theme: Theme) =>
                 display: "block",
             },
         },
-        menuButton: {
-            marginRight: theme.spacing(2),
-        },
-        hide: {
-            display: "none",
-        },
-        drawer: {
-            width: drawerWidth,
-            flexShrink: 0,
-        },
-        drawerPaper: {
-            width: drawerWidth,
-        },
-        drawerHeader: {
-            display: "flex",
-            alignItems: "center",
-            padding: theme.spacing(0, 1),
-            ...theme.mixins.toolbar,
-            justifyContent: "flex-end",
-        },
-        content: {
-            flexGrow: 1,
-            padding: theme.spacing(3),
-            transition: theme.transitions.create("margin", {
-                easing: theme.transitions.easing.sharp,
-                duration: theme.transitions.duration.leavingScreen,
-            }),
-            marginLeft: 0,
-        },
-        contentShift: {
-            transition: theme.transitions.create("margin", {
-                easing: theme.transitions.easing.easeOut,
-                duration: theme.transitions.duration.enteringScreen,
-            }),
-            marginRight: -drawerWidth,
-        },
         vl: {
             borderLeft: "2px solid black",
             height: 30,
         },
+        logo: {
+            height: 48,
+            [theme.breakpoints.down("sm")]: {
+                height: 36,
+            },
+        }
     }),
 );
 
@@ -142,10 +109,7 @@ export default function NavBar() {
             >
                 <Toolbar>
                     <Button color="inherit" onClick={() => history.push("/")}>
-                        <img src="https://static-2-badanamu.akamaized.net/wp-content/uploads/2017/04/cropped-Badanamu-PNG-2.png" style={{ height: 50, marginRight: 8 }} />
-                        <Typography variant="h4" className={classes.language} noWrap>
-                            Learning Pass
-                        </Typography>
+                        <img src={Logo} className={classes.logo} />
                     </Button>
                     <div className={classes.grow} />
                     <Tooltip title="Change Language" enterDelay={300}>
@@ -192,14 +156,14 @@ export default function NavBar() {
                                 className={classes.appBarBtn}
                                 onClick={() => history.push("/login")}
                             >
-                                Sign  In
+                                <FormattedMessage id="navbar_signin" />
                             </Button> :
                             <Button
                                 color="inherit"
                                 className={classes.appBarBtn}
                                 onClick={() => logout()}
                             >
-                                Sign Out
+                                <FormattedMessage id="navbar_signup" />
                             </Button>
                     }
                 </Toolbar>

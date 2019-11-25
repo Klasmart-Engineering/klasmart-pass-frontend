@@ -41,7 +41,6 @@ export function App() {
             justify="space-between"
             alignItems="center"
         >
-            <Box />
             <Switch>
                 <Route path="/login" component={Login} />
                 <Route path="/signup" component={Signup} />
