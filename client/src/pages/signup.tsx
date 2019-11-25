@@ -28,6 +28,9 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
         padding: theme.spacing(4, 0),
         textAlign: "right",
     },
+    formContainer: {
+        width: "100%",
+    },
 }),
 );
 // tslint:enable:object-literal-sort-keys
@@ -119,7 +122,7 @@ export function Signup() {
                                 />
                             </Typography>
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid item xs={12} className={classes.formContainer}>
                             <form onSubmit={(e) => signup(e)}>
                                 <Grid container spacing={2}>
                                     <Grid item xs={12}>

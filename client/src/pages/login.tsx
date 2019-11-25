@@ -30,6 +30,9 @@ const useStyles = makeStyles((theme) => createStyles({
         padding: theme.spacing(4, 0),
         textAlign: "right",
     },
+    formContainer: {
+        width: "100%",
+    },
 }),
 );
 // tslint:enable:object-literal-sort-keys
@@ -106,7 +109,7 @@ export function Login() {
                                 />
                             </Typography>
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid item xs={12} className={classes.formContainer}>
                             <form onSubmit={(e) => login(e)} >
                                 <Grid container spacing={2}>
                                     <Grid item xs={12}>
