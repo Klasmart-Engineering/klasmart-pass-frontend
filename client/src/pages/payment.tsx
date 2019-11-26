@@ -7,6 +7,7 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { useSelector } from "react-redux";
+import { useHistory } from "react-router";
 import { redirectIfUnauthorized } from "../components/authorized";
 import DropIn from "../components/braintree-web-drop-in-react";
 import BadanamuButton from "../components/button";
@@ -27,11 +28,12 @@ export function Payment() {
     const classes = useStyles();
     const [clientToken, setClientToken] = useState("");
     const [clientTokenInFlight, setClientTokenInFlight] = useState(false);
+    const [paymentInFlight, setPaymentInFlight] = useState(false);
     const [paymentReady, setPaymentReady] = useState(false);
     const [braintree, setBrainTree] = useState<Braintree.Dropin | null>(null);
     const [error, setError] = useState<JSX.Element | null>(null);
     const selectedProduct = useSelector((state: State) => state.account.productId);
-
+    const history = useHistory();
     const restApi = useRestAPI();
 
     useEffect(() => {
@@ -56,23 +58,29 @@ export function Payment() {
     async function buy() {
         if (error !== null) { return; }
         if (braintree === null) { return; }
-        // Send the nonce to your server
-        const { nonce } = await braintree.requestPaymentMethod();
-        // TODO: change product selection to use productIDs
-        let productId = "";
-        switch (selectedProduct) {
-            case "BLP":
-                productId = "com.calmid.learnandplay.blp.standard";
-                break;
-            case "BLPPremium":
-                productId = "com.calmid.learnandplay.blp.premium";
-                break;
-            default:
-                console.error(`unknown product '${productId}'`);
-                setError(<FormattedMessage id={"ERROR_UNKOWN"} />);
-                return;
+        if (paymentInFlight) { return; }
+        try {
+            setPaymentInFlight(true);
+            const { nonce } = await braintree.requestPaymentMethod();
+            // TODO: change product selection to use productIDs
+            let productId = "";
+            switch (selectedProduct) {
+                case "BLP":
+                    productId = "com.calmid.learnandplay.blp.standard";
+                    break;
+                case "BLPPremium":
+                    productId = "com.calmid.learnandplay.blp.premium";
+                    break;
+                default:
+                    throw new Error("Unknown product");
+            }
+            await restApi.reportPaymentNonce(productId, nonce);
+            history.push("/payment-thankyou");
+        } catch (e) {
+            history.push("/payment-error");
+        } finally {
+            setPaymentInFlight(false);
         }
-        await restApi.reportPaymentNonce(productId, nonce);
     }
 
     return (
@@ -95,8 +103,12 @@ export function Payment() {
             }
             {
                 paymentReady ?
-                    <BadanamuButton color="primary" onClick={() => buy()}>
-                        <FormattedMessage id={"payment_button"} />
+                    <BadanamuButton color="primary" onClick={() => buy()} disabled={paymentInFlight}>
+                        {
+                            paymentInFlight ?
+                                <CircularProgress size={25} /> :
+                                <FormattedMessage id={"payment_button"} />
+                        }
                     </BadanamuButton>
                     : null
             }

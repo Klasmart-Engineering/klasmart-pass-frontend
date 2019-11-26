@@ -43,6 +43,8 @@ const messages: Record<string, string> = {
     password_restore_heading: "Check your email for your reset code",
     payment: "Payment",
     payment_button: "Pay",
+    payment_error: "Sorry, your payment could not be processed, please try again later.",
+    payment_thankyou: "Thank you for your purchase",
     sign_up: "Sign Up",
     sign_up_already: "Already have an account? Sign in",
     sign_up_button: "SIGN UP",
