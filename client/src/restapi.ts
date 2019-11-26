@@ -186,8 +186,8 @@ export class RestAPI {
         }
         throw new RestAPIError(RestAPIErrorType.UNKNOWN, body);
     }
-    public async reportPaymentNonce(nonce: string) {
-        const response = await this.paymentCall("POST", "braintree/payment", JSON.stringify({ nonce }));
+    public async reportPaymentNonce(productCode: string, nonce: string) {
+        const response = await this.paymentCall("POST", "braintree/payment", JSON.stringify({ nonce, productCode }));
         const body = await response.json();
         if (typeof body === "object") {
             const { transactionId } = body;
