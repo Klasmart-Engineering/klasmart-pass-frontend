@@ -262,7 +262,7 @@ export function Landing() {
                         size="large"
                         onClick={(e) => {
                             store.dispatch({ type: ActionTypes.PRODUCT_ID, payload: selectedPlan });
-                            history.push("/introduction");
+                            history.push("/payment");
                         }}
                     >
                         Continue with {selectedPlan === "BLP" ?
