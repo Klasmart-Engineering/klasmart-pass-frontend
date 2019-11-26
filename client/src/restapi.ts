@@ -177,6 +177,17 @@ export class RestAPI {
         }
         return;
     }
+    public async getTransactionHistory() {
+        const response = await this.paymentCall("GET", "history");
+        const body = await response.json();
+        if (typeof body === "object") {
+            const { clientToken } = body;
+            if (typeof clientToken === "string") {
+                return clientToken;
+            }
+        }
+        throw new RestAPIError(RestAPIErrorType.UNKNOWN, body);
+    }
     public async getPaymentToken() {
         const response = await this.paymentCall("GET", "braintree/token");
         const body = await response.json();
