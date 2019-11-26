@@ -155,7 +155,7 @@ export default function NavBar() {
                                 className={classes.appBarBtn}
                                 onClick={() => logout()}
                             >
-                                <FormattedMessage id="navbar_signup" />
+                                <FormattedMessage id="navbar_signout" />
                             </Button>
                     }
                 </Toolbar>
