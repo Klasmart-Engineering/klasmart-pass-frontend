@@ -6,10 +6,12 @@ import clsx from "clsx";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
+import { useSelector } from "react-redux";
 import { redirectIfUnauthorized } from "../components/authorized";
 import DropIn from "../components/braintree-web-drop-in-react";
 import BadanamuButton from "../components/button";
 import { useRestAPI } from "../restapi";
+import { State } from "../store/store";
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme: Theme) =>
@@ -28,6 +30,7 @@ export function Payment() {
     const [paymentReady, setPaymentReady] = useState(false);
     const [braintree, setBrainTree] = useState<Braintree.Dropin | null>(null);
     const [error, setError] = useState<JSX.Element | null>(null);
+    const productId = useSelector((state: State) => state.account.productId);
 
     const restApi = useRestAPI();
 
@@ -55,7 +58,21 @@ export function Payment() {
         if (braintree === null) { return; }
         // Send the nonce to your server
         const { nonce } = await braintree.requestPaymentMethod();
-        await restApi.reportPaymentNonce(nonce);
+        // TODO: change product selection to use productIDs
+        let productId = "";
+        switch (productId) {
+            case "BLP":
+                productId = "com.calmid.learnandplay.blp.standard";
+                break;
+            case "BLPPremium":
+                productId = "com.calmid.learnandplay.blp.premium";
+                break;
+            default:
+                console.error("unknown product");
+                setError(<FormattedMessage id={"ERROR_UNKOWN"} />);
+                return;
+        }
+        await restApi.reportPaymentNonce(productId, nonce);
     }
 
     return (
