@@ -75,13 +75,13 @@ module.exports = {
                 pathRewrite: { '^/payment': '/v1' }
             },
             '/auth': {
-                target: 'https://seoul-beta.auth.badanamu.net/',
+                target: 'https://beta.auth.badanamu.net/',
                 secure: false,
                 changeOrigin: true,
                 pathRewrite: { '^/auth': '/v1' }
             },
             '/api': {
-                target: 'https://seoul-beta.api.badanamu.net/',
+                target: 'https://beta.account.badanamu.net/',
                 secure: false,
                 changeOrigin: true,
                 pathRewrite: { '^/api': '/v1' }

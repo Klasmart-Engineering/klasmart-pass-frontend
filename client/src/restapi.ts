@@ -26,7 +26,7 @@ export class RestAPI {
 
     public async signup(id: string, pw: string, lang: string) {
         const { phoneNr, email } = phoneOrEmail(id);
-        const result = await this.apiCall("account/signup", JSON.stringify({
+        const result = await this.apiCall("signup", JSON.stringify({
             email,
             lang,
             phoneNr,
@@ -44,9 +44,9 @@ export class RestAPI {
         if (accountId === null) { throw new Error("Unknown AccountID"); }
         switch (type) {
             case IdentityType.Phone:
-                return this.apiCall("account/verify/phonenumber", JSON.stringify({ accountId, verificationCode }));
+                return this.apiCall("verify/phonenumber", JSON.stringify({ accountId, verificationCode }));
             case IdentityType.Email:
-                return this.apiCall("account/verify/email", JSON.stringify({ accountId, verificationCode }));
+                return this.apiCall("verify/email", JSON.stringify({ accountId, verificationCode }));
             default:
                 throw new Error("Unknown Account Type");
         }
@@ -54,7 +54,7 @@ export class RestAPI {
 
     public forgotPassword(id: string, lang: string) {
         const { phoneNr, email } = phoneOrEmail(id);
-        return this.apiCall("account/forgotpassword", JSON.stringify({
+        return this.apiCall("forgotpassword", JSON.stringify({
             email,
             lang,
             phoneNr,
@@ -64,7 +64,7 @@ export class RestAPI {
     public restorePassword(id: string, password: string, resetCode: string) {
         const { phoneNr, email } = phoneOrEmail(id);
 
-        return this.apiCall("account/restorepassword", JSON.stringify({
+        return this.apiCall("restorepassword", JSON.stringify({
             accountEmail: email,
             accountPhoneNr: phoneNr,
             pw: password,
@@ -73,7 +73,7 @@ export class RestAPI {
     }
 
     public changePassword(currentPassword: string, newPassword: string) {
-        return this.apiCall("account/self/password", JSON.stringify({
+        return this.apiCall("self/password", JSON.stringify({
             currPass: currentPassword,
             newPass: newPassword,
         }));
@@ -171,8 +171,10 @@ export class RestAPI {
                 default:
                     throw e;
             }
+        } finally {
+            // Destroy local session data even if server wouldn't
+            this.store.dispatch({ type: ActionTypes.LOGOUT, payload: undefined });
         }
-        this.store.dispatch({ type: ActionTypes.LOGOUT, payload: undefined });
         return;
     }
     public async getPaymentToken() {
