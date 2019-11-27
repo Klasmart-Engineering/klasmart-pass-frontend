@@ -30,6 +30,12 @@ function ClientSide() {
         fontWeightLight: 400,
         fontWeightMedium: 600,
         fontWeightRegular: languageCode === "en" ? 400 : 400,
+        h1: { letterSpacing: "-1.0px" },
+        h2: { letterSpacing: "-2.2px" },
+        h3: { letterSpacing: "-2.2px" },
+        h4: { letterSpacing: "-1.4px" },
+        h5: { letterSpacing: "-1.4px" },
+        h6: { letterSpacing: "-1.2px" },
     } as any; // TODO: Seems like a bug in materialUI's types
 
     const overrides = {};
