@@ -48,15 +48,11 @@ export function App() {
                 <Route path="/verify-phone" render={(props) => <Verify type={IdentityType.Phone} {...props} />} />
                 <Route path="/verify-email" render={(props) => <Verify type={IdentityType.Email} {...props} />} />
                 <Route path="/verify_email" component={VerifyLink} />
-                <Route path="/payment" component={Payment} />
-                <Route path="/payment-thankyou" component={PaymentThankyou} />
-                <Route path="/payment-error" component={PaymentError} />
-                <Route path="/introduction" component={Introduction} />
                 <Route path="/password-change" component={PasswordChange} />
                 <Route path="/password-changed" component={PasswordChanged} />
                 <Route path="/password-forgot" component={PasswordForgot} />
                 <Route path="/password-restore" component={PasswordRestore} />
-                <Route path="/" component={Landing} />
+                <Route path="/" component={MyAccount} />
             </Switch>
             <Box mt={5}>
                 <Copyright />
