@@ -270,7 +270,7 @@ export class RestAPI {
         headers.append("Content-Type", "application/json");
         const state = this.store.getState();
         if (typeof state.account.accessToken === "string") {
-            headers.append("X-Access-Token", state.account.accessToken);
+            headers.append("Authorization", `Bearer ${state.account.accessToken}`);
             if (typeof state.account.accessTokenExpire === "number" && state.account.accessTokenExpire < Date.now()) {
                 console.log("It seems like the access token has expired, attempting request regardless");
             }
@@ -278,6 +278,7 @@ export class RestAPI {
         const url = prefix + route;
         const response = await fetch(url, {
             body,
+            // credentials: "include",
             headers,
             method,
         });
