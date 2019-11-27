@@ -1,3 +1,4 @@
+import { CircularProgress } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
 import Button from "@material-ui/core/Button";
 import Menu from "@material-ui/core/Menu";
@@ -5,15 +6,13 @@ import MenuItem from "@material-ui/core/MenuItem";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import Tooltip from "@material-ui/core/Tooltip";
-import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import LanguageIcon from "@material-ui/icons/Translate";
-import clsx from "clsx";
 import { useState } from "react";
 import * as React from "react";
 import { FormattedMessage } from "react-intl";
 import { useSelector, useStore } from "react-redux";
-import { Route, Switch, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import Logo from "../img/learning_pass_color_b.01.png";
 import { useRestAPI } from "../restapi";
 import { ActionTypes } from "../store/actions";
@@ -153,9 +152,14 @@ export default function NavBar() {
                             <Button
                                 color="inherit"
                                 className={classes.appBarBtn}
+                                disabled={logoutInFlight}
                                 onClick={() => logout()}
                             >
-                                <FormattedMessage id="navbar_signout" />
+                                {
+                                    logoutInFlight ?
+                                        <CircularProgress size={15} /> :
+                                        <FormattedMessage id="navbar_signout" />
+                                }
                             </Button>
                     }
                 </Toolbar>
