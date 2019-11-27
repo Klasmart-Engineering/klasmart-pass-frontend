@@ -12,7 +12,7 @@ import clsx from "clsx";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { FormattedDate, FormattedMessage } from "react-intl";
-import { useSelector } from "react-redux";
+import { useSelector, useStore } from "react-redux";
 import { useHistory } from "react-router";
 import { redirectIfUnauthorized } from "../components/authorized";
 import DropIn from "../components/braintree-web-drop-in-react";
@@ -22,6 +22,7 @@ import BLPPremium from "../img/learning_pass_premium_color_b.01.png";
 import { useRestAPI } from "../restapi";
 import { State } from "../store/store";
 import { getExpiration } from "../utils/date";
+import { ActionTypes } from "../store/actions";
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme: Theme) =>
@@ -69,6 +70,7 @@ export function Payment() {
     const selectedProduct = useSelector((state: State) => state.account.productId);
     const history = useHistory();
     const restApi = useRestAPI();
+    const store = useStore();
 
     useEffect(() => {
         getClientToken();
@@ -189,7 +191,15 @@ export function Payment() {
                             }
                             {
                                 paymentReady ?
-                                    <BadanamuButton color="primary" fullWidth onClick={() => buy()} disabled={paymentInFlight}>
+                                    <BadanamuButton
+                                        color="primary"
+                                        fullWidth
+                                        onClick={() => {
+                                            buy();
+                                            store.dispatch({ type: ActionTypes.EXPIRE_DATE, payload: getExpiration(1) });
+                                        }}
+                                        disabled={paymentInFlight}
+                                    >
                                         {
                                             paymentInFlight ?
                                                 <CircularProgress size={25} /> :

@@ -142,6 +142,15 @@ export function productId(state = null, action: Actions) {
     }
 }
 
+export function expireDate(state = null, action: Actions) {
+    switch (action.type) {
+        case ActionTypes.EXPIRE_DATE:
+            return action.payload;
+        default:
+            return state;
+    }
+}
+
 export function locale(state = getDefaultLanguageCode(), action: Actions) {
     switch (action.type) {
         case ActionTypes.LOCALE:
@@ -159,6 +168,7 @@ export const account = combineReducers({
     email,
     locale,
     productId,
+    expireDate,
     refreshToken,
     refreshTokenExpire,
     sessionId,

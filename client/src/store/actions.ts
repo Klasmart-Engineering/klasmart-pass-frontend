@@ -31,6 +31,7 @@ export type AccountIdAction = Action<ActionTypes.ACCOUNT_ID, {
 
 export type PostAuthorizationRouteAction = Action<ActionTypes.POST_AUTHORIZATION_ROUTE, string>;
 export type ProductIdAction = Action<ActionTypes.PRODUCT_ID, string>;
+export type PassExpiration = Action<ActionTypes.EXPIRE_DATE, string>;
 export type SetEMailAction = Action<ActionTypes.EMAIL, string>;
 export type SetLocale = Action<ActionTypes.LOCALE, string>;
 
@@ -45,6 +46,7 @@ export enum ActionTypes {
     DEVICE_ID,
     POST_AUTHORIZATION_ROUTE,
     PRODUCT_ID,
+    EXPIRE_DATE,
     EMAIL,
     LOCALE,
 }
@@ -60,6 +62,7 @@ export type Actions =
     | AccountIdAction
     | PostAuthorizationRouteAction
     | ProductIdAction
+    | ExpireDateAction
     | SetEMailAction
     | SetLocale
     | never;
