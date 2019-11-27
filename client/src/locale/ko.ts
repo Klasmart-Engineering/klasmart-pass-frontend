@@ -1,10 +1,10 @@
 const messages: Record<string, string> = {
     ERROR_INVALID_VERIFICATION_CODE: "잘못된 인증 코드",
     ERROR_UNKOWN: "오류가 발생했습니다",
+    LocaleName: "한국어",
     copyright: "저작권",
     create_account: "너의 <b>바다나무 계정을</b> 만드십시오.",
     email: "이메일",
-    LocaleName: "한국어",
     login: "로그인",
     password: "비밀번호",
     payment: "결제",
