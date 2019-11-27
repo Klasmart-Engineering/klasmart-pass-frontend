@@ -148,19 +148,29 @@ export default function NavBar() {
                                 onClick={() => history.push("/login")}
                             >
                                 <FormattedMessage id="navbar_signin" />
-                            </Button> :
-                            <Button
-                                color="inherit"
-                                className={classes.appBarBtn}
-                                disabled={logoutInFlight}
-                                onClick={() => logout()}
-                            >
-                                {
-                                    logoutInFlight ?
-                                        <CircularProgress size={15} /> :
-                                        <FormattedMessage id="navbar_signout" />
-                                }
                             </Button>
+                            :
+                            <React.Fragment>
+                                <Button
+                                    color="inherit"
+                                    className={classes.appBarBtn}
+                                    onClick={() => history.push("/my-account")}
+                                >
+                                    <FormattedMessage id="navbar_my_account" />
+                                </Button>
+                                <Button
+                                    color="inherit"
+                                    className={classes.appBarBtn}
+                                    disabled={logoutInFlight}
+                                    onClick={() => logout()}
+                                >
+                                    {
+                                        logoutInFlight ?
+                                            <CircularProgress size={15} /> :
+                                            <FormattedMessage id="navbar_signout" />
+                                    }
+                                </Button>
+                            </React.Fragment>
                     }
                 </Toolbar>
             </AppBar>

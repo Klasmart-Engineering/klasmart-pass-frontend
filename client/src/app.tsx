@@ -7,6 +7,7 @@ import Copyright from "./components/copyright";
 import { Introduction } from "./pages/introduction";
 import { Landing } from "./pages/landing";
 import { Login } from "./pages/login";
+import { MyAccount } from "./pages/my-account";
 import { PasswordChange } from "./pages/password-change";
 import { PasswordChanged } from "./pages/password-changed";
 import { PasswordForgot } from "./pages/password-forgot";
@@ -46,6 +47,7 @@ export function App() {
             <Switch>
                 <Route path="/login" component={Login} />
                 <Route path="/signup" component={Signup} />
+                <Route path="/my-account" component={MyAccount} />
                 <Route path="/verify-phone" render={(props) => <Verify type={IdentityType.Phone} {...props} />} />
                 <Route path="/verify-email" render={(props) => <Verify type={IdentityType.Email} {...props} />} />
                 <Route path="/verify_email" component={VerifyLink} />

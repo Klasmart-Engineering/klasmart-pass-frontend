@@ -181,9 +181,9 @@ export class RestAPI {
         const response = await this.paymentCall("GET", "history");
         const body = await response.json();
         if (typeof body === "object") {
-            const { clientToken } = body;
-            if (typeof clientToken === "string") {
-                return clientToken;
+            const { transactions } = body;
+            if (typeof transactions === "object" && transactions instanceof Array) {
+                return transactions;
             }
         }
         throw new RestAPIError(RestAPIErrorType.UNKNOWN, body);
