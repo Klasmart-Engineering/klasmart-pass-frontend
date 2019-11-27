@@ -24,7 +24,7 @@ const messages: Record<string, string> = {
     login_privacy: "Privacy",
     login_terms: "Terms",
     logout: "Logout",
-    my_account_header: "My Account",
+    my_account_header: "Account",
     navbar_my_account: "My Account",
     navbar_signin: "Sign In",
     navbar_signout: "Sign Out",
