@@ -2,6 +2,7 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Container from "@material-ui/core/Container";
+import Divider from "@material-ui/core/Divider";
 import Grid from "@material-ui/core/Grid";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
@@ -16,7 +17,6 @@ import BadanamuLogo from "../img/badanamu_logo.png";
 import { useRestAPI } from "../restapi";
 import { ActionTypes } from "../store/actions";
 import { State } from "../store/store";
-import Divider from "@material-ui/core/Divider";
 import { getExpiration } from "../utils/date";
 
 // tslint:disable:object-literal-sort-keys
@@ -77,7 +77,7 @@ export function PaymentThankyou() {
                             </Typography>
                         </Grid>
                         <Grid item xs={12}>
-                            <BadanamuButton fullWidth onClick={(e) => { }}>
+                            <BadanamuButton fullWidth onClick={(e) => { history.push("/my-account"); }}>
                                 Go to your account dashboard >
                             </BadanamuButton>
                         </Grid>
