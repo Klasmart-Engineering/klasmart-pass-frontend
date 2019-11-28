@@ -14,8 +14,8 @@ function phoneOrEmail(str: string): { phoneNr?: string, email?: string } {
 
 export class RestAPI {
     private paymentPrefix = "/payment/";
-    private authPrefix = "https://beta.auth.badanamu.net/";
-    private apiPrefix = "https://beta.account.badanamu.net/";
+    private authPrefix = "https://prod-test.auth.badanamu.net/";
+    private apiPrefix = "https://prod-test.account.badanamu.net/";
 
     private test: boolean = false;
     private store: Store;
