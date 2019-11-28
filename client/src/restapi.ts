@@ -14,8 +14,8 @@ function phoneOrEmail(str: string): { phoneNr?: string, email?: string } {
 
 export class RestAPI {
     private paymentPrefix = "/payment/";
-    private authPrefix = "https://beta.auth.badanamu.net/v1/";
-    private apiPrefix = "https://beta.account.badanamu.net/v1/";
+    private authPrefix = "https://beta.auth.badanamu.net/";
+    private apiPrefix = "https://beta.account.badanamu.net/";
 
     private test: boolean = false;
     private store: Store;
@@ -26,7 +26,7 @@ export class RestAPI {
 
     public async signup(id: string, pw: string, lang: string) {
         const { phoneNr, email } = phoneOrEmail(id);
-        const result = await this.apiCall("signup", JSON.stringify({
+        const result = await this.apiCall("v1/signup", JSON.stringify({
             email,
             lang,
             phoneNr,
@@ -44,9 +44,9 @@ export class RestAPI {
         if (accountId === null) { throw new Error("Unknown AccountID"); }
         switch (type) {
             case IdentityType.Phone:
-                return this.apiCall("verify/phonenumber", JSON.stringify({ accountId, verificationCode }));
+                return this.apiCall("v1/verify/phonenumber", JSON.stringify({ accountId, verificationCode }));
             case IdentityType.Email:
-                return this.apiCall("verify/email", JSON.stringify({ accountId, verificationCode }));
+                return this.apiCall("v1/verify/email", JSON.stringify({ accountId, verificationCode }));
             default:
                 throw new Error("Unknown Account Type");
         }
@@ -54,7 +54,7 @@ export class RestAPI {
 
     public forgotPassword(id: string, lang: string) {
         const { phoneNr, email } = phoneOrEmail(id);
-        return this.apiCall("forgotpassword", JSON.stringify({
+        return this.apiCall("v1/forgotpassword", JSON.stringify({
             email,
             lang,
             phoneNr,
@@ -64,7 +64,7 @@ export class RestAPI {
     public restorePassword(id: string, password: string, resetCode: string) {
         const { phoneNr, email } = phoneOrEmail(id);
 
-        return this.apiCall("restorepassword", JSON.stringify({
+        return this.apiCall("v1/restorepassword", JSON.stringify({
             accountEmail: email,
             accountPhoneNr: phoneNr,
             pw: password,
@@ -73,7 +73,7 @@ export class RestAPI {
     }
 
     public changePassword(currentPassword: string, newPassword: string) {
-        return this.apiCall("self/password", JSON.stringify({
+        return this.apiCall("v1/self/password", JSON.stringify({
             currPass: currentPassword,
             newPass: newPassword,
         }));
@@ -85,7 +85,7 @@ export class RestAPI {
             const deviceId = await this.deviceId();
             const deviceName = "Webpage";
             const response = await this.authCall(
-                "login",
+                "v1/login",
                 JSON.stringify({
                     deviceId,
                     deviceName,
@@ -144,7 +144,7 @@ export class RestAPI {
         if (typeof state.account.refreshTokenExpire === "number" && state.account.refreshTokenExpire < Date.now()) {
             console.log("It seems that the refresh token has expired, attempting to refresh session regardless.");
         }
-        const response = await this.authCall("token", JSON.stringify({
+        const response = await this.authCall("v1/token", JSON.stringify({
             accountId: state.account.accountId,
             deviceId,
             refreshToken: state.account.refreshToken,
@@ -161,7 +161,7 @@ export class RestAPI {
         const state = this.store.getState();
         const deviceId = state.account.deviceId;
         try {
-            const response = await this.authCall("signout", JSON.stringify({ deviceId }));
+            const response = await this.authCall("v1/signout", JSON.stringify({ deviceId }));
         } catch (e) {
             if (!(e instanceof RestAPIError)) { throw e; }
             switch (e.getErrorMessageType()) {
@@ -178,7 +178,7 @@ export class RestAPI {
         return;
     }
     public async getTransactionHistory() {
-        const response = await this.paymentCall("GET", "history");
+        const response = await this.paymentCall("GET", "v1/history");
         const body = await response.json();
         if (typeof body === "object") {
             const { transactions } = body;
@@ -189,7 +189,7 @@ export class RestAPI {
         throw new RestAPIError(RestAPIErrorType.UNKNOWN, body);
     }
     public async getPaymentToken() {
-        const response = await this.paymentCall("GET", "braintree/token");
+        const response = await this.paymentCall("GET", "v1/braintree/token");
         const body = await response.json();
         if (typeof body === "object") {
             const { clientToken } = body;
@@ -200,7 +200,7 @@ export class RestAPI {
         throw new RestAPIError(RestAPIErrorType.UNKNOWN, body);
     }
     public async reportPaymentNonce(productCode: string, nonce: string) {
-        const response = await this.paymentCall("POST", "braintree/payment", JSON.stringify({ nonce, productCode }));
+        const response = await this.paymentCall("POST", "v1/braintree/payment", JSON.stringify({ nonce, productCode }));
         const body = await response.json();
         if (typeof body === "object") {
             const { transactionId } = body;

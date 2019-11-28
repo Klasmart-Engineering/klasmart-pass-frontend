@@ -72,7 +72,7 @@ module.exports = {
                 target: 'http://localhost:8092/',
                 secure: false,
                 changeOrigin: true,
-                pathRewrite: { '^/payment': '/v1' }
+                pathRewrite: { '^/payment': '/' }
             }
         }
     },
