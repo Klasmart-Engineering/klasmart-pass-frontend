@@ -151,9 +151,10 @@ export function expireDate(state = null, action: Actions) {
     }
 }
 
-export function locale(state = getDefaultLanguageCode(), action: Actions) {
+export function locale(state = "en", action: Actions) {
     switch (action.type) {
         case ActionTypes.LOCALE:
+            return "en";
             return action.payload;
         default:
             return state;

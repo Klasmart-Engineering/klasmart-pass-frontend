@@ -103,7 +103,7 @@ export default function NavBar() {
                         <img src={Logo} className={classes.logo} />
                     </Button>
                     <div className={classes.grow} />
-                    <Tooltip title="Change Language" enterDelay={300}>
+                    {/* <Tooltip title="Change Language" enterDelay={300}>
                         <Button
                             color="inherit"
                             aria-owns={languageMenuElement ? "language-menu" : undefined}
@@ -119,7 +119,7 @@ export default function NavBar() {
                             </span>
                             <ExpandMoreIcon fontSize="small" />
                         </Button>
-                    </Tooltip>
+                    </Tooltip> */}
                     <Menu
                         id="language-menu"
                         anchorEl={languageMenuElement}
