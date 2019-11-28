@@ -1,15 +1,16 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack');
+const Visualizer = require('webpack-visualizer-plugin');
+const output_file_name = 'bundle.[chunkhash].js'
 
 module.exports = {
-    mode: 'development',
+    mode: 'production',
     entry: ['./src/client-entry.tsx'],
     module: {
         rules: [
             {
-                test: /\.tsx?$/,
-                exclude: /node_modules/,
+                test: /\.(j|t)sx?$/,
                 use: {
                     loader: 'babel-loader',
                 }
@@ -58,7 +59,8 @@ module.exports = {
         extensions: ['.js', '.jsx', '.tsx', '.ts'],
     },
     output: {
-        filename: 'bundle.js',
+        filename: output_file_name,
+        chunkFilename: output_file_name,
         path: path.resolve(__dirname, 'dist'),
     },
     plugins: [
@@ -68,7 +70,32 @@ module.exports = {
         new webpack.ProvidePlugin({
             'fetch': 'imports-loader?this=>global!exports-loader?global.fetch!whatwg-fetch'
         }),
+        new Visualizer({ filename: '../webpack-stats.html' }),
     ],
+    optimization: {
+        splitChunks: {
+            chunks: 'async',
+            minSize: 32 * 1024,
+            maxSize: 128 * 1024,
+            minChunks: 1,
+            name: false,
+            maxAsyncRequests: 6,
+            maxInitialRequests: 4,
+            automaticNameDelimiter: '~',
+            automaticNameMaxLength: 30,
+            cacheGroups: {
+                vendors: {
+                    test: /[\\/]node_modules[\\/]/,
+                    priority: -10
+                },
+                default: {
+                    minChunks: 2,
+                    priority: -20,
+                    reuseExistingChunk: true
+                }
+            }
+        },
+    },
     devServer: {
         host: "0.0.0.0",
         proxy: {

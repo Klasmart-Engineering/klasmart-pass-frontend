@@ -13,11 +13,10 @@ function phoneOrEmail(str: string): { phoneNr?: string, email?: string } {
 }
 
 export class RestAPI {
-
-    private paymentPrefix = "https://beta.payment.badanamu.net/";
-    private authPrefix = "https://beta.auth.badanamu.net/";
-    private apiPrefix = "https://beta.account.badanamu.net/";
-    private productPrefix = "https://beta.product.badanamu.net/";
+    private paymentPrefix = "https://prod.payment.badanamu.net/";
+    private authPrefix = "https://prod.auth.badanamu.net/";
+    private apiPrefix = "https://prod.account.badanamu.net/";
+    private productPrefix = "https://prod.product.badanamu.net/";
 
     private store: Store;
 
