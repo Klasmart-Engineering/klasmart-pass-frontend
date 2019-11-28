@@ -1,3 +1,4 @@
+import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
@@ -9,6 +10,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import DeleteIcon from "@material-ui/icons/Delete";
 import EmailIcon from "@material-ui/icons/Email";
 import LockIcon from "@material-ui/icons/Lock";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
@@ -90,10 +92,6 @@ interface Props {
 }
 export function DeveloperDrawer(props: Props) {
     const classes = useStyles();
-
-    const [logoutInFlight, setLogoutInFlight] = useState(false);
-    const [refreshInFlight, setRefreshInFlight] = useState(false);
-
     const history = useHistory();
     const api = useRestAPI();
 
@@ -102,6 +100,29 @@ export function DeveloperDrawer(props: Props) {
         history.push(path);
     }
 
+    const [expirePassesInFlight, setExpirePassesInFlight] = useState(false);
+    async function expirePasses() {
+        if (expirePassesInFlight) { return; }
+        try {
+            setExpirePassesInFlight(true);
+            await api.expirePassAccesses();
+        } finally {
+            setExpirePassesInFlight(false);
+        }
+    }
+
+    const [expireProductsInFlight, setExpireProductsInFlight] = useState(false);
+    async function expireProducts() {
+        if (expireProductsInFlight) { return; }
+        try {
+            setExpireProductsInFlight(true);
+            await api.expireProductAccesses();
+        } finally {
+            setExpireProductsInFlight(false);
+        }
+    }
+
+    const [logoutInFlight, setLogoutInFlight] = useState(false);
     async function logout() {
         if (logoutInFlight) { return; }
         try {
@@ -112,6 +133,7 @@ export function DeveloperDrawer(props: Props) {
         }
     }
 
+    const [refreshInFlight, setRefreshInFlight] = useState(false);
     async function refresh() {
         if (refreshInFlight) { return; }
         try {
@@ -239,6 +261,22 @@ export function DeveloperDrawer(props: Props) {
                 </ListItem>
             </List>
             <Divider />
+            <Button
+                variant="contained"
+                color="secondary"
+                startIcon={expirePassesInFlight ? <CircularProgress size={15} /> : <DeleteIcon />}
+                onClick={() => expirePasses()}
+            >
+                Expire Passes
+            </Button>
+            <Button
+                variant="contained"
+                color="secondary"
+                startIcon={expireProductsInFlight ? <CircularProgress size={15} /> : <DeleteIcon />}
+                onClick={() => expireProducts()}
+            >
+                Expire Products
+            </Button>
             <AccountInfo />
         </Drawer>
     );

@@ -177,6 +177,18 @@ export class RestAPI {
         }
         return;
     }
+    public async expirePassAccesses() {
+        const response = await this.paymentCall("DELETE", "dev/passesAccesses");
+        if (response.status === 200) { return true; }
+        const body = await response.json();
+        throw new RestAPIError(RestAPIErrorType.UNKNOWN, body);
+    }
+    public async expireProductAccesses() {
+        const response = await this.paymentCall("DELETE", "dev/productsAccesses");
+        if (response.status === 200) { return true; }
+        const body = await response.json();
+        throw new RestAPIError(RestAPIErrorType.UNKNOWN, body);
+    }
     public async getTransactionHistory() {
         const response = await this.paymentCall("GET", "v1/history");
         const body = await response.json();
@@ -220,7 +232,7 @@ export class RestAPI {
         }
     }
 
-    private paymentCall(method: "POST" | "GET", route: string, body?: string, refresh = true) {
+    private paymentCall(method: "POST" | "GET" | "DELETE", route: string, body?: string, refresh = true) {
         return this.call(method, this.paymentPrefix, route, body, refresh);
     }
 
