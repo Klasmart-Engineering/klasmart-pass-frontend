@@ -24,11 +24,8 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         content: {
             flexGrow: 1,
+            flexWrap: "nowrap",
             padding: "32px 0",
-            transition: theme.transitions.create("margin", {
-                duration: theme.transitions.duration.leavingScreen,
-                easing: theme.transitions.easing.sharp,
-            }),
         },
     }),
 );
