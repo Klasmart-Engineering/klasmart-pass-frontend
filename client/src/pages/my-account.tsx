@@ -95,7 +95,7 @@ export function MyAccount() {
                     </Grid>
                     <Grid item>
                         <Typography variant="h4">{defaultEmail}</Typography>
-                        <Typography variant="body1"><b>{selectedProduct === "BLP" ? "Badanamu Learning Pass" : "Badanamu Learning Pass Premium"},</b> expires <b><FormattedDate value={expiration} /></b>.</Typography>
+                        {/* <Typography variant="body1"><b>{selectedProduct === "BLP" ? "Badanamu Learning Pass" : "Badanamu Learning Pass Premium"},</b> expires <b><FormattedDate value={expiration} /></b>.</Typography> */}
                     </Grid>
                 </Grid>
                 <div className={classes.emptySpace} />
@@ -122,20 +122,20 @@ export function MyAccount() {
                         </Grid>
                     </Grid>
                     <div className={classes.emptySpace} />
-                    <Grid container item direction="row" spacing={4} xs={12}>
+                    {/* <Grid container item direction="row" spacing={4} xs={12}>
                         <Grid item xs={4}>
                             <Typography variant="h6" style={{ color: "#aaa" }}>PLAN DETAILS</Typography>
                         </Grid>
                         <Grid item xs={8} className={classes.productImgContainer}>
                             <img src={selectedProduct === "BLP" ? BLP : BLPPremium} className={classes.productImg} />
                         </Grid>
-                    </Grid>
+                    </Grid> */}
                     <div className={classes.emptySpace} />
                     <Grid container item direction="row" spacing={4} xs={12}>
                         <Grid item xs={12}>
                             <Typography variant="h6" style={{ textTransform: "uppercase", color: "#aaa" }}><FormattedMessage id="transaction_history" /></Typography>
                         </Grid>
-                        <Grid item xs={12} className={classes.productImgContainer}>
+                        {/* <Grid item xs={12} className={classes.productImgContainer}>
                             {
                                 transactionsInFlight ?
                                     <CircularProgress /> :
@@ -143,7 +143,7 @@ export function MyAccount() {
                                         <Transactions transactions={transactions} /> :
                                         <Typography>{transactionsError}</Typography>
                             }
-                        </Grid>
+                        </Grid> */}
                     </Grid>
                 </Grid>
             </Grid>
