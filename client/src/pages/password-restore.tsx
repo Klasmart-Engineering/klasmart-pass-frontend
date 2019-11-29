@@ -1,10 +1,10 @@
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
 import * as QueryString from "query-string";
 import * as React from "react";
 import { useState } from "react";
@@ -13,10 +13,10 @@ import { useSelector } from "react-redux";
 import { RouteComponentProps } from "react-router";
 import BadanamuButton from "../components/button";
 import BadanamuTextField from "../components/textfield";
+import BadanamuLogo from "../img/badanamu_logo.png";
 import { useRestAPI } from "../restapi";
 import { RestAPIError } from "../restapi_errors";
 import { State } from "../store/store";
-import BadanamuLogo from "../img/badanamu_logo.png";
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -43,13 +43,24 @@ export function PasswordRestore(props: RouteComponentProps) {
     const [email, setEmail] = useState(defaultEmail);
     const [newPassword, setNewPassword] = useState("");
     const [newPasswordConfirmation, setNewPasswordConfirmation] = useState("");
+    const [passwordMatchError, setPasswordMatchError] = useState(false);
     const [resetCode, setResetCode] = useState(typeof params.code === "string" ? params.code : "");
 
     const [generalError, setGeneralError] = useState<JSX.Element | null>(null);
 
     const classes = useStyles();
     const restApi = useRestAPI();
+
+    function checkPasswordMatch() {
+        if (newPassword === "") { return; }
+        if (newPasswordConfirmation === "") { return; }
+        const match = (newPassword !== newPasswordConfirmation);
+        setPasswordMatchError(match);
+    }
+
     async function restorePassword(e: React.FormEvent) {
+        if (inFlight) { return; }
+        if (newPassword !== newPasswordConfirmation) { return; }
         e.preventDefault();
         const lang = "en"; // TODO: use locale
         try {
@@ -99,8 +110,10 @@ export function PasswordRestore(props: RouteComponentProps) {
                                             required
                                             fullWidth
                                             type="password"
+                                            error={passwordMatchError}
                                             value={newPassword}
                                             onChange={(e) => setNewPassword(e.target.value)}
+                                            onBlur={() => checkPasswordMatch()}
                                             label={<FormattedMessage id="password_new" />}
                                         />
                                     </Grid>
@@ -109,8 +122,10 @@ export function PasswordRestore(props: RouteComponentProps) {
                                             required
                                             fullWidth
                                             type="password"
+                                            error={passwordMatchError}
                                             value={newPasswordConfirmation}
                                             onChange={(e) => setNewPasswordConfirmation(e.target.value)}
+                                            onBlur={() => checkPasswordMatch()}
                                             label={<FormattedMessage id="password_new_confirmation" />}
                                         />
                                     </Grid>

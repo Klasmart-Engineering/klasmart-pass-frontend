@@ -1,18 +1,18 @@
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { useHistory } from "react-router-dom";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
 import BadanamuButton from "../components/button";
 import BadanamuTextField from "../components/textfield";
+import BadanamuLogo from "../img/badanamu_logo.png";
 import { useRestAPI } from "../restapi";
 import { RestAPIError } from "../restapi_errors";
-import BadanamuLogo from "../img/badanamu_logo.png";
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
     card: {
@@ -37,16 +37,25 @@ export function PasswordChange() {
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [newPasswordConfirmation, setNewPasswordConfirmation] = useState("");
+    const [passwordMatchError, setPasswordMatchError] = useState(false);
 
     const classes = useStyles();
     const history = useHistory();
     const restApi = useRestAPI();
+
+    function checkPasswordMatch() {
+        if (newPassword === "") { return; }
+        if (newPasswordConfirmation === "") { return; }
+        const match = (newPassword !== newPasswordConfirmation);
+        setPasswordMatchError(match);
+    }
 
     async function changepassword(e: React.FormEvent) {
         e.preventDefault();
         if (inFlight) { return; }
         if (newPassword === "") { return; }
         if (currentPassword === "") { return; }
+        if (newPassword !== newPasswordConfirmation) { return; }
         try {
             setInFlight(true);
             const result = await restApi.changePassword(currentPassword, newPassword);
@@ -106,8 +115,10 @@ export function PasswordChange() {
                                             required
                                             fullWidth
                                             type="password"
+                                            error={passwordMatchError}
                                             value={newPassword}
                                             onChange={(e) => setNewPassword(e.target.value)}
+                                            onBlur={() => checkPasswordMatch()}
                                             label={<FormattedMessage id="password_new" />}
                                         />
                                     </Grid>
@@ -116,8 +127,10 @@ export function PasswordChange() {
                                             required
                                             fullWidth
                                             type="password"
+                                            error={passwordMatchError}
                                             value={newPasswordConfirmation}
                                             onChange={(e) => setNewPasswordConfirmation(e.target.value)}
+                                            onBlur={() => checkPasswordMatch()}
                                             label={<FormattedMessage id="password_new_confirmation" />}
                                         />
                                     </Grid>
