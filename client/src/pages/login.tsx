@@ -84,7 +84,10 @@ export function Login() {
                 setPasswordError(errorMessage);
                 break;
             case RestAPIErrorType.EMAIL_NOT_VERIFIED:
-                history.push("/verify");
+                history.push("/verify-email");
+                break;
+            case RestAPIErrorType.EMAIL_NOT_VERIFIED:
+                history.push("/verify-phone");
                 break;
             case RestAPIErrorType.ACCOUNT_BANNED:
             default:
