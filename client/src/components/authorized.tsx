@@ -5,12 +5,8 @@ import { State } from "../store/store";
 
 export function isLoggedIn() {
     const store = useStore();
-    const {
-        account: {
-            accessToken,
-            refreshToken,
-        },
-    }: State = store.getState();
+    const accessToken = useSelector((state: State) => state.account.accessToken);
+    const refreshToken = useSelector((state: State) => state.account.refreshToken);
     return (accessToken === null && refreshToken === null);
 }
 
@@ -32,15 +28,10 @@ export function redirectIfUnauthorized(returnRoute = "/") {
 }
 
 export function redirectIfAuthorized(defaultRoute = "/") {
-    const store = useStore();
     const history = useHistory();
-    const {
-        account: {
-            accessToken,
-            refreshToken,
-        },
-        postAuthorizationRoute,
-    }: State = store.getState();
+    const accessToken = useSelector((state: State) => state.account.accessToken);
+    const refreshToken = useSelector((state: State) => state.account.refreshToken);
+    const postAuthorizationRoute = useSelector((state: State) => state.postAuthorizationRoute);
 
     if (accessToken !== null || refreshToken !== null) {
         history.replace(postAuthorizationRoute || defaultRoute);
@@ -50,14 +41,10 @@ export function redirectIfAuthorized(defaultRoute = "/") {
 export function redirectIfUnverifiable(defaultRoute = "/") {
     const store = useStore();
     const history = useHistory();
-    const {
-        account: {
-            accountId,
-            accessToken,
-            refreshToken,
-        },
-        postAuthorizationRoute,
-    }: State = store.getState();
+    const accountId = useSelector((state: State) => state.account.accountId);
+    const accessToken = useSelector((state: State) => state.account.accessToken);
+    const refreshToken = useSelector((state: State) => state.account.refreshToken);
+    const postAuthorizationRoute = useSelector((state: State) => state.postAuthorizationRoute);
 
     if ((accessToken !== null || refreshToken !== null) || accountId === null) {
         history.replace(postAuthorizationRoute || defaultRoute);
