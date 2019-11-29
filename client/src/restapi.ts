@@ -26,7 +26,7 @@ export class RestAPI {
 
     public async signup(id: string, pw: string, lang: string) {
         const { phoneNr, email } = phoneOrEmail(id);
-        const result = await this.apiCall("v1/signup", JSON.stringify({
+        const result = await this.apiCall("POST", "v1/signup", JSON.stringify({
             email,
             lang,
             phoneNr,
@@ -44,17 +44,41 @@ export class RestAPI {
         if (accountId === null) { throw new Error("Unknown AccountID"); }
         switch (type) {
             case IdentityType.Phone:
-                return this.apiCall("v1/verify/phonenumber", JSON.stringify({ accountId, verificationCode }));
+                return this.apiCall("POST", "v1/verify/phonenumber", JSON.stringify({ accountId, verificationCode }));
             case IdentityType.Email:
-                return this.apiCall("v1/verify/email", JSON.stringify({ accountId, verificationCode }));
+                return this.apiCall("POST", "v1/verify/email", JSON.stringify({ accountId, verificationCode }));
             default:
                 throw new Error("Unknown Account Type");
         }
     }
 
+    public async verifyCheck(type: IdentityType) {
+        const state = this.store.getState();
+        const accountId = state.account.accountId;
+        if (accountId === null) { throw new Error("Unknown AccountID"); }
+        const params = new URLSearchParams({ accountId }).toString();
+        let url: string;
+        switch (type) {
+            case IdentityType.Phone:
+                url = "v1/verify/phonenumber";
+                break;
+            case IdentityType.Email:
+                url = "v1/verify/email";
+                break;
+            default:
+                throw new Error("Unknown Account Type");
+        }
+        const response = await this.apiCall("GET", `${url}?${params}`);
+        const body = await response.json();
+        if (typeof body === "object" && typeof body.verified === "boolean") {
+            return body.verified;
+        }
+        throw new RestAPIError(RestAPIErrorType.UNKNOWN, body);
+    }
+
     public forgotPassword(id: string, lang: string) {
         const { phoneNr, email } = phoneOrEmail(id);
-        return this.apiCall("v1/forgotpassword", JSON.stringify({
+        return this.apiCall("POST", "v1/forgotpassword", JSON.stringify({
             email,
             lang,
             phoneNr,
@@ -64,7 +88,7 @@ export class RestAPI {
     public restorePassword(id: string, password: string, resetCode: string) {
         const { phoneNr, email } = phoneOrEmail(id);
 
-        return this.apiCall("v1/restorepassword", JSON.stringify({
+        return this.apiCall("POST", "v1/restorepassword", JSON.stringify({
             accountEmail: email,
             accountPhoneNr: phoneNr,
             pw: password,
@@ -73,7 +97,7 @@ export class RestAPI {
     }
 
     public changePassword(currentPassword: string, newPassword: string) {
-        return this.apiCall("v1/self/password", JSON.stringify({
+        return this.apiCall("POST", "v1/self/password", JSON.stringify({
             currPass: currentPassword,
             newPass: newPassword,
         }));
@@ -239,8 +263,8 @@ export class RestAPI {
     private authCall(route: string, body: string, refresh = true) {
         return this.call("POST", this.authPrefix, route, body, refresh);
     }
-    private apiCall(route: string, body: string, refresh = true) {
-        return this.call("POST", this.apiPrefix, route, body, refresh);
+    private apiCall(method: "GET" | "POST", route: string, body?: string, refresh = true) {
+        return this.call(method, this.apiPrefix, route, body, refresh);
     }
 
     private async call(method: string, prefix: string, route: string, body: string | undefined, refresh: boolean) {
@@ -329,5 +353,6 @@ export class RestAPI {
 
 export function useRestAPI() {
     const store = useStore();
-    return new RestAPI(store);
+    const api = new RestAPI(store);
+    return api;
 }
