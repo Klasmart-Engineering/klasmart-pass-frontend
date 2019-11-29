@@ -1,3 +1,4 @@
+import "@babel/polyfill";
 import blue from "@material-ui/core/colors/blue";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { createMuiTheme, responsiveFontSizes, ThemeProvider } from "@material-ui/core/styles";
