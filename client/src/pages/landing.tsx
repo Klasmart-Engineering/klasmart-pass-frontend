@@ -16,8 +16,8 @@ import { FormattedDate, FormattedMessage } from "react-intl";
 import { useStore } from "react-redux";
 import { useHistory } from "react-router";
 import BadanamuButton from "../components/button";
-import BLP from "../img/learning_pass_b.01.png";
-import BLPPremium from "../img/learning_pass_premium_b.01.png";
+import BLP from "../img/logo_learning_pass.png";
+import BLPPremium from "../img/logo_learning_pass_premium.png";
 import { ActionTypes } from "../store/actions";
 import { getExpiration } from "../utils/date";
 
@@ -25,15 +25,15 @@ import { getExpiration } from "../utils/date";
 const useStyles = makeStyles((theme) => createStyles({
     productImgContainer: {
         textAlign: "center",
-        minHeight: 96,
+        minHeight: 90,
         [theme.breakpoints.down("sm")]: {
-            minHeight: 72,
+            minHeight: 70,
         },
     },
     productImg: {
-        maxWidth: 64,
+        maxWidth: 200,
         [theme.breakpoints.down("sm")]: {
-            maxWidth: 48,
+            maxWidth: 150,
         },
     },
     planSelectBtn: {
@@ -81,7 +81,7 @@ const useStyles = makeStyles((theme) => createStyles({
         },
     },
     columnHead: {
-        flexBasis: "50%",
+        flexBasis: "33.33%",
     },
     headingInner: {
         [theme.breakpoints.up("md")]: {
@@ -89,7 +89,7 @@ const useStyles = makeStyles((theme) => createStyles({
         },
     },
     column: {
-        flexBasis: "25%",
+        flexBasis: "33.33%",
         textAlign: "center",
     },
     noIconPadding: {
@@ -110,7 +110,7 @@ const useStyles = makeStyles((theme) => createStyles({
 type Plan = JSX.Element | string | number;
 
 // tslint:enable:object-literal-sort-keys
-function createData(name: string, blp: Plan, blpPlus: Plan) {
+function createData(name: string | JSX.Element, blp: Plan, blpPlus: Plan) {
     return { name, blp, blpPlus };
 }
 
@@ -130,26 +130,27 @@ export function Landing() {
         createData("Bada Talk 2", <CheckRoundedIcon />, <CheckRoundedIcon />),
         createData("Bada Sound", <CheckRoundedIcon />, <CheckRoundedIcon />),
         createData("Bada Read", <CheckRoundedIcon />, <CheckRoundedIcon />),
+        createData("Dino Park ESL", <CheckRoundedIcon />, <CheckRoundedIcon />),
         createData("Badanamu: Cadets", <ClearRoundedIcon />, <CheckRoundedIcon />),
         createData("Badanamu: Songs", <ClearRoundedIcon />, <CheckRoundedIcon />),
         createData("Badanamu: Books", <ClearRoundedIcon />, <CheckRoundedIcon />),
     ];
     const details = [
-        createData("Additonal learning apps (coming soon)", 9, 11),
-        createData("Digital ESL lessons", "300+", "300+"),
-        createData("5 ESL program levels", <CheckRoundedIcon />, <CheckRoundedIcon />),
-        createData("HD content", <CheckRoundedIcon />, <CheckRoundedIcon />),
-        createData("Ad free", <CheckRoundedIcon />, <CheckRoundedIcon />),
-        createData("Animated series", <ClearRoundedIcon />, "52 episodes"),
-        createData("Premium songs", <ClearRoundedIcon />, "500+ minutes"),
-        createData("Premium apps", <ClearRoundedIcon />, 5),
-        createData("One-time purchase", "$20.00", "$50.00"),
+        createData(<FormattedMessage id="learning_pass_additional_apps" />, 8, 10),
+        createData(<FormattedMessage id="learning_pass_esl_lessons" />, "300+", "300+"),
+        createData(<FormattedMessage id="learning_pass_program_levels" />, <CheckRoundedIcon />, <CheckRoundedIcon />),
+        createData(<FormattedMessage id="learning_pass_hd_content" />, <CheckRoundedIcon />, <CheckRoundedIcon />),
+        createData(<FormattedMessage id="learning_pass_ad_free" />, <CheckRoundedIcon />, <CheckRoundedIcon />),
+        createData(<FormattedMessage id="learning_pass_animated_series" />, <ClearRoundedIcon />, "52 episodes"),
+        createData(<FormattedMessage id="learning_pass_premium_songs" />, <ClearRoundedIcon />, "500+ minutes"),
+        createData(<FormattedMessage id="learning_pass_premium_apps" />, <ClearRoundedIcon />, 5),
+        createData(<FormattedMessage id="learning_pass_ot_purchase" />, "$20.00", "$50.00"),
     ];
 
     function createPlanButton(plan: string) {
         return (
             <React.Fragment>
-                <Grid item xs={6} md={3}>
+                <Grid item xs={6} md={4}>
                     <Grid item xs={12} className={classes.productImgContainer}>
                         <img src={plan === "BLP" ? BLP : BLPPremium} className={classes.productImg} />
                     </Grid>
@@ -167,17 +168,17 @@ export function Landing() {
         );
     }
 
-    function createDetailsRow(detail: { name: string, blp: Plan, blpPlus: Plan }) {
+    function createDetailsRow(detail: { name: string | JSX.Element, blp: Plan, blpPlus: Plan }) {
         return (
             <React.Fragment>
                 <Grid container spacing={2} className={classes.row}>
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={12} md={4}>
                         <Typography className={classes.heading}>{detail.name}</Typography>
                     </Grid>
-                    <Grid item xs={6} md={3}>
+                    <Grid item xs={6} md={4}>
                         <Typography className={selectedPlan === "BLP" ? classes.selected : classes.notSelected}>{detail.blp}</Typography>
                     </Grid>
-                    <Grid item xs={6} md={3}>
+                    <Grid item xs={6} md={4}>
                         <Typography className={selectedPlan === "BLPPremium" ? classes.selected : classes.notSelected}>{detail.blpPlus}</Typography>
                     </Grid>
                 </Grid>
@@ -190,9 +191,9 @@ export function Landing() {
         <Container maxWidth="lg">
             {/* Onboarding */}
             <Grid container spacing={2} style={{ margin: "32px 0" }}>
-                <Grid item xs={12}>
+                {/* <Grid item xs={12}>
                     <Typography variant="body1">STEP <b>{step}</b> OF <b>3</b></Typography>
-                </Grid>
+                </Grid> */}
                 <Grid item xs={12}>
                     <Typography variant="h4">
                         <FormattedMessage id="landing_select_header" values={{ b: (...chunks: any[]) => <strong>{chunks}</strong> }} />
@@ -207,7 +208,7 @@ export function Landing() {
             {/* Plan Selection Button */}
             <Grid container spacing={2}>
                 <Grid container item xs={12} className={classes.noIconMargin}>
-                    <Grid item xs={12} md={6} />
+                    <Grid item xs={12} md={4} />
                     {createPlanButton("BLP")}
                     {createPlanButton("BLPPremium")}
                 </Grid>
@@ -221,14 +222,14 @@ export function Landing() {
                             id="learning-apps"
                         >
                             <Grid container spacing={2}>
-                                <Grid item xs={12} md={6}>
-                                    <Typography className={classes.heading}>Learning apps</Typography>
+                                <Grid item xs={12} md={4}>
+                                    <Typography className={classes.heading}><FormattedMessage id="learning_pass_apps" /></Typography>
                                 </Grid>
-                                <Grid item xs={6} md={3}>
-                                    <Typography className={selectedPlan === "BLP" ? classes.selected : classes.notSelected}>9</Typography>
+                                <Grid item xs={6} md={4}>
+                                    <Typography className={selectedPlan === "BLP" ? classes.selected : classes.notSelected}>10</Typography>
                                 </Grid>
-                                <Grid item xs={6} md={3}>
-                                    <Typography className={selectedPlan === "BLPPremium" ? classes.selected : classes.notSelected}>12</Typography>
+                                <Grid item xs={6} md={4}>
+                                    <Typography className={selectedPlan === "BLPPremium" ? classes.selected : classes.notSelected}>13</Typography>
                                 </Grid>
                             </Grid>
                         </ExpansionPanelSummary>
@@ -236,13 +237,13 @@ export function Landing() {
                             <Grid container spacing={1} className={classes.noIconPadding}>
                                 {learningApps.map((app) => (
                                     <React.Fragment>
-                                        <Grid item xs={12} md={6}>
+                                        <Grid item xs={12} md={4}>
                                             <Typography className={clsx(classes.heading, classes.headingInner)}>{app.name}</Typography>
                                         </Grid>
-                                        <Grid item xs={6} md={3}>
+                                        <Grid item xs={6} md={4}>
                                             <Typography className={selectedPlan === "BLP" ? classes.selected : classes.notSelected}>{app.blp}</Typography>
                                         </Grid>
-                                        <Grid item xs={6} md={3}>
+                                        <Grid item xs={6} md={4}>
                                             <Typography className={selectedPlan === "BLPPremium" ? classes.selected : classes.notSelected}>{app.blpPlus}</Typography>
                                         </Grid>
                                     </React.Fragment>
@@ -265,7 +266,7 @@ export function Landing() {
                             history.push("/payment");
                         }}
                     >
-                        Continue with {selectedPlan === "BLP" ?
+                        <FormattedMessage id="learning_pass_continue_btn" /> {selectedPlan === "BLP" ?
                             <FormattedMessage id="learning_pass" /> :
                             <FormattedMessage id="learning_pass_premium" />
                         }

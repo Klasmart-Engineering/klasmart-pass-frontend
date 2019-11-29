@@ -13,7 +13,7 @@ import * as React from "react";
 import { FormattedMessage } from "react-intl";
 import { useSelector, useStore } from "react-redux";
 import { useHistory } from "react-router-dom";
-import Logo from "../img/learning_pass_color_b.01.png";
+import Logo from "../img/logo_learning_pass_header.png";
 import { useRestAPI } from "../restapi";
 import { ActionTypes } from "../store/actions";
 import { State } from "../store/store";

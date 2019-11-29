@@ -241,6 +241,16 @@ export function DeveloperDrawer(props: Props) {
                 </ListItem>
                 <ListItem
                     button
+                    selected={history.location.pathname === "/payment-error"}
+                    onClick={() => navigate("/payment-error")}
+                >
+                    <ListItemIcon>
+                        <PaymentIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={<FormattedMessage id="payment_error" />} />
+                </ListItem>
+                <ListItem
+                    button
                     selected={history.location.pathname === "/verify-email"}
                     onClick={() => navigate("/verify-email")}
                 >
