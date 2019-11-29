@@ -1,9 +1,9 @@
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Container from "@material-ui/core/Container";
 import Divider from "@material-ui/core/Divider";
 import FormControl from "@material-ui/core/FormControl";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
 import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
 import InputBase from "@material-ui/core/InputBase";
@@ -15,13 +15,13 @@ import ExitToAppRoundedIcon from "@material-ui/icons/ExitToAppRounded";
 import * as QueryString from "query-string";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import BadanamuLogo from "../img/badanamu_logo.png";
 import { FormattedHTMLMessage, FormattedMessage } from "react-intl";
 import { useStore } from "react-redux";
-import { RouteComponentProps } from "react-router-dom";
+import { RouteComponentProps, useHistory } from "react-router-dom";
 import { redirectIfUnverifiable } from "../components/authorized";
 import BadanamuButton from "../components/button";
 import BadanamuTextField from "../components/textfield";
+import BadanamuLogo from "../img/badanamu_logo.png";
 import { useRestAPI } from "../restapi";
 import { RestAPIError } from "../restapi_errors";
 import { ActionTypes } from "../store/actions";
@@ -64,6 +64,7 @@ export function Verify(props: Props & RouteComponentProps) {
     const [error, setError] = useState<JSX.Element | null>(null);
     const [verifyInFlight, setVerifyInFlight] = useState(false);
     const restApi = useRestAPI();
+    const history = useHistory();
 
     const params = QueryString.parse(props.location.search);
     if (typeof params.accountId === "string") {
@@ -78,6 +79,7 @@ export function Verify(props: Props & RouteComponentProps) {
         try {
             setVerifyInFlight(true);
             await restApi.verify(code, props.type);
+            history.replace("/login");
         } catch (e) {
             if (e instanceof RestAPIError) {
                 const id = e.getErrorMessageID();
@@ -94,6 +96,22 @@ export function Verify(props: Props & RouteComponentProps) {
             verify(params.code);
         }
     }, []);
+
+    let stopVerifyCheckLoop = false;
+    async function verifyCheckLoop() {
+        try {
+            const verified = await restApi.verifyCheck(props.type);
+            if (verified) { history.replace("/login"); }
+        } catch (e) { } finally {
+            if (!stopVerifyCheckLoop) {
+                setTimeout(() => verifyCheckLoop(), 1000);
+            }
+        }
+    }
+    useEffect(() => {
+        verifyCheckLoop();
+        return () => { stopVerifyCheckLoop = true; };
+    });
 
     const type = IdentityType[props.type].toLowerCase();
 
@@ -145,7 +163,7 @@ export function Verify(props: Props & RouteComponentProps) {
                                 }
                             </FormControl>
                         </Grid>
-                        {type === "email" ?
+                        {props.type === IdentityType.Email ?
                             <React.Fragment>
                                 <Grid item xs={12} style={{ textAlign: "center" }}>
                                     <CircularProgress size={25} />
