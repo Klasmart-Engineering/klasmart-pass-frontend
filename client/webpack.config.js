@@ -5,12 +5,11 @@ const Visualizer = require('webpack-visualizer-plugin');
 const output_file_name = 'bundle.[chunkhash].js'
 module.exports = {
     mode: 'production',
-    entry: ['babel-polyfill', './src/client-entry.tsx'],
+    entry: ['./src/client-entry.tsx'],
     module: {
         rules: [
             {
-                test: /\.tsx?$/,
-                exclude: /node_modules/,
+                test: /\.(j|t)sx?$/,
                 use: {
                     loader: 'babel-loader',
                 }
