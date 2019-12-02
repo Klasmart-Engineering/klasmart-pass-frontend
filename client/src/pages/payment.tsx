@@ -20,9 +20,9 @@ import BadanamuButton from "../components/button";
 import BLP from "../img/logo_learning_pass.png";
 import BLPPremium from "../img/logo_learning_pass_premium.png";
 import { useRestAPI } from "../restapi";
+import { ActionTypes } from "../store/actions";
 import { State } from "../store/store";
 import { getExpiration } from "../utils/date";
-import { ActionTypes } from "../store/actions";
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme: Theme) =>
@@ -181,7 +181,7 @@ export function Payment() {
                                         <DropIn
                                             options={{
                                                 authorization: clientToken,
-                                                paypal: { flow: "checkout" },
+                                                paypal: { flow: "vault" },
                                             }}
                                             onInstance={(b) => setBrainTree(b)}
                                             onPaymentMethodRequestable={(p) => setPaymentReady(true)}
