@@ -49,7 +49,7 @@ function Transaction(props: { transaction: any }) {
                     <TableRow key={`${pass.start}-${pass.passId}`}>
                         <TableCell>{date}</TableCell>
                         <TableCell>{pass.passName}</TableCell>
-                        <TableCell>{date.split(",")[0]} - <FormattedDate value={expiration} /></TableCell>
+                        <TableCell>{date.split(",")[0]} - <FormattedDate value={pass.end} /></TableCell>
                         <TableCell style={{ textTransform: "capitalize" }}>{store}</TableCell>
                         <TableCell align="right">{pass.passName === "Learning Pass" ? "US$20" : "US$50"}</TableCell>
                     </TableRow>
