@@ -11,7 +11,7 @@ export function getIntl(locale: string) {
         case "id":
             return createIntl({ locale: "id", messages: indonesian, onError: () => { } }, intlCache);
         case "ko":
-            return createIntl({ locale: "ko", messages: korean, onError: () => { } }, intlCache);
+            return createIntl({ locale: "ko", messages: korean }, intlCache);
         case "en":
             return createIntl({ locale: "en", messages: english }, intlCache);
     }

@@ -1,7 +1,7 @@
 const messages: Record<string, string> = {
     ERROR_INVALID_LOGIN: "Invalid Login",
     ERROR_INVALID_VERIFICATION_CODE: "Invalid verification code",
-    ERROR_MOCK: "The restapi simulated a mock error",
+    ERROR_MOCK: "The rest api simulated a mock error",
     ERROR_UNKOWN: "An unexpected error occurred",
     LocaleName: "English",
     button_select: "Get Started",
