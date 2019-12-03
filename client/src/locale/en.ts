@@ -7,7 +7,7 @@ const messages: Record<string, string> = {
     button_select: "Get Started",
     copyright: "Copyright",
     create_account: "Create your <b>Badanamu Account.</b>",
-    email: "Email",
+    email: "Email / Phone Number",
     intro_go_back: "Go back",
     intro_header: "Create your account.",
     intro_subheader: "Use your email or mobile phone and create a password to access your Kids' Apps on any device at any time.",

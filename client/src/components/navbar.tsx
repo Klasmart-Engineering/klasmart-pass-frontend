@@ -1,11 +1,14 @@
 import { CircularProgress } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
 import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
+import Hidden from '@material-ui/core/Hidden'
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import Tooltip from "@material-ui/core/Tooltip";
+import AccountCircleRoundedIcon from '@material-ui/icons/AccountCircleRounded';
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import LanguageIcon from "@material-ui/icons/Translate";
 import { useState } from "react";
@@ -142,13 +145,26 @@ export default function NavBar() {
                     <div className={classes.vl}></div>
                     {
                         authorized ?
-                            <Button
-                                color="inherit"
-                                className={classes.appBarBtn}
-                                onClick={() => history.push("/login")}
-                            >
-                                <FormattedMessage id="navbar_signin" />
-                            </Button>
+                            <React.Fragment>
+                                <Hidden only="xs">
+                                    <Button
+                                        color="inherit"
+                                        className={classes.appBarBtn}
+                                        onClick={() => history.push("/login")}
+                                    >
+                                        <FormattedMessage id="navbar_signin" />
+                                    </Button>
+                                </Hidden>
+                                <Hidden smUp>
+                                    <IconButton
+                                        color="inherit"
+                                        className={classes.appBarBtn}
+                                        onClick={() => history.push("/login")}
+                                    >
+                                        <AccountCircleRoundedIcon id="navbar_signin" />
+                                    </IconButton>
+                                </Hidden>
+                            </React.Fragment>
                             :
                             <React.Fragment>
                                 <Button

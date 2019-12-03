@@ -18,6 +18,7 @@ import BadanamuLogo from "../img/badanamu_logo.png";
 import { useRestAPI } from "../restapi";
 import { RestAPIError, RestAPIErrorType } from "../restapi_errors";
 import { State } from "../store/store";
+import PolicyLink from "../components/policyLinks";
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme) => createStyles({
@@ -26,9 +27,12 @@ const useStyles = makeStyles((theme) => createStyles({
         alignItems: "center",
         padding: "48px 40px !important",
     },
-    links: {
-        padding: theme.spacing(4, 0),
+    link: {
         textAlign: "right",
+        [theme.breakpoints.down("sm")]: {
+            paddingTop: theme.spacing(2),
+            textAlign: "left",
+        },
     },
     formContainer: {
         width: "100%",
@@ -164,8 +168,8 @@ export function Login() {
                                     }
                                 </Grid>
                             </form>
-                            <Grid container item xs={12} justify="space-between">
-                                <Grid item>
+                            <Grid container justify="space-between">
+                                <Grid item xs={12} sm={6}>
                                     <Link
                                         href="#"
                                         variant="subtitle2"
@@ -174,7 +178,7 @@ export function Login() {
                                         <FormattedMessage id="login_forgot_password" />
                                     </Link>
                                 </Grid>
-                                <Grid item>
+                                <Grid item xs={12} sm={6} className={classes.link}>
                                     <Link
                                         href="#"
                                         variant="subtitle2"
@@ -188,32 +192,7 @@ export function Login() {
                     </Grid>
                 </CardContent>
             </Card>
-            <Grid container spacing={4} justify="flex-end" className={classes.links}>
-                <Grid item xs={2}>
-                    <Link
-                        href="#"
-                        variant="subtitle2"
-                    >
-                        <FormattedMessage id="login_help" />
-                    </Link>
-                </Grid>
-                <Grid item xs={2}>
-                    <Link
-                        href="#"
-                        variant="subtitle2"
-                    >
-                        <FormattedMessage id="login_privacy" />
-                    </Link>
-                </Grid>
-                <Grid item xs={2}>
-                    <Link
-                        href="#"
-                        variant="subtitle2"
-                    >
-                        <FormattedMessage id="login_terms" />
-                    </Link>
-                </Grid>
-            </Grid>
+            <PolicyLink />
         </Container>
     );
 }

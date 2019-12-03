@@ -11,6 +11,7 @@ import { FormattedMessage } from "react-intl";
 import { useHistory } from "react-router-dom";
 import { redirectIfAuthorized } from "../components/authorized";
 import BadanamuButton from "../components/button";
+import PolicyLink from "../components/policyLinks";
 import BadanamuTextField from "../components/textfield";
 import BadanamuLogo from "../img/badanamu_logo.png";
 import { useRestAPI } from "../restapi";
@@ -24,9 +25,14 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
         alignItems: "center",
         padding: "48px 40px !important",
     },
-    links: {
-        padding: theme.spacing(4, 0),
+    link: {
         textAlign: "right",
+        justifyContent: "flex-end",
+        [theme.breakpoints.down("sm")]: {
+            justifyContent: "flex-start",
+            paddingTop: theme.spacing(2),
+            textAlign: "left",
+        },
     },
     formContainer: {
         width: "100%",
@@ -196,7 +202,7 @@ export function Signup() {
                                     }
                                 </Grid>
                             </form>
-                            <Grid container item xs={12} justify="flex-end">
+                            <Grid container item xs={12} className={classes.link}>
                                 <Grid item>
                                     <Link
                                         href="#"
@@ -211,32 +217,7 @@ export function Signup() {
                     </Grid>
                 </CardContent>
             </Card>
-            <Grid container spacing={4} justify="flex-end" className={classes.links}>
-                <Grid item xs={2}>
-                    <Link
-                        href="#"
-                        variant="subtitle2"
-                    >
-                        <FormattedMessage id="login_help" />
-                    </Link>
-                </Grid>
-                <Grid item xs={2}>
-                    <Link
-                        href="#"
-                        variant="subtitle2"
-                    >
-                        <FormattedMessage id="login_privacy" />
-                    </Link>
-                </Grid>
-                <Grid item xs={2}>
-                    <Link
-                        href="#"
-                        variant="subtitle2"
-                    >
-                        <FormattedMessage id="login_terms" />
-                    </Link>
-                </Grid>
-            </Grid>
+            <PolicyLink />
         </Container>
     );
 }
