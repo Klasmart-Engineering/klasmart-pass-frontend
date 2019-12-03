@@ -71,6 +71,8 @@ export function Payment() {
     const history = useHistory();
     const restApi = useRestAPI();
     const store = useStore();
+    // For Testing payment
+    const fakeNonce = useSelector((state: State) => state.fakeNonce);
 
     useEffect(() => {
         getClientToken();
@@ -97,7 +99,7 @@ export function Payment() {
         if (paymentInFlight) { return; }
         try {
             setPaymentInFlight(true);
-            const { nonce } = await braintree.requestPaymentMethod();
+            const { nonce } = fakeNonce ? fakeNonce : await braintree.requestPaymentMethod();
             // TODO: change product selection to use productIDs
             let productId = "";
             switch (selectedProduct) {
@@ -190,7 +192,7 @@ export function Payment() {
                                     </div>
                             }
                             {
-                                paymentReady ?
+                                paymentReady || fakeNonce ?
                                     <BadanamuButton
                                         color="primary"
                                         fullWidth

@@ -10,6 +10,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Switch from "@material-ui/core/Switch";
+import TextField from "@material-ui/core/TextField";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -100,6 +101,7 @@ export function DeveloperDrawer(props: Props) {
     const history = useHistory();
     const api = useRestAPI();
     const simulateUnstableConnection = useSelector((state: State) => state.account.unstableConnection);
+    const fakeNonce = useSelector((state: State) => state.account.fakeNonce);
     const dispatch = useDispatch<(action: Actions) => void>();
 
     function toggleSimulateUnstableConnection() {
@@ -291,6 +293,12 @@ export function DeveloperDrawer(props: Props) {
                     </ListItemIcon>
                     <ListItemText primary={<FormattedMessage id="verify_phone" />} />
                 </ListItem>
+                <Divider />
+                <TextField
+                    label="Payment Fake Nonce"
+                    value={fakeNonce}
+                    onChange={(e) => dispatch({ type: ActionTypes.FAKE_NONCE, payload: e.target.value })}
+                />
             </List>
             <Divider />
             <Button

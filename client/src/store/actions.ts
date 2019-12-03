@@ -36,6 +36,7 @@ export type SetEMailAction = Action<ActionTypes.EMAIL, string>;
 export type SetLocale = Action<ActionTypes.LOCALE, string>;
 
 export type SimulateUnstableConnection = Action<ActionTypes.SIMULATE_UNSTABLE_CONNECTION, boolean>;
+export type SetFakeNonce = Action<ActionTypes.FAKE_NONCE, undefined | null | string>;
 
 export enum ActionTypes {
     LOGIN,
@@ -51,6 +52,8 @@ export enum ActionTypes {
     EXPIRE_DATE,
     EMAIL,
     LOCALE,
+    // Testing
+    FAKE_NONCE,
     SIMULATE_UNSTABLE_CONNECTION,
 }
 
@@ -68,5 +71,7 @@ export type Actions =
     | PassExpiration
     | SetEMailAction
     | SetLocale
+    // Testing
+    | SetFakeNonce
     | SimulateUnstableConnection
     | never;

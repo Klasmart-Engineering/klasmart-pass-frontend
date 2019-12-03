@@ -160,6 +160,16 @@ export function locale(state = getDefaultLanguageCode(), action: Actions) {
     }
 }
 
+// Testing
+export function fakeNonce(state = "", action: Actions) {
+    switch (action.type) {
+        case ActionTypes.FAKE_NONCE:
+            return action.payload;
+        default:
+            return state;
+    }
+}
+
 export function unstableConnection(state = false, action: Actions) {
     switch (action.type) {
         case ActionTypes.SIMULATE_UNSTABLE_CONNECTION:
@@ -181,5 +191,8 @@ export const account = combineReducers({
     refreshToken,
     refreshTokenExpire,
     sessionId,
+    // Testing
+    // tslint:disable:object-literal-sort-keys
     unstableConnection,
+    // tslint:enable:object-literal-sort-keys
 });
