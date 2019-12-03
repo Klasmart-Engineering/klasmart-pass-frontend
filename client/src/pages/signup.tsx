@@ -43,6 +43,7 @@ export function Signup() {
     const [passwordConfirmation, setPasswordConfirmation] = useState("");
 
     const [passwordError, setPasswordError] = useState<JSX.Element | null>(null);
+    const [passwordMatchError, setPasswordMatchError] = useState(false);
     const [emailError, setEmailError] = useState<JSX.Element | null>(null);
     const [generalError, setGeneralError] = useState<JSX.Element | null>(null);
 
@@ -52,11 +53,19 @@ export function Signup() {
 
     redirectIfAuthorized();
 
+    function checkPasswordMatch() {
+        if (password === "") { return; }
+        if (passwordConfirmation === "") { return; }
+        setPasswordMatchError(password !== passwordConfirmation);
+    }
+
     async function signup(e: React.FormEvent) {
         e.preventDefault();
         if (inFlight) { return; }
         if (email === "") { return; }
         if (password === "") { return; }
+        if (password !== passwordConfirmation) { return; }
+
         const accountType = getIdentityType(email);
         if (accountType === undefined) { return; }
         try {
@@ -144,9 +153,10 @@ export function Signup() {
                                             type="password"
                                             label={<FormattedMessage id="password" />}
                                             value={password}
-                                            error={passwordError !== null}
+                                            error={passwordError !== null || passwordMatchError}
                                             helperText={passwordError}
                                             onChange={(e) => setPassword(e.target.value)}
+                                            onBlur={() => checkPasswordMatch()}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
@@ -156,9 +166,10 @@ export function Signup() {
                                             value={passwordConfirmation}
                                             label={<FormattedMessage id="password_confirmation" />}
                                             type="password"
-                                            error={passwordError !== null}
+                                            error={passwordError !== null || passwordMatchError}
                                             helperText={passwordError}
                                             onChange={(e) => setPasswordConfirmation(e.target.value)}
+                                            onBlur={() => checkPasswordMatch()}
                                         />
                                     </Grid>
                                 </Grid>
