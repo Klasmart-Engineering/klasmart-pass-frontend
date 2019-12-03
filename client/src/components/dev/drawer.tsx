@@ -2,12 +2,14 @@ import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 import IconButton from "@material-ui/core/IconButton";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import Switch from "@material-ui/core/Switch";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -21,8 +23,11 @@ import RefreshIcon from "@material-ui/icons/Refresh";
 import { useState } from "react";
 import * as React from "react";
 import { FormattedMessage } from "react-intl";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { useRestAPI } from "../../restapi";
+import { RestAPI, useRestAPI } from "../../restapi";
+import { Actions, ActionTypes } from "../../store/actions";
+import { State } from "../../store/store";
 import AccountInfo from "./accountInfo";
 
 const drawerWidth = 350;
@@ -94,6 +99,15 @@ export function DeveloperDrawer(props: Props) {
     const classes = useStyles();
     const history = useHistory();
     const api = useRestAPI();
+    const simulateUnstableConnection = useSelector((state: State) => state.account.unstableConnection);
+    const dispatch = useDispatch<(action: Actions) => void>();
+
+    function toggleSimulateUnstableConnection() {
+        dispatch({
+            payload: !simulateUnstableConnection,
+            type: ActionTypes.SIMULATE_UNSTABLE_CONNECTION,
+        });
+    }
 
     function navigate(path: string) {
         if (open) { props.setOpen(false); }
@@ -159,6 +173,14 @@ export function DeveloperDrawer(props: Props) {
                     <ChevronLeftIcon />
                 </IconButton>
             </div>
+            <Divider />
+
+            <FormControlLabel
+                control={
+                    <Switch checked={simulateUnstableConnection} onChange={() => toggleSimulateUnstableConnection()} />
+                }
+                label="Simulate Unstable Connection"
+            />
             <Divider />
             <List>
                 <ListItem

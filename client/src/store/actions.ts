@@ -35,6 +35,8 @@ export type PassExpiration = Action<ActionTypes.EXPIRE_DATE, string>;
 export type SetEMailAction = Action<ActionTypes.EMAIL, string>;
 export type SetLocale = Action<ActionTypes.LOCALE, string>;
 
+export type SimulateUnstableConnection = Action<ActionTypes.SIMULATE_UNSTABLE_CONNECTION, boolean>;
+
 export enum ActionTypes {
     LOGIN,
     LOGOUT,
@@ -49,6 +51,7 @@ export enum ActionTypes {
     EXPIRE_DATE,
     EMAIL,
     LOCALE,
+    SIMULATE_UNSTABLE_CONNECTION,
 }
 
 export type Actions =
@@ -62,7 +65,8 @@ export type Actions =
     | AccountIdAction
     | PostAuthorizationRouteAction
     | ProductIdAction
-    | ExpireDateAction
+    | PassExpiration
     | SetEMailAction
     | SetLocale
+    | SimulateUnstableConnection
     | never;

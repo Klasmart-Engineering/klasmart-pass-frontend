@@ -13,11 +13,10 @@ function phoneOrEmail(str: string): { phoneNr?: string, email?: string } {
 }
 
 export class RestAPI {
-    private paymentPrefix = "/payment/";
+
+    private paymentPrefix = "https://beta.payment.badanamu.net/";
     private authPrefix = "https://beta.auth.badanamu.net/";
     private apiPrefix = "https://beta.account.badanamu.net/";
-
-    private test: boolean = false;
     private store: Store;
 
     constructor(store: ReturnType<typeof useStore>) {
@@ -289,17 +288,21 @@ export class RestAPI {
     }
 
     private async fetchRoute(method: string, prefix: string, route: string, body?: string) {
-        if (this.test) {
+        if (this.store.getState().account.unstableConnection) {
+            const minDelay = 1000;
             const maxDelay = 10000;
-            const delaySkew = 5;
-            const failureRate = 0.01;
-            const delay = Math.pow(Math.random(), delaySkew) * maxDelay;
+            const delaySkew = 2;
+            const failureRate = 0.2;
+            const delay = minDelay + Math.pow(Math.random(), delaySkew) * (maxDelay - minDelay);
             console.log(`Delaying request to '${route}' by ${Math.round(delay).toLocaleString()}ms`);
-            await new Promise((resolve) => setTimeout(resolve, delay));
-            if (Math.random() <= failureRate) {
-                console.log(`Blocking rest request to '${route}' to simulate error`);
-                throw new RestAPIError(RestAPIErrorType.MOCK, {});
-            }
+            await new Promise((resolve, reject) => {
+                if (Math.random() <= failureRate) {
+                    console.log(`Blocking rest request to '${route}' to simulate error`);
+                    setTimeout(() => reject(new RestAPIError(RestAPIErrorType.MOCK, {})), delay);
+                } else {
+                    setTimeout(resolve, delay);
+                }
+            });
         }
         const headers = new Headers();
         headers.append("Accept", "application/json");

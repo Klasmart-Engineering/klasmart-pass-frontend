@@ -160,16 +160,26 @@ export function locale(state = getDefaultLanguageCode(), action: Actions) {
     }
 }
 
+export function unstableConnection(state = false, action: Actions) {
+    switch (action.type) {
+        case ActionTypes.SIMULATE_UNSTABLE_CONNECTION:
+            return action.payload;
+        default:
+            return state;
+    }
+}
+
 export const account = combineReducers({
     accessToken,
     accessTokenExpire,
     accountId,
     deviceId,
     email,
+    expireDate,
     locale,
     productId,
-    expireDate,
     refreshToken,
     refreshTokenExpire,
     sessionId,
+    unstableConnection,
 });
