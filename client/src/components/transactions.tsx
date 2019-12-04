@@ -7,7 +7,7 @@ import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
 import { mergeClasses } from "@material-ui/styles";
 import React from "react";
-import { FormattedDate } from "react-intl";
+import { FormattedDate, FormattedMessage } from "react-intl";
 import { useSelector } from "react-redux";
 import { State } from "../store/store";
 
@@ -51,7 +51,7 @@ function Transaction(props: { transaction: any }) {
                     <TableRow key={`${pass.start}-${pass.passId}`}>
                         <TableCell>{date}</TableCell>
                         <TableCell>{pass.passName}</TableCell>
-                        <TableCell>{date.split(",")[0]} - <FormattedDate value={pass.end} /></TableCell>
+                        <TableCell>{<FormattedDate value={date.split(",")[0]} />} - <FormattedDate value={pass.end} /></TableCell>
                         <TableCell style={{ textTransform: "capitalize" }}>{store}</TableCell>
                         <TableCell align="right">{pass.passName === "Learning Pass" ? "US$20" : "US$50"}</TableCell>
                     </TableRow>
@@ -71,11 +71,11 @@ export function Transactions(props: Props) {
             <Table style={{ minWidth: 320 }} aria-label="transaction-history">
                 <TableHead>
                     <TableRow>
-                        <TableCell>Date</TableCell>
-                        <TableCell>Description</TableCell>
-                        <TableCell>Service Period</TableCell>
-                        <TableCell>Payment Method</TableCell>
-                        <TableCell align="right">Total</TableCell>
+                        <TableCell><FormattedMessage id="my_account_transaction_date" /></TableCell>
+                        <TableCell><FormattedMessage id="my_account_transaction_description" /></TableCell>
+                        <TableCell><FormattedMessage id="my_account_service_period" /></TableCell>
+                        <TableCell><FormattedMessage id="my_account_payment_method" /></TableCell>
+                        <TableCell align="right"><FormattedMessage id="my_account_total" /></TableCell>
                     </TableRow>
                 </TableHead>
                 {

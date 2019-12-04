@@ -3,6 +3,7 @@ import { createStyles, Theme, WithStyles, withStyles } from "@material-ui/core/s
 import Typography from "@material-ui/core/Typography";
 import * as React from "react";
 import { FormattedMessage } from "react-intl";
+import Grid from "@material-ui/core/Grid"
 
 const styles = (theme: Theme) => createStyles({
     responsiveTypography: {
@@ -22,7 +23,7 @@ type Props = WithStyles<typeof styles>;
 class Copyright extends React.PureComponent<Props, any> {
     public render() {
         return (
-            <React.Fragment>
+            <Grid item xs={12} className={this.props.classes.responsiveTypography}>
                 <Typography variant="caption" color="textSecondary" className={this.props.classes.responsiveTypography}>
                     <FormattedMessage id="copyright" />
                     {" © "}
@@ -44,7 +45,7 @@ class Copyright extends React.PureComponent<Props, any> {
                         Refund Policy
                     </Link>
                 </Typography>
-            </React.Fragment>
+            </Grid>
         );
     }
 }

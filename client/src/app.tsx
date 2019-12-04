@@ -28,7 +28,11 @@ const useStyles = makeStyles((theme: Theme) =>
             padding: "32px 0",
         },
         footer: {
+            alignItems: "center",
             padding: theme.spacing(4, 2, 2, 2),
+            [theme.breakpoints.down("xs")]: {
+                alignItems: "left",
+            },
         },
     }),
 );
@@ -61,7 +65,7 @@ export function App() {
                 <Route path="/password-restore" component={PasswordRestore} />
                 <Route path="/" component={Landing} />
             </Switch>
-            <Grid item xs={12} className={classes.footer}>
+            <Grid container className={classes.footer}>
                 <Copyright />
             </Grid>
         </Grid>

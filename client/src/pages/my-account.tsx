@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
         padding: theme.spacing(4),
         [theme.breakpoints.down("xs")]: {
             padding: theme.spacing(2),
-        }
+        },
     },
     bigAvatar: {
         width: 96,
@@ -59,7 +59,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
         textAlign: "right",
         [theme.breakpoints.down("xs")]: {
             textAlign: "left",
-        }
+        },
     },
 }),
 );
@@ -97,18 +97,18 @@ export function MyAccount() {
         <Container maxWidth="lg" >
             <div className={classes.emptySpace} />
             <Grid container direction="row" spacing={4} >
-                <Hidden only="xs">
+                {/* <Hidden only="xs">
                     <Grid container item direction="row" alignItems="center" spacing={4} xs={12}>
                         <Grid item>
                             <Avatar alt={defaultEmail} src="" className={classes.bigAvatar} />
                         </Grid>
                         <Grid item>
                             <Typography variant="h4">{defaultEmail}</Typography>
-                            {/* <Typography variant="body1"><b>{selectedProduct === "BLP" ? "Badanamu Learning Pass" : "Badanamu Learning Pass Premium"},</b> expires <b><FormattedDate value={expiration} /></b>.</Typography> */}
+                            <Typography variant="body1"><b>{selectedProduct === "BLP" ? "Badanamu Learning Pass" : "Badanamu Learning Pass Premium"},</b> expires <b><FormattedDate value={expiration} /></b>.</Typography>
                         </Grid>
                     </Grid>
                     <div className={classes.emptySpace} />
-                </Hidden>
+                </Hidden> */}
                 <Grid item xs={12}>
                     <Typography variant="h2">
                         <FormattedMessage id="my_account_header" />
@@ -116,7 +116,7 @@ export function MyAccount() {
                     <Divider light className={classes.sectionDivider} />
                     <Grid container item direction="row" spacing={4} xs={12}>
                         <Grid item xs={12} sm={4}>
-                            <Typography variant="h6" style={{ color: "#aaa" }}>PROFILE</Typography>
+                            <Typography variant="h6" style={{ color: "#aaa" }}><FormattedMessage id="my_account_plan_profile" /></Typography>
                         </Grid>
                         <Grid item xs={12} sm={8}>
                             <Typography variant="h6" className={classes.sectionTypography}>{defaultEmail}</Typography>
@@ -134,7 +134,7 @@ export function MyAccount() {
                     <div className={classes.emptySpace} />
                     <Grid container item direction="row" spacing={4} xs={12}>
                         <Grid item xs={12} sm={4}>
-                            <Typography variant="h6" style={{ color: "#aaa" }}>PLAN DETAILS</Typography>
+                            <Typography variant="h6" style={{ color: "#aaa" }}><FormattedMessage id="my_account_plan_details" /></Typography>
                         </Grid>
                         <Grid item xs={12} sm={8}>
                             <Passes />
@@ -143,7 +143,7 @@ export function MyAccount() {
                     <div className={classes.emptySpace} />
                     <Grid container item direction="row" spacing={4} xs={12}>
                         <Grid item xs={12}>
-                            <Typography variant="h6" style={{ textTransform: "uppercase", color: "#aaa" }}><FormattedMessage id="transaction_history" /></Typography>
+                            <Typography variant="h6" style={{ textTransform: "uppercase", color: "#aaa" }}><FormattedMessage id="my_account_transaction_history" /></Typography>
                         </Grid>
                         <Grid item xs={12}>
                             {

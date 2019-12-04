@@ -141,10 +141,10 @@ export function Landing() {
         createData(<FormattedMessage id="learning_pass_program_levels" />, <CheckRoundedIcon />, <CheckRoundedIcon />),
         createData(<FormattedMessage id="learning_pass_hd_content" />, <CheckRoundedIcon />, <CheckRoundedIcon />),
         createData(<FormattedMessage id="learning_pass_ad_free" />, <CheckRoundedIcon />, <CheckRoundedIcon />),
-        createData(<FormattedMessage id="learning_pass_animated_series" />, <ClearRoundedIcon />, "52 episodes"),
-        createData(<FormattedMessage id="learning_pass_premium_songs" />, <ClearRoundedIcon />, "500+ minutes"),
+        createData(<FormattedMessage id="learning_pass_animated_series" />, <ClearRoundedIcon />, <FormattedMessage id="landing_number_episodes" />),
+        createData(<FormattedMessage id="learning_pass_premium_songs" />, <ClearRoundedIcon />, <FormattedMessage id="landing_number_minutes" />),
         createData(<FormattedMessage id="learning_pass_premium_apps" />, <ClearRoundedIcon />, 5),
-        createData(<FormattedMessage id="learning_pass_ot_purchase" />, "$20.00", "$50.00"),
+        createData(<FormattedMessage id="learning_pass_ot_purchase" />, "US$20.00", "US$50.00"),
     ];
 
     function createPlanButton(plan: string) {
