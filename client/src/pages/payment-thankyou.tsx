@@ -50,17 +50,17 @@ export function PaymentThankyou() {
                         </Grid>
                         <Grid item xs={12}>
                             <Typography variant="h4" align="center">
-                                Thank you for purchasing the <b>{selectedProduct === "BLP" ? "Badanamu Learning Pass" : "Badanamu Learning Pass Premium"}</b>.
+                                <FormattedMessage id="thank_you_heading" /><b>{selectedProduct === "BLP" ? "Badanamu Learning Pass" : "Badanamu Learning Pass Premium"}</b>.
                             </Typography>
                         </Grid>
                         <Grid item xs={12}>
                             <Typography variant="body1" align="center">
-                                You are now ready to begin learning English with Badanamu! To access your pass, log in to the Badanamu ESL application.
+                                <FormattedMessage id="thank_you_intro1" />
                             </Typography>
                         </Grid>
                         <Grid item xs={12}>
                             <Typography variant="body1" align="center">
-                                Applications can also be individually downloaded and accessed with the same login credentials.
+                                <FormattedMessage id="thank_you_intro2" />
                             </Typography>
                         </Grid>
                         <Grid item xs={12} style={{ width: "100%" }}>
@@ -68,17 +68,17 @@ export function PaymentThankyou() {
                         </Grid>
                         <Grid item xs={6}>
                             <Typography variant="caption">
-                                Account: <b>{defaultEmail}</b>
+                                <FormattedMessage id="thank_you_account" /> <b>{defaultEmail}</b>
                             </Typography>
                         </Grid>
                         <Grid item xs={6}>
                             <Typography variant="caption">
-                                Subscription Expiration: <b><FormattedDate value={expiration} /></b>
+                                <FormattedMessage id="thank_you_expiration" /> <b><FormattedDate value={expiration} /></b>
                             </Typography>
                         </Grid>
                         <Grid item xs={12}>
                             <BadanamuButton fullWidth onClick={(e) => { history.push("/my-account"); }}>
-                                Go to your account dashboard >
+                                <FormattedMessage id="thank_you_go_to_dashboard" />
                             </BadanamuButton>
                         </Grid>
                     </Grid>

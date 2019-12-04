@@ -135,7 +135,7 @@ export function Payment() {
                         <Grid container item justify="space-between" xs={12} sm={6}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12}>
-                                    <Typography variant="h3">Instant delivery.</Typography>
+                                    <Typography variant="h3"><FormattedMessage id="payment_delivery_header" /></Typography>
                                 </Grid>
                                 <Grid item xs={12}>
                                     <Typography variant="body1">
@@ -151,22 +151,14 @@ export function Payment() {
                             </Grid>
                             <Grid container item xs={12} spacing={2} direction="column" justify="space-between" alignItems="flex-start">
                                 <Grid item>
-                                    <Typography variant="subtitle2">
-                                        Some things to keep in mind:
-                                    </Typography>
-                                    <Typography variant="body1">
-                                        [placeholder]
-                                    </Typography>
-                                </Grid>
-                                <Grid item>
                                     <Grid item xs={12}>
                                         <Link href="#" variant="subtitle2">
-                                            View our Terms of Service >
+                                            <FormattedMessage id="payment_view_terms" /> >
                                         </Link>
                                     </Grid>
                                     <Grid item xs={12}>
                                         <Link href="#" variant="subtitle2">
-                                            View our Return Policy >
+                                            <FormattedMessage id="payment_view_returns" /> >
                                         </Link>
                                     </Grid>
                                 </Grid>
@@ -178,7 +170,7 @@ export function Payment() {
                             {
                                 clientTokenInFlight || clientToken === "" ? null :
                                     <div className={clsx(braintree === null && classes.hide)}>
-                                        <Typography variant="h3">How do you want to pay?</Typography>
+                                        <Typography variant="h3"><FormattedMessage id="payment_pay_option_header" /></Typography>
                                         <div style={{ padding: 32 }} />
                                         <DropIn
                                             options={{
