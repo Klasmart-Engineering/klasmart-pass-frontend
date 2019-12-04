@@ -1,11 +1,12 @@
-
-import React, { useEffect, useRef } from "react";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useRestAPI } from "../restapi";
 import { State } from "../store/store";
 
 export function PayPalButton() {
+    const [inFlight, setInFlight] = useState(false);
     const selectedProduct = useSelector((state: State) => state.account.productId);
     const paypal = (window as any).paypal;
     const buttonRef = useRef<HTMLDivElement>(null);
@@ -41,6 +42,7 @@ export function PayPalButton() {
             },
             async onApprove(data: any, actions: any) {
                 try {
+                    setInFlight(true);
                     const details = await actions.order.capture();
                     console.log(details);
                     console.log(data);
@@ -53,5 +55,8 @@ export function PayPalButton() {
         });
         button.render(buttonRef.current);
     }, [paypal]);
-    return <div ref={buttonRef}></div>;
+    return < >
+        <div ref={buttonRef} style={{ visibility: inFlight ? "hidden" : "visible" }} />
+        {inFlight ? <CircularProgress /> : null}
+    </ >;
 }

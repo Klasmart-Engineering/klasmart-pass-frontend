@@ -2,6 +2,7 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Checkbox from "@material-ui/core/Checkbox";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Collapse from "@material-ui/core/Collapse";
 import Container from "@material-ui/core/Container";
 import Divider from "@material-ui/core/Divider";
 import Fade from "@material-ui/core/Fade";
@@ -28,7 +29,6 @@ import { useRestAPI } from "../restapi";
 import { ActionTypes } from "../store/actions";
 import { State } from "../store/store";
 import { getExpiration } from "../utils/date";
-import Collapse from "@material-ui/core/Collapse";
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme: Theme) =>
@@ -82,65 +82,10 @@ const useStyles = makeStyles((theme: Theme) =>
 export function Payment() {
     const classes = useStyles();
     const [acceptPolicy, setAcceptPolicy] = useState(false);
-    const [clientToken, setClientToken] = useState("");
-    const [clientTokenInFlight, setClientTokenInFlight] = useState(false);
-    const [paymentInFlight, setPaymentInFlight] = useState(false);
     const [paymentReady, setPaymentReady] = useState(false);
-    const [braintree, setBrainTree] = useState<Braintree.Dropin | null>(null);
-    const [error, setError] = useState<JSX.Element | null>(null);
     const selectedProduct = useSelector((state: State) => state.account.productId);
-    const history = useHistory();
-    const restApi = useRestAPI();
-    const store = useStore();
-    // For Testing payment
-    const fakeNonce = useSelector((state: State) => state.fakeNonce);
 
-    useEffect(() => {
-        getClientToken();
-        return;
-    }, []);
     redirectIfUnauthorized("/payment");
-
-    async function getClientToken() {
-        if (clientTokenInFlight) { return; }
-        try {
-            setClientTokenInFlight(true);
-            const newClientToken = await restApi.getPaymentToken();
-            setClientToken(newClientToken);
-        } catch (e) {
-            setError(<FormattedMessage id={"ERROR_UNKOWN"} />);
-        } finally {
-            setClientTokenInFlight(false);
-        }
-    }
-
-    async function buy() {
-        if (error !== null) { return; }
-        if (braintree === null) { return; }
-        if (paymentInFlight) { return; }
-        try {
-            setPaymentInFlight(true);
-            const { nonce } = fakeNonce ? fakeNonce : await braintree.requestPaymentMethod();
-            // TODO: change product selection to use productIDs
-            let productId = "";
-            switch (selectedProduct) {
-                case "BLP":
-                    productId = "com.calmid.learnandplay.blap.standard";
-                    break;
-                case "BLPPremium":
-                    productId = "com.calmid.learnandplay.blap.premium";
-                    break;
-                default:
-                    throw new Error("Unknown product");
-            }
-            await restApi.reportPaymentNonce(productId, nonce);
-            history.push("/payment-thankyou");
-        } catch (e) {
-            history.push("/payment-error");
-        } finally {
-            setPaymentInFlight(false);
-        }
-    }
 
     return (
         <Container maxWidth="lg" style={{ margin: "auto 0" }}>
