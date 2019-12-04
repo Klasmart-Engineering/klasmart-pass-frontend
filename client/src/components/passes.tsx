@@ -84,12 +84,14 @@ export function Pass({ pass }: Props) {
 
     function getImage(passId: string) {
         switch (passId) {
+            case "com.calmid.learnandplay.blap.premium":
             case "com.calmid.learnandplay.blp.premium":
                 return <img src={BLPPremium} alt={BLPPremium} aria-label={BLPPremium} className={classes.productImg} />;
+            case "com.calmid.learnandplay.blap.standard":
             case "com.calmid.learnandplay.blp.standard":
                 return <img src={BLP} alt={BLP} aria-label={BLP} className={classes.productImg} />;
             default:
-                return ClassIcon;
+                return <ClassIcon />;
         }
     }
 
