@@ -104,10 +104,10 @@ export function Payment() {
             let productId = "";
             switch (selectedProduct) {
                 case "BLP":
-                    productId = "com.calmid.learnandplay.blp.standard";
+                    productId = "com.calmid.learnandplay.blap.standard";
                     break;
                 case "BLPPremium":
-                    productId = "com.calmid.learnandplay.blp.premium";
+                    productId = "com.calmid.learnandplay.blap.premium";
                     break;
                 default:
                     throw new Error("Unknown product");

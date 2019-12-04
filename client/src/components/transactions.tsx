@@ -14,8 +14,10 @@ import { State } from "../store/store";
 // TODO: Get pass information from DB later
 function PassIDName(id: string) {
     switch (id) {
+        case "com.calmid.learnandplay.blap.standard":
         case "com.calmid.learnandplay.blp.standard":
             return "Learning Pass";
+        case "com.calmid.learnandplay.blap.premium":
         case "com.calmid.learnandplay.blp.premium":
             return "Learning Pass Premium";
         default:
