@@ -68,7 +68,7 @@ interface Props {
 export function Transactions(props: Props) {
     return (
         <Paper style={{ width: "100%", overflowX: "auto" }}>
-            <Table style={{ minWidth: 400 }} aria-label="transaction-history">
+            <Table style={{ minWidth: 320 }} aria-label="transaction-history">
                 <TableHead>
                     <TableRow>
                         <TableCell>Date</TableCell>

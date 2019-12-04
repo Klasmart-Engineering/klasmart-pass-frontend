@@ -15,14 +15,15 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
         textAlign: "right",
         minHeight: 96,
         margin: 0,
-        padding: theme.spacing(4, 0),
-        [theme.breakpoints.down("sm")]: {
+        padding: theme.spacing(2, 0),
+        [theme.breakpoints.down("xs")]: {
             minHeight: 72,
+            textAlign: "left",
         },
     },
     productImg: {
         maxWidth: 192,
-        [theme.breakpoints.down("sm")]: {
+        [theme.breakpoints.down("xs")]: {
             maxWidth: 128,
         },
     },
@@ -86,7 +87,7 @@ export function Pass({ pass }: Props) {
     }
 
     return (
-        <Grid item xs={8} className={classes.productImgContainer}>
+        <Grid item xs={12} className={classes.productImgContainer}>
             {getImage(pass.passId)}
         </Grid>
     );

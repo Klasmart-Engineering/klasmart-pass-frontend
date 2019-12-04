@@ -3,6 +3,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import Container from "@material-ui/core/Container";
 import Divider from "@material-ui/core/Divider";
 import Grid from "@material-ui/core/Grid";
+import Hidden from "@material-ui/core/Hidden";
 import Link from "@material-ui/core/Link";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
@@ -28,6 +29,9 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     },
     emptySpace: {
         padding: theme.spacing(4),
+        [theme.breakpoints.down("xs")]: {
+            padding: theme.spacing(2),
+        }
     },
     bigAvatar: {
         width: 96,
@@ -50,6 +54,12 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
         [theme.breakpoints.down("sm")]: {
             maxWidth: 128,
         },
+    },
+    sectionTypography: {
+        textAlign: "right",
+        [theme.breakpoints.down("xs")]: {
+            textAlign: "left",
+        }
     },
 }),
 );
@@ -86,29 +96,31 @@ export function MyAccount() {
     return (
         <Container maxWidth="lg" >
             <div className={classes.emptySpace} />
-            <Grid container direction="column" spacing={4} >
-                <Grid container item direction="row" alignItems="center" spacing={4} xs={12}>
-                    <Grid item>
-                        <Avatar alt={defaultEmail} src="" className={classes.bigAvatar} />
+            <Grid container direction="row" spacing={4} >
+                <Hidden only="xs">
+                    <Grid container item direction="row" alignItems="center" spacing={4} xs={12}>
+                        <Grid item>
+                            <Avatar alt={defaultEmail} src="" className={classes.bigAvatar} />
+                        </Grid>
+                        <Grid item>
+                            <Typography variant="h4">{defaultEmail}</Typography>
+                            {/* <Typography variant="body1"><b>{selectedProduct === "BLP" ? "Badanamu Learning Pass" : "Badanamu Learning Pass Premium"},</b> expires <b><FormattedDate value={expiration} /></b>.</Typography> */}
+                        </Grid>
                     </Grid>
-                    <Grid item>
-                        <Typography variant="h4">{defaultEmail}</Typography>
-                        {/* <Typography variant="body1"><b>{selectedProduct === "BLP" ? "Badanamu Learning Pass" : "Badanamu Learning Pass Premium"},</b> expires <b><FormattedDate value={expiration} /></b>.</Typography> */}
-                    </Grid>
-                </Grid>
-                <div className={classes.emptySpace} />
+                    <div className={classes.emptySpace} />
+                </Hidden>
                 <Grid item xs={12}>
                     <Typography variant="h2">
                         <FormattedMessage id="my_account_header" />
                     </Typography>
                     <Divider light className={classes.sectionDivider} />
                     <Grid container item direction="row" spacing={4} xs={12}>
-                        <Grid item xs={4}>
+                        <Grid item xs={12} sm={4}>
                             <Typography variant="h6" style={{ color: "#aaa" }}>PROFILE</Typography>
                         </Grid>
-                        <Grid item xs={8}>
-                            <Typography variant="h6" align="right">{defaultEmail}</Typography>
-                            <Typography variant="h6" align="right">
+                        <Grid item xs={12} sm={8}>
+                            <Typography variant="h6" className={classes.sectionTypography}>{defaultEmail}</Typography>
+                            <Typography variant="h6" className={classes.sectionTypography}>
                                 <Link
                                     href="#"
                                     variant="subtitle2"
@@ -121,10 +133,10 @@ export function MyAccount() {
                     </Grid>
                     <div className={classes.emptySpace} />
                     <Grid container item direction="row" spacing={4} xs={12}>
-                        <Grid item xs={4}>
+                        <Grid item xs={12} sm={4}>
                             <Typography variant="h6" style={{ color: "#aaa" }}>PLAN DETAILS</Typography>
                         </Grid>
-                        <Grid item xs={4}>
+                        <Grid item xs={12} sm={8}>
                             <Passes />
                         </Grid>
                     </Grid>
@@ -133,7 +145,7 @@ export function MyAccount() {
                         <Grid item xs={12}>
                             <Typography variant="h6" style={{ textTransform: "uppercase", color: "#aaa" }}><FormattedMessage id="transaction_history" /></Typography>
                         </Grid>
-                        <Grid item xs={12} className={classes.productImgContainer}>
+                        <Grid item xs={12}>
                             {
                                 transactionsInFlight ?
                                     <CircularProgress /> :

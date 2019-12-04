@@ -27,6 +27,9 @@ const useStyles = makeStyles((theme: Theme) =>
             flexWrap: "nowrap",
             padding: "32px 0",
         },
+        footer: {
+            padding: theme.spacing(4, 2, 2, 2),
+        },
     }),
 );
 
@@ -58,9 +61,9 @@ export function App() {
                 <Route path="/password-restore" component={PasswordRestore} />
                 <Route path="/" component={Landing} />
             </Switch>
-            <Box mt={5}>
+            <Grid item xs={12} className={classes.footer}>
                 <Copyright />
-            </Box>
+            </Grid>
         </Grid>
     );
 }
