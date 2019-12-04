@@ -1,11 +1,11 @@
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
-import Checkbox from "@material-ui/core/Checkbox"
+import Checkbox from "@material-ui/core/Checkbox";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Container from "@material-ui/core/Container";
 import Divider from "@material-ui/core/Divider";
-import FormControlLabel from "@material-ui/core/FormControlLabel"
-import FormGroup from "@material-ui/core/FormGroup"
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormGroup from "@material-ui/core/FormGroup";
 import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
@@ -20,6 +20,7 @@ import { useHistory } from "react-router";
 import { redirectIfUnauthorized } from "../components/authorized";
 import DropIn from "../components/braintree-web-drop-in-react";
 import BadanamuButton from "../components/button";
+import { PayPalButton } from "../components/paypal";
 import BLP from "../img/logo_learning_pass.png";
 import BLPPremium from "../img/logo_learning_pass_premium.png";
 import { useRestAPI } from "../restapi";
@@ -184,46 +185,7 @@ export function Payment() {
                             </Grid>
                         </Grid>
                         <Grid item xs={12} sm={6} className={classes.columnSeparator}>
-                            {error === null ? null : <Typography color="error">{error}</Typography>}
-                            {braintree !== null ? null : <CircularProgress />}
-                            {
-                                clientTokenInFlight || clientToken === "" ? null :
-                                    <div className={clsx(braintree === null && classes.hide)}>
-                                        <Typography variant="h3"><FormattedMessage id="payment_pay_option_header" /></Typography>
-                                        <div style={{ padding: 32 }} />
-                                        <DropIn
-                                            options={{
-                                                authorization: clientToken,
-                                                paypal: { flow: "vault" },
-                                            }}
-                                            onInstance={(b) => setBrainTree(b)}
-                                            onPaymentMethodRequestable={(p) => setPaymentReady(true)}
-                                            onNoPaymentMethodRequestable={() => setPaymentReady(false)}
-                                        />
-                                    </div>
-                            }
-                            {
-                                paymentReady || fakeNonce ?
-                                    <BadanamuButton
-                                        color="primary"
-                                        fullWidth
-                                        onClick={() => {
-                                            buy();
-                                            store.dispatch({ type: ActionTypes.EXPIRE_DATE, payload: getExpiration(1) });
-                                        }}
-                                        disabled={paymentInFlight || !acceptPolicy}
-                                    >
-                                        {
-                                            paymentInFlight ?
-                                                <CircularProgress size={25} /> :
-                                                <React.Fragment>
-                                                    <FormattedMessage id={"payment_button"} />
-                                                    {selectedProduct === "BLP" ? " (US$20)" : " (US$50)"}
-                                                </React.Fragment>
-                                        }
-                                    </BadanamuButton>
-                                    : null
-                            }
+                            <PayPalButton />
                         </Grid>
                     </Grid>
                     {/* <div style={{ padding: 10 }}>

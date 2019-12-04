@@ -247,6 +247,15 @@ export class RestAPI {
         }
         throw new RestAPIError(RestAPIErrorType.UNKNOWN, body);
     }
+    public async reportPaypalOrder(orderId: string, productCode: string) {
+        const response = await this.paymentCall("POST", "v1/paypal/payment", JSON.stringify({ orderId, productCode }));
+        const body = await response.json();
+        if (typeof body === "object") {
+            const { success, value } = body;
+            if (success === true) { return true; }
+        }
+        throw new RestAPIError(RestAPIErrorType.UNKNOWN, body);
+    }
 
     public async getProductAccesses() {
         const response = await this.productCall("GET", "v1/product/accesses");
