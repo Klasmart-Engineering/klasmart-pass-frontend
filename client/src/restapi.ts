@@ -17,6 +17,8 @@ export class RestAPI {
     private paymentPrefix = "https://beta.payment.badanamu.net/";
     private authPrefix = "https://beta.auth.badanamu.net/";
     private apiPrefix = "https://beta.account.badanamu.net/";
+    private productPrefix = "https://beta.product.badanamu.net/";
+
     private store: Store;
 
     constructor(store: ReturnType<typeof useStore>) {
@@ -246,6 +248,18 @@ export class RestAPI {
         throw new RestAPIError(RestAPIErrorType.UNKNOWN, body);
     }
 
+    public async getProductAccesses() {
+        const response = await this.productCall("GET", "v1/product/accesses");
+        const body = await response.json();
+        return body;
+    }
+
+    public async getPassAccesses() {
+        const response = await this.productCall("GET", "v1/pass/accesses");
+        const body = await response.json();
+        return body;
+    }
+
     private async autoRefreshSesion() {
         try {
             await this.refreshSession();
@@ -258,7 +272,9 @@ export class RestAPI {
     private paymentCall(method: "POST" | "GET" | "DELETE", route: string, body?: string, refresh = true) {
         return this.call(method, this.paymentPrefix, route, body, refresh);
     }
-
+    private productCall(method: "GET" | "POST", route: string, body?: string, refresh = true) {
+        return this.call(method, this.productPrefix, route, body, refresh);
+    }
     private authCall(route: string, body: string, refresh = true) {
         return this.call("POST", this.authPrefix, route, body, refresh);
     }
@@ -357,5 +373,6 @@ export class RestAPI {
 export function useRestAPI() {
     const store = useStore();
     const api = new RestAPI(store);
+    (window as any).api = api;
     return api;
 }

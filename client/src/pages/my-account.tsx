@@ -11,12 +11,10 @@ import { FormattedDate, FormattedMessage } from "react-intl";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { redirectIfUnauthorized } from "../components/authorized";
+import { Passes } from "../components/passes";
 import { Transactions } from "../components/transactions";
-import BLP from "../img/logo_learning_pass.png";
-import BLPPremium from "../img/logo_learning_pass_premium.png";
 import { useRestAPI } from "../restapi";
 import { State } from "../store/store";
-import { getExpiration } from "../utils/date";
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -95,7 +93,7 @@ export function MyAccount() {
                     </Grid>
                     <Grid item>
                         <Typography variant="h4">{defaultEmail}</Typography>
-                        <Typography variant="body1"><b>{selectedProduct === "BLP" ? "Badanamu Learning Pass" : "Badanamu Learning Pass Premium"},</b> expires <b><FormattedDate value={expiration} /></b>.</Typography>
+                        {/* <Typography variant="body1"><b>{selectedProduct === "BLP" ? "Badanamu Learning Pass" : "Badanamu Learning Pass Premium"},</b> expires <b><FormattedDate value={expiration} /></b>.</Typography> */}
                     </Grid>
                 </Grid>
                 <div className={classes.emptySpace} />
@@ -126,8 +124,8 @@ export function MyAccount() {
                         <Grid item xs={4}>
                             <Typography variant="h6" style={{ color: "#aaa" }}>PLAN DETAILS</Typography>
                         </Grid>
-                        <Grid item xs={8} className={classes.productImgContainer}>
-                            <img src={selectedProduct === "BLP" ? BLP : BLPPremium} className={classes.productImg} />
+                        <Grid item xs={4}>
+                            <Passes />
                         </Grid>
                     </Grid>
                     <div className={classes.emptySpace} />
