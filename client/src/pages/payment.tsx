@@ -1,8 +1,11 @@
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
+import Checkbox from "@material-ui/core/Checkbox"
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Container from "@material-ui/core/Container";
 import Divider from "@material-ui/core/Divider";
+import FormControlLabel from "@material-ui/core/FormControlLabel"
+import FormGroup from "@material-ui/core/FormGroup"
 import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
@@ -27,6 +30,12 @@ import { getExpiration } from "../utils/date";
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
+        checkbox: {
+            paddingBottom: theme.spacing(4),
+            [theme.breakpoints.down("xs")]: {
+                paddingBottom: theme.spacing(2),
+            },
+        },
         columnSeparator: {
             borderLeft: "1px solid #aaa",
             [theme.breakpoints.down("sm")]: {
@@ -61,6 +70,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export function Payment() {
     const classes = useStyles();
+    const [acceptPolicy, setAcceptPolicy] = useState(false);
     const [clientToken, setClientToken] = useState("");
     const [clientTokenInFlight, setClientTokenInFlight] = useState(false);
     const [paymentInFlight, setPaymentInFlight] = useState(false);
@@ -152,6 +162,15 @@ export function Payment() {
                             <Grid container item xs={12} spacing={2} direction="column" justify="space-between" alignItems="flex-start">
                                 <Grid item>
                                     <Grid item xs={12}>
+                                        <FormGroup row className={classes.checkbox}>
+                                            <FormControlLabel
+                                                control={
+                                                    <Checkbox required checked={acceptPolicy} onChange={() => setAcceptPolicy(!acceptPolicy)} value="policy-accepted" />
+                                                }
+                                                label={<Typography variant="caption" style={{ color: (paymentReady && !acceptPolicy) ? "red" : "black" }}><FormattedMessage id="payment_accept_terms" /></Typography>} />
+                                        </FormGroup>
+                                    </Grid>
+                                    <Grid item xs={12}>
                                         <Link href="#" variant="subtitle2">
                                             <FormattedMessage id="payment_view_terms" /> >
                                         </Link>
@@ -192,7 +211,7 @@ export function Payment() {
                                             buy();
                                             store.dispatch({ type: ActionTypes.EXPIRE_DATE, payload: getExpiration(1) });
                                         }}
-                                        disabled={paymentInFlight}
+                                        disabled={paymentInFlight || !acceptPolicy}
                                     >
                                         {
                                             paymentInFlight ?

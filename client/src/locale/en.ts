@@ -76,6 +76,7 @@ const messages: Record<string, string> = {
     payment_view_terms: "View our Terms of Service",
     payment_view_returns: "View our Return Policy",
     payment_thankyou: "Thank you for your purchase",
+    payment_accept_terms: "I agree to Calm Island's Terms of Service and Return Policy",
     thank_you_heading: "Thank you for purchasing the ",
     thank_you_intro1: "You are now ready to begin learning English with Badanamu! To use your pass, log in to the Badanamu ESL™ application.",
     thank_you_intro2: "Badanamu Learning Applications can also be individually downloaded and accessed with the same login credentials.",
