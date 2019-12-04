@@ -1,14 +1,15 @@
-import { CircularProgress } from "@material-ui/core";
+import { CircularProgress, Typography } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
 import Button from "@material-ui/core/Button";
+import Grid from "@material-ui/core/Grid";
+import Hidden from "@material-ui/core/Hidden";
 import IconButton from "@material-ui/core/IconButton";
-import Hidden from '@material-ui/core/Hidden'
-import Menu from "@material-ui/core/Menu";
+import Menu, { MenuProps } from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import { createStyles, makeStyles, Theme, withStyles } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import Tooltip from "@material-ui/core/Tooltip";
-import AccountCircleRoundedIcon from '@material-ui/icons/AccountCircleRounded';
+import AccountCircleRoundedIcon from "@material-ui/icons/AccountCircleRounded";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import LanguageIcon from "@material-ui/icons/Translate";
 import { useState } from "react";
@@ -22,7 +23,6 @@ import { ActionTypes } from "../store/actions";
 import { State } from "../store/store";
 import { isLoggedIn } from "./authorized";
 
-const drawerWidth = 240;
 const LANGUAGES_LABEL = [
     {
         code: "en",
@@ -47,6 +47,9 @@ const useStyles = makeStyles((theme: Theme) =>
         appBarBtn: {
             margin: "0 10px",
         },
+        accountMenuBtn: {
+            borderRadius: 20,
+        },
         language: {
             margin: theme.spacing(0, 0.5, 0, 1),
             display: "none",
@@ -64,16 +67,39 @@ const useStyles = makeStyles((theme: Theme) =>
                 height: 36,
             },
         },
+        accountMenu: {
+            maxWidth: 256,
+            padding: theme.spacing(1),
+            textAlign: "center",
+        },
     }),
 );
+
+const StyledMenu = withStyles({})((props: MenuProps) => (
+    <Menu
+        elevation={4}
+        getContentAnchorEl={null}
+        anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "center",
+        }}
+        transformOrigin={{
+            vertical: "top",
+            horizontal: "center",
+        }}
+        {...props}
+    />
+));
 
 export default function NavBar() {
     const classes = useStyles();
     const store = useStore();
 
     const locale = useSelector((state: State) => state.account.locale || "");
+    const defaultEmail = useSelector((state: State) => state.account.email || "");
     const [logoutInFlight, setLogoutInFlight] = useState(false);
     const [languageMenuElement, setLanguageMenuElement] = useState<null | HTMLElement>(null);
+    const [accountMenuElement, setAccountMenuElement] = useState<null | HTMLElement>(null);
 
     const history = useHistory();
     const api = useRestAPI();
@@ -123,7 +149,7 @@ export default function NavBar() {
                             <ExpandMoreIcon fontSize="small" />
                         </Button>
                     </Tooltip>
-                    <Menu
+                    <StyledMenu
                         id="language-menu"
                         anchorEl={languageMenuElement}
                         keepMounted
@@ -141,7 +167,7 @@ export default function NavBar() {
                                 </MenuItem>
                             ))
                         }
-                    </Menu>
+                    </StyledMenu>
                     <div className={classes.vl}></div>
                     {
                         authorized ?
@@ -167,25 +193,93 @@ export default function NavBar() {
                             </React.Fragment>
                             :
                             <React.Fragment>
-                                <Button
-                                    color="inherit"
-                                    className={classes.appBarBtn}
-                                    onClick={() => history.push("/my-account")}
-                                >
-                                    <FormattedMessage id="navbar_my_account" />
-                                </Button>
-                                <Button
-                                    color="inherit"
-                                    className={classes.appBarBtn}
-                                    disabled={logoutInFlight}
-                                    onClick={() => logout()}
-                                >
-                                    {
-                                        logoutInFlight ?
-                                            <CircularProgress size={15} /> :
-                                            <FormattedMessage id="navbar_signout" />
-                                    }
-                                </Button>
+                                <Hidden only="xs">
+                                    <Button
+                                        color="inherit"
+                                        className={classes.appBarBtn}
+                                        onClick={() => history.push("/my-account")}
+                                    >
+                                        <FormattedMessage id="navbar_my_account" />
+                                    </Button>
+                                    <Button
+                                        color="inherit"
+                                        className={classes.appBarBtn}
+                                        disabled={logoutInFlight}
+                                        onClick={() => logout()}
+                                    >
+                                        {
+                                            logoutInFlight ?
+                                                <CircularProgress size={15} /> :
+                                                <FormattedMessage id="navbar_signout" />
+                                        }
+                                    </Button>
+                                </Hidden>
+                                <Hidden smUp>
+                                    <Tooltip title="My Account" enterDelay={300}>
+                                        <Button
+                                            color="inherit"
+                                            aria-owns={accountMenuElement ? "my-account" : undefined}
+                                            aria-haspopup="true"
+                                            className={classes.appBarBtn}
+                                            data-ga-event-category="AppBar"
+                                            data-ga-event-action="account"
+                                            onClick={(e) => setAccountMenuElement(e.currentTarget)}
+                                        >
+                                            <AccountCircleRoundedIcon />
+                                            <ExpandMoreIcon fontSize="small" />
+                                        </Button>
+                                    </Tooltip>
+                                    <StyledMenu
+                                        id="my-account"
+                                        anchorEl={accountMenuElement}
+                                        keepMounted
+                                        open={Boolean(accountMenuElement)}
+                                        onClose={() => setAccountMenuElement(null)}
+                                    >
+                                        {
+                                            <Grid container spacing={2} className={classes.accountMenu}>
+                                                <Grid item xs={12}>
+                                                    <Typography variant="caption">
+                                                        {defaultEmail}
+                                                    </Typography>
+                                                </Grid>
+                                                <Grid item xs={12}>
+                                                    <Button
+                                                        color="inherit"
+                                                        variant="outlined"
+                                                        fullWidth
+                                                        className={classes.accountMenuBtn}
+                                                        onClick={() => {
+                                                            history.push("/my-account")
+                                                            setAccountMenuElement(null)
+                                                        }}
+                                                    >
+                                                        <FormattedMessage id="navbar_my_account" />
+                                                    </Button>
+                                                </Grid>
+                                                <Grid item xs={12}>
+                                                    <Button
+                                                        color="inherit"
+                                                        variant="outlined"
+                                                        fullWidth
+                                                        className={classes.accountMenuBtn}
+                                                        disabled={logoutInFlight}
+                                                        onClick={() => {
+                                                            logout()
+                                                            setAccountMenuElement(null)
+                                                        }}
+                                                    >
+                                                        {
+                                                            logoutInFlight ?
+                                                                <CircularProgress size={15} /> :
+                                                                <FormattedMessage id="navbar_signout" />
+                                                        }
+                                                    </Button>
+                                                </Grid>
+                                            </Grid>
+                                        }
+                                    </StyledMenu>
+                                </Hidden>
                             </React.Fragment>
                     }
                 </Toolbar>
