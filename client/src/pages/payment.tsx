@@ -138,9 +138,22 @@ export function Payment() {
                                     <FormGroup row className={classes.checkbox}>
                                         <FormControlLabel
                                             control={
-                                                <Checkbox required checked={acceptPolicy} onChange={() => setAcceptPolicy(!acceptPolicy)} value="policy-accepted" />
+                                                <Checkbox
+                                                    required
+                                                    checked={acceptPolicy}
+                                                    onChange={() => setAcceptPolicy(!acceptPolicy)}
+                                                    value="policy-accepted"
+                                                />
                                             }
-                                            label={<Typography variant="caption" style={{ color: (paymentReady && !acceptPolicy) ? "red" : "black" }}><FormattedMessage id="payment_accept_terms" /></Typography>} />
+                                            label={
+                                                <Typography
+                                                    variant="caption"
+                                                    style={{ color: (paymentReady && !acceptPolicy) ? "red" : "black" }}
+                                                >
+                                                    <FormattedMessage id="payment_accept_terms" />
+                                                </Typography>
+                                            }
+                                        />
                                     </FormGroup>
                                 </Grid>
                             </Collapse>
