@@ -1,7 +1,7 @@
-import CircularProgress from "@material-ui/core/CircularProgress";
-import Container from "@material-ui/core/Container";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
@@ -12,8 +12,9 @@ import { useSelector, useStore } from "react-redux";
 import { useHistory } from "react-router";
 import BadanamuButton from "../components/button";
 import BadanamuTextField from "../components/textfield";
-import { useRestAPI } from "../restapi";
 import BadanamuLogo from "../img/badanamu_logo.png";
+import { useRestAPI } from "../restapi";
+import { RestAPIError } from "../restapi_errors";
 import { ActionTypes } from "../store/actions";
 import { State } from "../store/store";
 
@@ -56,6 +57,12 @@ export function PasswordForgot() {
                 store.dispatch({ type: ActionTypes.EMAIL, payload: email });
                 history.push("/password-restore");
             }
+        } catch (e) {
+            if (!(e instanceof RestAPIError)) {
+                console.error(e);
+                return;
+            }
+            setGeneralError(<FormattedMessage id={e.getErrorMessageID()} />);
         } finally {
             setInFlight(false);
         }
@@ -92,6 +99,14 @@ export function PasswordForgot() {
                                     </Grid>
                                 </Grid>
                                 <Grid item xs={12}>
+                                    {
+                                        generalError === null ? null :
+                                            <Typography color="error">
+                                                {generalError}
+                                            </Typography>
+                                    }
+                                </Grid>
+                                <Grid item xs={12}>
                                     <BadanamuButton
                                         type="submit"
                                         fullWidth
@@ -104,14 +119,6 @@ export function PasswordForgot() {
                                                 <FormattedMessage id="password_forgot_button" />
                                         }
                                     </BadanamuButton>
-                                </Grid>
-                                <Grid item xs={12}>
-                                    {
-                                        generalError === null ? null :
-                                            <Typography color="error">
-                                                {generalError}
-                                            </Typography>
-                                    }
                                 </Grid>
                             </form>
                         </Grid>
