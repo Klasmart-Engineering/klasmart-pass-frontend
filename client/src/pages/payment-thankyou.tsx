@@ -50,7 +50,13 @@ export function PaymentThankyou() {
                         </Grid>
                         <Grid item xs={12}>
                             <Typography variant="h4" align="center">
-                                <FormattedMessage id="thank_you_heading" /><b>{selectedProduct === "BLP" ? "Badanamu Learning Pass" : "Badanamu Learning Pass Premium"}</b>.
+                                <FormattedMessage id="thank_you_heading"
+                                    values={{
+                                        pass: selectedProduct === "BLP" ?
+                                            <FormattedMessage id="pass_name_standard" /> :
+                                            <FormattedMessage id="pass_name_premium" />,
+                                    }}
+                                />
                             </Typography>
                         </Grid>
                         <Grid item xs={12}>
