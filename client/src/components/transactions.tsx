@@ -16,10 +16,10 @@ function PassIDName(id: string) {
     switch (id) {
         case "com.calmid.learnandplay.blap.standard":
         case "com.calmid.learnandplay.blp.standard":
-            return "Learning Pass";
+            return <FormattedMessage id="pass_name_standard" />;
         case "com.calmid.learnandplay.blap.premium":
         case "com.calmid.learnandplay.blp.premium":
-            return "Learning Pass Premium";
+            return <FormattedMessage id="pass_name_premium" />;
         default:
             return id;
     }

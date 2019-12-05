@@ -55,6 +55,8 @@ const messages: Record<string, string> = {
     navbar_my_account: "My Account",
     navbar_signin: "Sign In",
     navbar_signout: "Sign Out",
+    pass_name_standard: "Learning Pass",
+    pass_name_premium: "Learning Pass Premium",
     password: "Password",
     password_change: "Change password",
     password_change_button: "CHANGE PASSWORD",
