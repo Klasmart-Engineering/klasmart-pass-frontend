@@ -67,10 +67,15 @@ export function Signup() {
 
     async function signup(e: React.FormEvent) {
         e.preventDefault();
+        setEmailError(null);
         if (inFlight) { return; }
-        if (email === "") { return; }
-        if (password === "") { return; }
-        if (password !== passwordConfirmation) { return; }
+        if (email === "") { setEmailError(<FormattedMessage id="create_account_empty_email" />); return; }
+        if (email.indexOf("@") === -1 || email.match(/^(\+[1-9][0-9]* (\([0-9]*\)|-[0-9]*-))?[0]?[1-9][0-9\- ]*$/)) {
+            setEmailError(<FormattedMessage id="create_account_invalid_email" />);
+            return;
+        }
+        if (password === "") { setEmailError(<FormattedMessage id="create_account_empty_pass" />); return; }
+        if (password !== passwordConfirmation) { setEmailError(<FormattedMessage id="create_account_pass_not_matched" />); return; }
 
         const accountType = getIdentityType(email);
         if (accountType === undefined) { return; }
