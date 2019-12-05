@@ -109,7 +109,9 @@ export function Verify(props: Props & RouteComponentProps) {
         }
     }
     useEffect(() => {
-        verifyCheckLoop();
+        if (props.type === IdentityType.Email) {
+            verifyCheckLoop();
+        }
         return () => { stopVerifyCheckLoop = true; };
     });
 
