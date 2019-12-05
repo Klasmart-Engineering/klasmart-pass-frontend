@@ -6,9 +6,9 @@ import { createStyles, makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import * as React from "react";
 import { FormattedMessage } from "react-intl";
+import { useHistory } from "react-router";
 import BadanamuButton from "../components/button";
 import BadanamuLogo from "../img/badanamu_logo.png";
-import { useHistory } from "react-router";
 
 const useStyles = makeStyles((theme) => createStyles({
     card: {
@@ -41,10 +41,10 @@ export function PasswordChanged() {
                                 fullWidth
                                 size="large"
                                 onClick={(e) => {
-                                    history.push("/login");
+                                    history.push("/my-account");
                                 }}
                             >
-                                <FormattedMessage id="login_button" />
+                                <FormattedMessage id="navbar_my_account" />
                             </BadanamuButton>
                         </Grid>
                     </Grid>
