@@ -123,6 +123,8 @@ export class RestAPI {
                 return false;
             }
             const body = await response.json();
+            // TODO: Remove this hack
+            if (phoneNr) { body.email = phoneNr; }
             this.store.dispatch({ type: ActionTypes.LOGIN, payload: body });
             // if (typeof this.state.accessTokenExpire === "number" &&
             //     typeof this.state.refreshToken === "string") {
