@@ -118,12 +118,12 @@ export function Payment() {
                             <Grid container item xs={12} spacing={2} direction="column" justify="space-between" alignItems="flex-start">
                                 <Grid item>
                                     <Grid item xs={12}>
-                                        <Link href="#" variant="subtitle2">
+                                        <Link target="_blank" href="https://kidsloop.net/en/policies/terms" variant="subtitle2">
                                             <FormattedMessage id="payment_view_terms" /> >
                                         </Link>
                                     </Grid>
                                     <Grid item xs={12}>
-                                        <Link href="#" variant="subtitle2">
+                                        <Link target="_blank" href="https://kidsloop.net/en/policies/return-policy" variant="subtitle2">
                                             <FormattedMessage id="payment_view_returns" /> >
                                         </Link>
                                     </Grid>
