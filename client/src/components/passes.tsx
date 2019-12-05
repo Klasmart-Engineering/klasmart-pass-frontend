@@ -102,7 +102,11 @@ export function Pass({ pass }: Props) {
             </Grid>
             <Grid item>
                 <Typography variant="subtitle2" className={classes.productExpiration}>
-                    <FormattedMessage id="learning_pass_valid_until" /> <FormattedDate value={pass.expirationDate} />
+                    <FormattedMessage id="learning_pass_valid_until"
+                        values={{
+                            date: <FormattedDate value={pass.expirationDate} />,
+                        }}
+                    />
                 </Typography>
             </Grid>
         </Grid>

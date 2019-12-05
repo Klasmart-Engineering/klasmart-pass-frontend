@@ -1,6 +1,5 @@
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
-import CircularProgress from "@material-ui/core/CircularProgress";
 import Container from "@material-ui/core/Container";
 import Divider from "@material-ui/core/Divider";
 import Grid from "@material-ui/core/Grid";
@@ -52,16 +51,21 @@ export function PaymentThankyou() {
                             <Typography variant="h4" align="center">
                                 <FormattedMessage id="thank_you_heading"
                                     values={{
-                                        pass: selectedProduct === "BLP" ?
-                                            <FormattedMessage id="pass_name_standard" /> :
-                                            <FormattedMessage id="pass_name_premium" />,
+                                        br: <br />,
+                                        pass: <FormattedMessage
+                                            id={selectedProduct === "BLP" ? "pass_name_standard" : "pass_name_premium"}
+                                            values={{ b: (...chunks: any[]) => <strong>{chunks}</strong> }}
+                                        />,
                                     }}
                                 />
                             </Typography>
                         </Grid>
                         <Grid item xs={12}>
                             <Typography variant="body1" align="center">
-                                <FormattedMessage id="thank_you_intro1" />
+                                <FormattedMessage
+                                    id="thank_you_intro1"
+                                    values={{ br: <br /> }}
+                                />
                             </Typography>
                         </Grid>
                         <Grid item xs={12}>
@@ -72,16 +76,18 @@ export function PaymentThankyou() {
                         <Grid item xs={12} style={{ width: "100%" }}>
                             <Divider orientation="horizontal" variant="fullWidth" />
                         </Grid>
-                        <Grid item xs={6}>
+                        {/* <Grid item xs={6}>
                             <Typography variant="caption">
-                                <FormattedMessage id="thank_you_account" /> <b>{defaultEmail}</b>
+                                <FormattedMessage id="thank_you_account" />
+                                <b>{defaultEmail}</b>
                             </Typography>
                         </Grid>
                         <Grid item xs={6}>
                             <Typography variant="caption">
-                                <FormattedMessage id="thank_you_expiration" /> <b><FormattedDate value={expiration} /></b>
+                                <FormattedMessage id="thank_you_expiration" />
+                                <b><FormattedDate value={expiration} /></b>
                             </Typography>
-                        </Grid>
+                        </Grid> */}
                         <Grid item xs={12}>
                             <BadanamuButton fullWidth onClick={(e) => { history.push("/my-account"); }}>
                                 <FormattedMessage id="thank_you_go_to_dashboard" />

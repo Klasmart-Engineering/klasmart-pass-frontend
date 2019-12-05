@@ -6,9 +6,9 @@ import { createStyles, makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import * as React from "react";
 import { FormattedMessage } from "react-intl";
+import { useHistory } from "react-router";
 import BadanamuButton from "../components/button";
 import BadanamuLogo from "../img/badanamu_logo.png";
-import { useHistory } from "react-router";
 
 const useStyles = makeStyles((theme) => createStyles({
     card: {
@@ -33,7 +33,10 @@ export function PaymentError() {
                         </Grid>
                         <Grid item xs={12}>
                             <Typography variant="h5" align="center">
-                                <FormattedMessage id="payment_error_message" />
+                                <FormattedMessage
+                                    id="payment_error_message"
+                                    values={{ br: <br /> }}
+                                />
                             </Typography>
                         </Grid>
                         <Grid item xs={12}>
