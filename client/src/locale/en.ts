@@ -111,6 +111,8 @@ const messages: Record<string, string> = {
     thank_you_heading: "Thank you for purchasing the {pass}",
     thank_you_intro1: "You are now ready to begin learning English with Badanamu! To use your pass, log in to the Badanamu ESL™ application.",
     thank_you_intro2: "Badanamu Learning Applications can also be individually downloaded and accessed with the same login credentials.",
+    thank_you_promo1: "As a token of our appreciation, please accept this holiday coupon code for $20 off your next Badanamu Gift Toys Package purchase. Enter the code <b>MerryBadaChristmas</b> when you check out.",
+    thank_you_promo2: "This offer is only valid until January 31, 2020.",
     verify_email: "Account Verification",
     verify_email_button: "VERIFY",
     verify_email_code: "Verification code",

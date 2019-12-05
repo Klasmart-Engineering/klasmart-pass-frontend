@@ -73,6 +73,19 @@ export function PaymentThankyou() {
                                 <FormattedMessage id="thank_you_intro2" />
                             </Typography>
                         </Grid>
+                        <Grid item xs={12}>
+                            <Typography variant="body1" align="center">
+                                <FormattedMessage
+                                    id="thank_you_promo1"
+                                    values={{ b: (...chunks: any[]) => <strong>{chunks}</strong> }}
+                                />
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Typography variant="body1" align="center">
+                                <FormattedMessage id="thank_you_promo2" />
+                            </Typography>
+                        </Grid>
                         <Grid item xs={12} style={{ width: "100%" }}>
                             <Divider orientation="horizontal" variant="fullWidth" />
                         </Grid>

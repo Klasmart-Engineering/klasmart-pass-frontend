@@ -44,7 +44,7 @@ export function PasswordChanged() {
                                     history.push("/my-account");
                                 }}
                             >
-                                <FormattedMessage id="navbar_my_account" />
+                                <FormattedMessage id="thank_you_go_to_dashboard" />
                             </BadanamuButton>
                         </Grid>
                     </Grid>
