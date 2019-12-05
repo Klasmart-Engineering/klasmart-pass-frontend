@@ -57,6 +57,10 @@ export enum RestAPIErrorType {
     // Verification
     INVALID_VERIFICATION_CODE = 60,
     VERIFICATION_NOT_FOUND = 61,
+
+    INPUT_INVALID_FORMAT = 262,
+    INPUT_TOO_LONG = 261,
+    INPUT_TOO_SHORT = 260,
 }
 
 const errorCodeToMessageID = {
@@ -99,4 +103,9 @@ const errorCodeToMessageID = {
     // Verification
     [RestAPIErrorType.INVALID_VERIFICATION_CODE]: "ERROR_INVALID_VERIFICATION_CODE",
     [RestAPIErrorType.VERIFICATION_NOT_FOUND]: "ERROR_VERIFICATION_NOT_FOUND",
+
+    // Input
+    [RestAPIErrorType.INPUT_TOO_SHORT]: "ERROR_INPUT_TOO_SHORT",
+    [RestAPIErrorType.INPUT_TOO_LONG]: "ERROR_INPUT_TOO_LONG",
+    [RestAPIErrorType.INPUT_INVALID_FORMAT]: "ERROR_INPUT_INVALID_FORMAT",
 };

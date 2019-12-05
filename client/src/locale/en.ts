@@ -1,4 +1,7 @@
 const messages: Record<string, string> = {
+    ERROR_INPUT_INVALID_FORMAT: "Invalid format",
+    ERROR_INPUT_TOO_LONG: "Too long",
+    ERROR_INPUT_TOO_SHORT: "Too short",
     ERROR_INVALID_LOGIN: "Invalid Login",
     ERROR_INVALID_VERIFICATION_CODE: "Invalid verification code",
     ERROR_MOCK: "The rest api simulated a mock error",
