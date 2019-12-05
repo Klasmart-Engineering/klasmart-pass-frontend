@@ -191,9 +191,6 @@ export function Landing() {
         <Container maxWidth="lg">
             {/* Onboarding */}
             <Grid container spacing={2} style={{ margin: "32px 0" }}>
-                {/* <Grid item xs={12}>
-                    <Typography variant="body1">STEP <b>{step}</b> OF <b>3</b></Typography>
-                </Grid> */}
                 <Grid item xs={12}>
                     <Typography variant="h4">
                         <FormattedMessage id="landing_select_header" values={{ b: (...chunks: any[]) => <strong>{chunks}</strong> }} />
@@ -201,7 +198,7 @@ export function Landing() {
                 </Grid>
                 <Grid item xs={12}>
                     <Typography variant="body1">
-                        <FormattedMessage id="landing_select_subheader" /><FormattedDate value={getExpiration(1)} />.
+                        <FormattedMessage id="landing_select_subheader" />
                     </Typography>
                 </Grid>
             </Grid>

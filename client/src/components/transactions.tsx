@@ -16,10 +16,10 @@ function PassIDName(id: string) {
     switch (id) {
         case "com.calmid.learnandplay.blap.standard":
         case "com.calmid.learnandplay.blp.standard":
-            return <FormattedMessage id="pass_name_standard" />;
+            return <FormattedMessage id="pass_name_standard" values={{ b: (...chunks: any[]) => <strong>{chunks}</strong> }} />;
         case "com.calmid.learnandplay.blap.premium":
         case "com.calmid.learnandplay.blp.premium":
-            return <FormattedMessage id="pass_name_premium" />;
+            return <FormattedMessage id="pass_name_premium" values={{ b: (...chunks: any[]) => <strong>{chunks}</strong> }} />;
         default:
             return id;
     }

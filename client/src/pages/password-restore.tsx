@@ -17,6 +17,7 @@ import BadanamuLogo from "../img/badanamu_logo.png";
 import { useRestAPI } from "../restapi";
 import { RestAPIError } from "../restapi_errors";
 import { State } from "../store/store";
+import { useHistory } from "react-router";
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -48,6 +49,7 @@ export function PasswordRestore(props: RouteComponentProps) {
 
     const [generalError, setGeneralError] = useState<JSX.Element | null>(null);
 
+    const history = useHistory();
     const classes = useStyles();
     const restApi = useRestAPI();
 
@@ -74,6 +76,7 @@ export function PasswordRestore(props: RouteComponentProps) {
         } finally {
             setInFlight(false);
         }
+        history.push("/password-changed");
     }
 
     return (

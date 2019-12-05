@@ -105,7 +105,7 @@ export function Payment() {
                                 </Grid>
                                 <Grid item xs={12}>
                                     <Typography variant="body1">
-                                        <FormattedMessage id="landing_select_subheader" />.
+                                        <FormattedMessage id="landing_select_subheader" />
                                     </Typography>
                                 </Grid>
                             </Grid>
