@@ -1,4 +1,6 @@
 const messages: Record<string, string> = {
+    ERROR_ACCOUNT_BANNED: "Your account has been banned",
+    ERROR_ALREADY_VERIFIED: "Your account has already been verified",
     ERROR_INPUT_INVALID_FORMAT: "Invalid format",
     ERROR_INPUT_TOO_LONG: "Too long",
     ERROR_INPUT_TOO_SHORT: "Too short",
@@ -7,6 +9,7 @@ const messages: Record<string, string> = {
     ERROR_INVALID_VERIFICATION_CODE: "Invalid verification code",
     ERROR_MOCK: "The rest api simulated a mock error",
     ERROR_UNKOWN: "An unexpected error occurred",
+    ERROR_VERIFICATION_NOT_FOUND: "Verification not found",
     LocaleName: "English",
     button_select: "Get Started",
     copyright: "Copyright",
