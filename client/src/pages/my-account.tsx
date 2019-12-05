@@ -84,6 +84,7 @@ export function MyAccount() {
         try {
             setTransactionsInFlight(true);
             const newTransactions = await restApi.getTransactionHistory();
+            newTransactions.sort((txA, txB) => txB.CreatedDate - txA.CreatedDate);
             setTransactions(newTransactions);
         } catch (e) {
             // TODO: More specific error message
