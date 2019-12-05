@@ -41,6 +41,8 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 );
 // tslint:enable:object-literal-sort-keys
 
+// TODO: Lookup standard
+const phoneRegex = /^(\+[1-9][0-9]*)?[0-9\- ]*$/;
 export function Signup() {
     const [inFlight, setInFlight] = useState(false);
 
@@ -70,7 +72,7 @@ export function Signup() {
         setEmailError(null);
         if (inFlight) { return; }
         if (email === "") { setEmailError(<FormattedMessage id="create_account_empty_email" />); return; }
-        if (email.indexOf("@") === -1 || email.match(/^(\+[1-9][0-9]* (\([0-9]*\)|-[0-9]*-))?[0]?[1-9][0-9\- ]*$/)) {
+        if (email.indexOf("@") === -1 && !phoneRegex.test(email)) {
             setEmailError(<FormattedMessage id="create_account_invalid_email" />);
             return;
         }
