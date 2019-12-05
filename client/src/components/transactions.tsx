@@ -51,7 +51,6 @@ function Transaction(props: { transaction: any }) {
                     <TableRow key={`${pass.start}-${pass.passId}`}>
                         <TableCell>{date}</TableCell>
                         <TableCell>{pass.passName}</TableCell>
-                        <TableCell>{<FormattedDate value={pass.start} />} - <FormattedDate value={pass.end} /></TableCell>
                         <TableCell style={{ textTransform: "capitalize" }}>{store}</TableCell>
                         <TableCell align="right">{pass.passName === "Learning Pass" ? "US$20" : "US$50"}</TableCell>
                     </TableRow>
@@ -73,7 +72,6 @@ export function Transactions(props: Props) {
                     <TableRow>
                         <TableCell><FormattedMessage id="my_account_transaction_date" /></TableCell>
                         <TableCell><FormattedMessage id="my_account_transaction_description" /></TableCell>
-                        <TableCell><FormattedMessage id="my_account_service_period" /></TableCell>
                         <TableCell><FormattedMessage id="my_account_payment_method" /></TableCell>
                         <TableCell align="right"><FormattedMessage id="my_account_total" /></TableCell>
                     </TableRow>
