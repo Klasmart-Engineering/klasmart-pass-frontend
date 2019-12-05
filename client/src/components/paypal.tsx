@@ -33,8 +33,10 @@ export function PayPalButton() {
             createOrder(data: any, actions: any) {
                 // This function sets up the details of the transaction, including the amount and line item details.
                 return actions.order.create({
+                    application_context: {
+                        shipping_preference: "NO_SHIPPING",
+                    },
                     purchase_units: [{ amount: { value: price } }],
-                    shipping_preference: "NO_SHIPPING",
                 });
             },
             async onApprove(data: any, actions: any) {

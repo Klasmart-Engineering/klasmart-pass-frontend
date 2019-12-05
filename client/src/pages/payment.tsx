@@ -4,6 +4,7 @@ import Checkbox from "@material-ui/core/Checkbox";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Container from "@material-ui/core/Container";
 import Divider from "@material-ui/core/Divider";
+import Fade from "@material-ui/core/Fade";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormGroup from "@material-ui/core/FormGroup";
 import Grid from "@material-ui/core/Grid";
@@ -27,6 +28,7 @@ import { useRestAPI } from "../restapi";
 import { ActionTypes } from "../store/actions";
 import { State } from "../store/store";
 import { getExpiration } from "../utils/date";
+import Collapse from "@material-ui/core/Collapse";
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme: Theme) =>
@@ -37,10 +39,18 @@ const useStyles = makeStyles((theme: Theme) =>
                 paddingBottom: theme.spacing(2),
             },
         },
-        columnSeparator: {
+        columnSeparatorLeft: {
+            minHeight: 350,
             borderLeft: "1px solid #aaa",
-            [theme.breakpoints.down("sm")]: {
+            [theme.breakpoints.down("xs")]: {
                 borderLeft: "0px",
+            },
+        },
+        columnSeparatorRight: {
+            minHeight: 350,
+            borderRight: "1px solid #aaa",
+            [theme.breakpoints.down("xs")]: {
+                borderRight: "0px",
             },
         },
         hide: {
@@ -150,7 +160,7 @@ export function Payment() {
                                 </Grid>
                                 <Grid item xs={12}>
                                     <Typography variant="body1">
-                                        <FormattedMessage id="landing_select_subheader" /><FormattedDate value={getExpiration(1)} />.
+                                        <FormattedMessage id="landing_select_subheader" />.
                                     </Typography>
                                 </Grid>
                             </Grid>
@@ -162,15 +172,6 @@ export function Payment() {
                             </Grid>
                             <Grid container item xs={12} spacing={2} direction="column" justify="space-between" alignItems="flex-start">
                                 <Grid item>
-                                    <Grid item xs={12}>
-                                        <FormGroup row className={classes.checkbox}>
-                                            <FormControlLabel
-                                                control={
-                                                    <Checkbox required checked={acceptPolicy} onChange={() => setAcceptPolicy(!acceptPolicy)} value="policy-accepted" />
-                                                }
-                                                label={<Typography variant="caption" style={{ color: (paymentReady && !acceptPolicy) ? "red" : "black" }}><FormattedMessage id="payment_accept_terms" /></Typography>} />
-                                        </FormGroup>
-                                    </Grid>
                                     <Grid item xs={12}>
                                         <Link href="#" variant="subtitle2">
                                             <FormattedMessage id="payment_view_terms" /> >
@@ -184,8 +185,25 @@ export function Payment() {
                                 </Grid>
                             </Grid>
                         </Grid>
-                        <Grid item xs={12} sm={6} className={classes.columnSeparator}>
-                            <PayPalButton />
+                        <Grid item xs={12} sm={6} className={classes.columnSeparatorLeft}>
+                            <Typography variant="h3"><FormattedMessage id="payment_pay_option_header" /></Typography>
+                            <div style={{ padding: 32 }} />
+                            <Collapse in={!acceptPolicy}>
+                                <Grid item xs={12}>
+                                    <FormGroup row className={classes.checkbox}>
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox required checked={acceptPolicy} onChange={() => setAcceptPolicy(!acceptPolicy)} value="policy-accepted" />
+                                            }
+                                            label={<Typography variant="caption" style={{ color: (paymentReady && !acceptPolicy) ? "red" : "black" }}><FormattedMessage id="payment_accept_terms" /></Typography>} />
+                                    </FormGroup>
+                                </Grid>
+                            </Collapse>
+                            <Collapse in={acceptPolicy}>
+                                <Grid item>
+                                    <PayPalButton />
+                                </Grid>
+                            </Collapse>
                         </Grid>
                     </Grid>
                     {/* <div style={{ padding: 10 }}>

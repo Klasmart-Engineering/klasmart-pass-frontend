@@ -28,21 +28,21 @@ class Copyright extends React.PureComponent<Props, any> {
                     <FormattedMessage id="copyright" />
                     {" © "}
                     {new Date().getFullYear()}
-                    {" "}
+                    {". "}
                     <Link color="inherit" href="https://badanamu.com/">
-                        Calm Island Limited.
+                        <FormattedMessage id="copyright_company" />
                     </Link>{" "}
-                    {" All rights reserved. "}
+                    <FormattedMessage id="copyright_arr" />
                 </Typography>
                 <Typography variant="caption" color="textSecondary" className={this.props.classes.responsiveTypography}>
                     <Link color="inherit" href="https://kidsloop.net/en/privacy" style={{ textDecoration: "underline" }}>
-                        Privacy Notice
+                        <FormattedMessage id="copyright_privacy" />
                     </Link>{" | "}
                     <Link color="inherit" href="https://kidsloop.net/en/terms/" style={{ textDecoration: "underline" }}>
-                        Terms of Use
+                        <FormattedMessage id="copyright_terms" />
                     </Link>{" | "}
                     <Link color="inherit" href="https://kidsloop.net/en/refund/" style={{ textDecoration: "underline" }}>
-                        Refund Policy
+                        <FormattedMessage id="copyright_refund" />
                     </Link>
                 </Typography>
             </Grid>
