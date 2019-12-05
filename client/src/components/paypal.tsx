@@ -17,9 +17,9 @@ export function PayPalButton() {
     function getProductCode() {
         switch (selectedProduct) {
             case "BLP":
-                return { productCode: "com.calmid.learnandplay.blap.standard", price: "20.00" };
+                return { productCode: "com.calmid.learnandplay.blp.standard", price: "20.00" };
             case "BLPPremium":
-                return { productCode: "com.calmid.learnandplay.blap.premium", price: "50.00" };
+                return { productCode: "com.calmid.learnandplay.blp.premium", price: "50.00" };
             default:
                 throw new Error("Unknown product");
         }
