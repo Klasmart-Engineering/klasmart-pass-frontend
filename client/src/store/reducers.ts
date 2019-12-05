@@ -142,9 +142,9 @@ export function productId(state = null, action: Actions) {
     }
 }
 
-export function expireDate(state = null, action: Actions) {
+export function passes(state = null, action: Actions) {
     switch (action.type) {
-        case ActionTypes.EXPIRE_DATE:
+        case ActionTypes.PASSES:
             return action.payload;
         default:
             return state;
@@ -185,8 +185,8 @@ export const account = combineReducers({
     accountId,
     deviceId,
     email,
-    expireDate,
     locale,
+    passes,
     productId,
     refreshToken,
     refreshTokenExpire,

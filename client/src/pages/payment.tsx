@@ -25,10 +25,7 @@ import BadanamuButton from "../components/button";
 import { PayPalButton } from "../components/paypal";
 import BLP from "../img/logo_learning_pass.png";
 import BLPPremium from "../img/logo_learning_pass_premium.png";
-import { useRestAPI } from "../restapi";
-import { ActionTypes } from "../store/actions";
 import { State } from "../store/store";
-import { getExpiration } from "../utils/date";
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme: Theme) =>
@@ -83,7 +80,15 @@ export function Payment() {
     const classes = useStyles();
     const [acceptPolicy, setAcceptPolicy] = useState(false);
     const [paymentReady, setPaymentReady] = useState(false);
+
     const selectedProduct = useSelector((state: State) => state.account.productId);
+    const passes = useSelector((state: State) => state.account.passes || []);
+
+    const standardPass = passes.find((element) => element.passId === "com.calmid.learnandplay.blp.standard");
+    const premiumPass = passes.find((element) => element.passId === "com.calmid.learnandplay.blp.premium");
+
+    const validStandardPass = standardPass !== undefined ? standardPass.expirationDate > Date.now() : false;
+    const validPremiumPass = premiumPass !== undefined ? premiumPass.expirationDate > Date.now() : false;
 
     redirectIfUnauthorized("/payment");
 
@@ -164,9 +169,6 @@ export function Payment() {
                             </Collapse>
                         </Grid>
                     </Grid>
-                    {/* <div style={{ padding: 10 }}>
-
-                    </div> */}
                 </CardContent>
             </Card>
         </Container>

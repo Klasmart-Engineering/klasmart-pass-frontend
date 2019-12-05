@@ -9,7 +9,7 @@ import Typography from "@material-ui/core/Typography";
 import * as React from "react";
 import { useState } from "react";
 import { FormattedMessage } from "react-intl";
-import { useSelector } from "react-redux";
+import { useSelector, useStore } from "react-redux";
 import { useHistory } from "react-router";
 import { redirectIfAuthorized } from "../components/authorized";
 import BadanamuButton from "../components/button";
@@ -19,6 +19,7 @@ import { useRestAPI } from "../restapi";
 import { RestAPIError, RestAPIErrorType } from "../restapi_errors";
 import { State } from "../store/store";
 import PolicyLink from "../components/policyLinks";
+import { ActionTypes } from "../store/actions";
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme) => createStyles({
@@ -53,6 +54,7 @@ export function Login() {
     const [emailError, setEmailError] = useState<JSX.Element | null>(null);
     const [generalError, setGeneralError] = useState<JSX.Element | null>(null);
 
+    const store = useStore();
     const history = useHistory();
     const restApi = useRestAPI();
 
@@ -66,6 +68,9 @@ export function Login() {
         try {
             setInFlight(true);
             await restApi.login(email, password);
+            const { passes: newPasses } = await restApi.getPassAccesses();
+            console.log(newPasses);
+            store.dispatch({ type: ActionTypes.PASSES, payload: newPasses })
         } catch (e) {
             handleError(e);
         } finally {

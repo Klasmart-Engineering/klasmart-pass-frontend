@@ -73,8 +73,7 @@ export function MyAccount() {
     const history = useHistory();
     const restApi = useRestAPI();
 
-    const expiration = useSelector((state: State) => state.account.expireDate);
-    const selectedProduct = useSelector((state: State) => state.account.productId);
+    // const selectedProduct = useSelector((state: State) => state.account.productId);
     const defaultEmail = useSelector((state: State) => state.account.email || "");
 
     redirectIfUnauthorized("/my-account");
