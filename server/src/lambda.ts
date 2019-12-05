@@ -52,7 +52,7 @@ async function payment(gateway: BraintreeGateway, event: any) {
 
     const { nonce, amount } = event;
 
-    const { clientToken, transaction } = await gateway.transaction.sale({
+    const result = await gateway.transaction.sale({
         amount,
         options: {
             storeInVaultOnSuccess: true,
@@ -60,6 +60,11 @@ async function payment(gateway: BraintreeGateway, event: any) {
         },
         paymentMethodNonce: nonce,
     });
-    const transactionId = transaction.id;
-    return { transactionId };
+    console.log(result);
+
+    if (result.transaction) {
+        return { success: true, transactionId: result.transaction.id };
+    } else {
+        return { success: false, errors: result.errors };
+    }
 }
