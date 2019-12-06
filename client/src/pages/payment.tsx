@@ -25,8 +25,8 @@ import BadanamuButton from "../components/button";
 import { PayPalButton } from "../components/paypal";
 import BLP from "../img/logo_learning_pass.png";
 import BLPPremium from "../img/logo_learning_pass_premium.png";
-import { State } from "../store/store";
 import { ActionTypes } from "../store/actions";
+import { State } from "../store/store";
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme: Theme) =>
@@ -42,6 +42,7 @@ const useStyles = makeStyles((theme: Theme) =>
             borderLeft: "1px solid #aaa",
             [theme.breakpoints.down("xs")]: {
                 borderLeft: "0px",
+                borderBottom: "1px solid #aaa",
             },
         },
         columnSeparatorRight: {
@@ -49,6 +50,7 @@ const useStyles = makeStyles((theme: Theme) =>
             borderRight: "1px solid #aaa",
             [theme.breakpoints.down("xs")]: {
                 borderRight: "0px",
+                borderBottom: "1px solid #aaa",
             },
         },
         hide: {
@@ -71,6 +73,12 @@ const useStyles = makeStyles((theme: Theme) =>
             maxWidth: 256,
             [theme.breakpoints.down("sm")]: {
                 maxWidth: 128,
+            },
+        },
+        emptySpace: {
+            height: theme.spacing(8),
+            [theme.breakpoints.down("xs")]: {
+                height: theme.spacing(4),
             },
         },
     }),
@@ -97,154 +105,149 @@ export function Payment() {
     redirectIfUnauthorized("/payment");
 
     return (
-        <Container maxWidth="lg" style={{ margin: "auto 0" }}>
-            <Card>
-                <CardContent className={classes.card}>
-                    <Grid
-                        container
-                        direction="row"
-                        justify="flex-start"
-                        alignItems="flex-start"
-                        spacing={8}
-                    >
-                        {(!validStandardPass || acceptUpgrade) && !validPremiumPass ?
-                            <React.Fragment>
-                                <Grid container item justify="space-between" xs={12} sm={6}>
-                                    <Grid container spacing={2}>
-                                        <Grid item xs={12}>
-                                            <Typography variant="h3"><FormattedMessage id="payment_delivery_header" /></Typography>
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <Typography variant="body1">
-                                                <FormattedMessage id="landing_select_subheader" />
-                                            </Typography>
-                                        </Grid>
-                                    </Grid>
-                                    <Grid container item xs={12} spacing={2} justify="space-between" alignItems="center" className={classes.productImgContainer}>
-                                        <img src={selectedProduct === "BLP" ? BLP : BLPPremium} className={classes.productImg} />
-                                        <Typography variant="h5">
-                                            {selectedProduct === "BLP" ? "US$20" : "US$50"}
-                                        </Typography>
-                                    </Grid>
-                                    <Grid container item xs={12} spacing={2} direction="column" justify="space-between" alignItems="flex-start">
-                                        <Grid item>
-                                            <Grid item xs={12}>
-                                                <Link target="_blank" href="https://kidsloop.net/en/policies/terms" variant="subtitle2">
-                                                    <FormattedMessage id="payment_view_terms" /> >
-                                                </Link>
-                                            </Grid>
-                                            <Grid item xs={12}>
-                                                <Link target="_blank" href="https://kidsloop.net/en/policies/return-policy" variant="subtitle2">
-                                                    <FormattedMessage id="payment_view_returns" /> >
-                                                </Link>
-                                            </Grid>
-                                        </Grid>
-                                    </Grid>
-                                </Grid>
-                                <Grid item xs={12} sm={6} className={classes.columnSeparatorLeft}>
-                                    <Typography variant="h3"><FormattedMessage id="payment_pay_option_header" /></Typography>
-                                    <div style={{ padding: 32 }} />
-                                    <Collapse in={!acceptPolicy}>
-                                        <Grid item xs={12}>
-                                            <FormGroup row className={classes.checkbox}>
-                                                <FormControlLabel
-                                                    control={
-                                                        <Checkbox
-                                                            required
-                                                            checked={acceptPolicy}
-                                                            onChange={() => setAcceptPolicy(!acceptPolicy)}
-                                                            value="policy-accepted"
-                                                        />
-                                                    }
-                                                    label={
-                                                        <Typography
-                                                            variant="caption"
-                                                            style={{ color: (paymentReady && !acceptPolicy) ? "red" : "black" }}
-                                                        >
-                                                            <FormattedMessage id="payment_accept_terms" />
-                                                        </Typography>
-                                                    }
-                                                />
-                                            </FormGroup>
-                                        </Grid>
-                                    </Collapse>
-                                    <Collapse in={acceptPolicy}>
-                                        <Grid item>
-                                            <PayPalButton />
-                                        </Grid>
-                                    </Collapse>
-                                </Grid>
-                            </React.Fragment>
-                            :
-                            <Grid container direction="row" justify="center" alignItems="center" spacing={2}>
-                                {validPremiumPass ? null :
-                                    <Grid item xs={12}>
-                                        <Typography variant="body2" align="center">
-                                            <FormattedMessage
-                                                id="payment_prompt_have_standard_pass"
-                                                values={{ b: (...chunks: any[]) => <strong>{chunks}</strong> }} />!
-                                        </Typography>
-                                    </Grid>
-                                }
+        <Container maxWidth={(validStandardPass && !acceptUpgrade) ? "md" : "lg"} style={{ margin: "auto 0" }}>
+            <Collapse in={!(validStandardPass || validPremiumPass) || acceptUpgrade}>
+                <Card>
+                    <CardContent className={classes.card}>
+                        <Grid container direction="row" spacing={8}>
+                            <Grid container item xs={12} sm={6} spacing={2} className={classes.columnSeparatorRight}>
                                 <Grid item xs={12}>
-                                    {validPremiumPass ?
-                                        <React.Fragment>
-                                            <Typography variant="body1" align="center"><FormattedMessage id="thank_you_heading"
+                                    <Typography variant="h3"><FormattedMessage id="payment_delivery_header" /></Typography>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Typography variant="body1">
+                                        <FormattedMessage id="landing_select_subheader" />
+                                    </Typography>
+                                </Grid>
+                                <Grid item xs={12} className={classes.emptySpace} />
+                                <Grid container item justify="space-between" alignItems="center" xs={12} spacing={2}>
+                                    <img src={selectedProduct === "BLP" ? BLP : BLPPremium} className={classes.productImg} />
+                                    <Typography variant="h5">
+                                        {selectedProduct === "BLP" ? "US$20" : "US$50"}
+                                    </Typography>
+                                </Grid>
+                                <Grid item xs={12} className={classes.emptySpace} />
+                                <Grid item xs={12}>
+                                    <Link target="_blank" href="https://kidsloop.net/en/policies/terms" variant="subtitle2">
+                                        <FormattedMessage id="payment_view_terms" /> >
+                                    </Link>
+                                    <br />
+                                    <Link target="_blank" href="https://kidsloop.net/en/policies/return-policy" variant="subtitle2">
+                                        <FormattedMessage id="payment_view_returns" /> >
+                                    </Link>
+                                </Grid>
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <Typography variant="h3"><FormattedMessage id="payment_pay_option_header" /></Typography>
+                                <Grid item xs={12} className={classes.emptySpace} />
+                                <Collapse in={!acceptPolicy}>
+                                    <Grid item xs={12} className={classes.emptySpace} />
+                                    <Grid item xs={12}>
+                                        <FormGroup row className={classes.checkbox}>
+                                            <FormControlLabel
+                                                control={
+                                                    <Checkbox
+                                                        required
+                                                        checked={acceptPolicy}
+                                                        onChange={() => setAcceptPolicy(!acceptPolicy)}
+                                                        value="policy-accepted"
+                                                    />
+                                                }
+                                                label={
+                                                    <Typography
+                                                        variant="caption"
+                                                        style={{ color: (paymentReady && !acceptPolicy) ? "red" : "black" }}
+                                                    >
+                                                        <FormattedMessage id="payment_accept_terms" />
+                                                    </Typography>
+                                                }
+                                            />
+                                        </FormGroup>
+                                    </Grid>
+                                </Collapse>
+                                <Collapse in={acceptPolicy}>
+                                    <Grid item>
+                                        <Grid item xs={12} style={{ height: 48 }} />
+                                        <PayPalButton />
+                                    </Grid>
+                                </Collapse>
+                            </Grid>
+                        </Grid>
+                    </CardContent>
+                </Card>
+            </Collapse>
+            <Collapse in={(validStandardPass && !acceptUpgrade) || validPremiumPass}>
+                <Card>
+                    <CardContent className={classes.card}>
+                        <Grid container direction="row" justify="center" alignItems="center" spacing={2}>
+                            {validPremiumPass ?
+                                <React.Fragment>
+                                    <Grid item xs={12}>
+                                        <Typography variant="body1" align="center">
+                                            <FormattedMessage id="thank_you_heading"
                                                 values={{
                                                     br: <br />,
                                                     pass: <FormattedMessage
                                                         id={validPremiumPass ? "pass_name_premium" : "pass_name_standard"}
                                                         values={{ b: (...chunks: any[]) => <strong>{chunks}</strong> }}
                                                     />,
-                                                }} />.</Typography>
-                                            <Typography variant="h5" align="center"><FormattedMessage id="payment_thankyou_heading" /></Typography>
-                                        </React.Fragment> :
+                                                }} />.
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <Typography variant="h5" align="center"><FormattedMessage id="payment_thankyou_heading" /></Typography>
+                                    </Grid>
+                                    <Grid item xs={12} style={{ height: 16 }} />
+                                    <BadanamuButton
+                                        size="large"
+                                        onClick={(e) => {
+                                            history.push("/my-account"); e.preventDefault();
+                                        }}
+                                    >
+                                        <FormattedMessage id="thank_you_go_to_dashboard" />
+                                    </BadanamuButton>
+                                </React.Fragment>
+                                :
+                                <React.Fragment>
+                                    <Grid item xs={12}>
+                                        <Typography variant="body1" align="center">
+                                            <FormattedMessage
+                                                id="payment_prompt_have_standard_pass"
+                                                values={{ b: (...chunks: any[]) => <strong>{chunks}</strong> }} />!
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item xs={12}>
                                         <Typography variant="h5" align="center">
                                             <FormattedMessage
                                                 id="payment_prompt_upgrade"
                                                 values={{ b: (...chunks: any[]) => <strong>{chunks}</strong> }} />?
                                         </Typography>
-                                    }
-                                </Grid>
-                                <Grid container style={{ paddingBottom: 32 }}>
-                                    <Grid item xs={12} style={{ textAlign: "center" }}>
-                                        {validPremiumPass ?
-                                            <BadanamuButton
-                                                size="large"
-                                                onClick={(e) => {
-                                                    history.push("/my-account"); e.preventDefault();
-                                                }}
-                                            >
-                                                <FormattedMessage id="thank_you_go_to_dashboard" />
-                                            </BadanamuButton> :
-                                            <BadanamuButton
-                                                size="large"
-                                                onClick={(e) => {
-                                                    store.dispatch({ type: ActionTypes.PRODUCT_ID, payload: "BLPPremium" });
-                                                    setUpgrade(true);
-                                                }}
-                                            >
-                                                <FormattedMessage id="payment_yes_upgrade_btn" />
-                                            </BadanamuButton>
-                                        }
                                     </Grid>
-                                    {validPremiumPass ? null :
-                                        <Grid item xs={12} style={{ textAlign: "center" }}>
-                                            <Link
-                                                href="#"
-                                                variant="caption"
-                                                onClick={(e: React.MouseEvent) => { history.push("/my-account"); e.preventDefault(); }}
-                                            >
-                                                <FormattedMessage id="payment_no_upgrade_btn" />
-                                            </Link>
-                                        </Grid>
-                                    }
-                                </Grid>
-                            </Grid>
-                        }
-                    </Grid>
-                </CardContent>
-            </Card>
+                                    <Grid item xs={12} style={{ textAlign: "center" }}>
+                                        <BadanamuButton
+                                            size="large"
+                                            onClick={(e) => {
+                                                store.dispatch({ type: ActionTypes.PRODUCT_ID, payload: "BLPPremium" });
+                                                setUpgrade(true);
+                                            }}
+                                        >
+                                            <FormattedMessage id="payment_yes_upgrade_btn" />
+                                        </BadanamuButton>
+                                        <br />
+                                        <Link
+                                            href="#"
+                                            variant="caption"
+                                            onClick={(e: React.MouseEvent) => { history.push("/my-account"); e.preventDefault(); }}
+                                        >
+                                            <FormattedMessage id="payment_no_upgrade_btn" />
+                                        </Link>
+                                    </Grid>
+                                </React.Fragment>
+                            }
+                        </Grid>
+                    </CardContent>
+                </Card>
+            </Collapse>
         </Container >
 
     );
