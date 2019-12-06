@@ -9,6 +9,8 @@ import { useHistory } from "react-router-dom";
 import BLP from "../img/logo_learning_pass.png";
 import BLPPremium from "../img/logo_learning_pass_premium.png";
 import { useRestAPI } from "../restapi";
+import { ActionTypes } from "../store/actions";
+import { useStore } from "react-redux";
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -42,6 +44,7 @@ export function Passes() {
     const [getPassesError, setGetPassesError] = useState<JSX.Element | undefined>(undefined);
     const [getPassesInFlight, setPassesInFlight] = useState(false);
 
+    const store = useStore();
     const classes = useStyles();
     const history = useHistory();
     const restApi = useRestAPI();
@@ -51,8 +54,8 @@ export function Passes() {
         try {
             setPassesInFlight(true);
             const { passes: newPasses } = await restApi.getPassAccesses();
-            console.log(newPasses);
             setPasses(newPasses);
+            store.dispatch({ type: ActionTypes.PASSES, payload: newPasses });
         } catch (e) {
             // TODO: More specific error message
             setGetPassesError(<FormattedMessage id="ERROR_UNKOWN" />);

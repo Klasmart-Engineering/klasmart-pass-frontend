@@ -102,6 +102,9 @@ export function Payment() {
     const validStandardPass = standardPass !== undefined ? standardPass.expirationDate > Date.now() : false;
     const validPremiumPass = premiumPass !== undefined ? premiumPass.expirationDate > Date.now() : false;
 
+    console.log(validStandardPass);
+    console.log(validPremiumPass)
+
     redirectIfUnauthorized("/payment");
 
     return (

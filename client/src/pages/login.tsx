@@ -47,6 +47,7 @@ export function Login() {
     const [inFlight, setInFlight] = useState(false);
 
     const defaultEmail = useSelector((state: State) => state.account.email || "");
+    const passes = useSelector((state: State) => state.account.passes || []);
     const [email, setEmail] = useState(defaultEmail);
     const [password, setPassword] = useState("");
 
@@ -68,9 +69,10 @@ export function Login() {
         try {
             setInFlight(true);
             await restApi.login(email, password);
-            const { passes: newPasses } = await restApi.getPassAccesses();
-            console.log(newPasses);
-            store.dispatch({ type: ActionTypes.PASSES, payload: newPasses })
+            if (passes.length === 0) {
+                const { passes: newPasses } = await restApi.getPassAccesses();
+                store.dispatch({ type: ActionTypes.PASSES, payload: newPasses })    
+            }
         } catch (e) {
             handleError(e);
         } finally {
