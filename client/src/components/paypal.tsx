@@ -45,8 +45,8 @@ export function PayPalButton() {
                 try {
                     setInFlight(true);
                     const details = await actions.order.capture();
-                    console.log(details);
-                    console.log(data);
+                    // console.log(details);
+                    // console.log(data);
                     await api.reportPaypalOrder(data.orderID, productCode);
                     history.push("/payment-thankyou");
                 } catch (e) {
