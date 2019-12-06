@@ -6,6 +6,7 @@ import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
+import LogRocket from "logrocket";
 import * as React from "react";
 import { useState } from "react";
 import { FormattedMessage } from "react-intl";
@@ -13,13 +14,13 @@ import { useSelector, useStore } from "react-redux";
 import { useHistory } from "react-router";
 import { redirectIfAuthorized } from "../components/authorized";
 import BadanamuButton from "../components/button";
+import PolicyLink from "../components/policyLinks";
 import BadanamuTextField from "../components/textfield";
 import BadanamuLogo from "../img/badanamu_logo.png";
 import { useRestAPI } from "../restapi";
 import { RestAPIError, RestAPIErrorType } from "../restapi_errors";
-import { State } from "../store/store";
-import PolicyLink from "../components/policyLinks";
 import { ActionTypes } from "../store/actions";
+import { State } from "../store/store";
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme) => createStyles({
@@ -69,10 +70,9 @@ export function Login() {
         try {
             setInFlight(true);
             await restApi.login(email, password);
-            if (passes.length === 0) {
-                const { passes: newPasses } = await restApi.getPassAccesses();
-                store.dispatch({ type: ActionTypes.PASSES, payload: newPasses })    
-            }
+            const { passes: newPasses } = await restApi.getPassAccesses();
+            store.dispatch({ type: ActionTypes.PASSES, payload: newPasses });
+            LogRocket.identify(email);
         } catch (e) {
             handleError(e);
         } finally {

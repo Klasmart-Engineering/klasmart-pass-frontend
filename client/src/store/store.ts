@@ -1,5 +1,6 @@
 import Cookies from "cookies-js";
-import { combineReducers, createStore, Store } from "redux";
+import LogRocket from "logrocket";
+import { applyMiddleware, combineReducers, createStore, Store } from "redux";
 import { persistReducer, persistStore } from "redux-persist";
 import { CookieStorage } from "redux-persist-cookie-storage";
 import { Actions } from "./actions";
@@ -14,7 +15,7 @@ const rootReducer = combineReducers({ account: accountPersisted, postAuthorizati
 
 export async function createDefaultStore() {
   return new Promise<Store>((resolve) => {
-    const store = createStore(rootReducer);
+    const store = createStore(rootReducer, applyMiddleware(LogRocket.reduxMiddleware()));
     const persistor = persistStore(store, {}, () => resolve(store));
   });
 }
