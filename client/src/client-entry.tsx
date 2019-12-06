@@ -1,4 +1,7 @@
 import "@babel/polyfill";
+import LogRocket from "logrocket";
+LogRocket.init("8qowji/badanamu-learning-pass");
+
 import blue from "@material-ui/core/colors/blue";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { createMuiTheme, responsiveFontSizes, ThemeProvider } from "@material-ui/core/styles";

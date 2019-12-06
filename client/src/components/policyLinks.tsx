@@ -23,7 +23,8 @@ class PolicyLink extends React.PureComponent<Props, any> {
             <Grid container spacing={4} justify="flex-end" className={this.props.classes.links}>
                 <Grid item xs={4} sm={2}>
                     <Link
-                        href="#"
+                        href="https://kidsloop.net/en/faq"
+                        target="_blank"
                         variant="subtitle2"
                     >
                         <FormattedMessage id="login_help" />
@@ -31,7 +32,8 @@ class PolicyLink extends React.PureComponent<Props, any> {
                 </Grid>
                 <Grid item xs={4} sm={2}>
                     <Link
-                        href="#"
+                        href="https://kidsloop.net/en/policies/privacy-notice"
+                        target="_blank"
                         variant="subtitle2"
                     >
                         <FormattedMessage id="login_privacy" />
@@ -39,7 +41,8 @@ class PolicyLink extends React.PureComponent<Props, any> {
                 </Grid>
                 <Grid item xs={4} sm={2}>
                     <Link
-                        href="#"
+                        href="https://kidsloop.net/en/policies/terms"
+                        target="_blank"
                         variant="subtitle2"
                     >
                         <FormattedMessage id="login_terms" />

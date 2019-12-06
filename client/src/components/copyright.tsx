@@ -33,15 +33,16 @@ class Copyright extends React.PureComponent<Props, any> {
                         <FormattedMessage id="copyright_company" />
                     </Link>{" "}
                     <FormattedMessage id="copyright_arr" />
+                    {" "}
                 </Typography>
                 <Typography variant="caption" color="textSecondary" className={this.props.classes.responsiveTypography}>
-                    <Link color="inherit" target="_blank" href="https://kidsloop.net/en/policies/privacy" style={{ textDecoration: "underline" }}>
+                    <Link color="inherit" target="_blank" href="https://kidsloop.net/en/policies/privacy-notice" style={{ textDecoration: "underline" }}>
                         <FormattedMessage id="copyright_privacy" />
                     </Link>{" | "}
                     <Link color="inherit" target="_blank" href="https://kidsloop.net/en/policies/terms/" style={{ textDecoration: "underline" }}>
                         <FormattedMessage id="copyright_terms" />
                     </Link>{" | "}
-                    <Link color="inherit" target="_blank" href="https://kidsloop.net/en/policies/refund-policy/" style={{ textDecoration: "underline" }}>
+                    <Link color="inherit" target="_blank" href="https://kidsloop.net/en/policies/return-policy/" style={{ textDecoration: "underline" }}>
                         <FormattedMessage id="copyright_refund" />
                     </Link>
                 </Typography>
