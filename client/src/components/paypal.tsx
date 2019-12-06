@@ -1,4 +1,5 @@
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Grid from "@material-ui/core/Grid";
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -57,6 +58,7 @@ export function PayPalButton() {
     }, [paypal]);
     return < >
         <div ref={buttonRef} style={{ visibility: inFlight ? "hidden" : "visible" }} />
-        {inFlight ? <CircularProgress /> : null}
+        {inFlight ?
+            <Grid container direction="column" justify="flex-start" alignItems="center"><CircularProgress /></Grid> : null}
     </ >;
 }
