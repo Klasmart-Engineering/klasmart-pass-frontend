@@ -34,7 +34,6 @@ function Transaction(props: { transaction: any }) {
     const createdTimestamp: number = props.transaction.CreatedDate;
     const date = new Date(createdTimestamp).toLocaleString();
     const products = (props.transaction.ProductList as any[]).map((product: any) => JSON.stringify(product));
-    const expiration = useSelector((state: State) => state.account.expireDate);
     const passes = (props.transaction.PassList as any[]).map((pass: any) => {
         // return JSON.stringify(pass);
         return {
@@ -52,7 +51,7 @@ function Transaction(props: { transaction: any }) {
                         <TableCell>{date}</TableCell>
                         <TableCell>{pass.passName}</TableCell>
                         <TableCell style={{ textTransform: "capitalize" }}>{store}</TableCell>
-                        <TableCell align="right">{pass.passName === "Learning Pass" ? "US$20" : "US$50"}</TableCell>
+                        <TableCell align="right">{pass.passId === "com.calmid.learnandplay.blp.standard" ? "US$20" : "US$50"}</TableCell>
                     </TableRow>
                 ))
             }
