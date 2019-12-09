@@ -11,7 +11,7 @@ const messages: Record<string, string> = {
     ERROR_UNKOWN: "An unexpected error occurred",
     ERROR_VERIFICATION_NOT_FOUND: "Verification not found",
     LocaleName: "English",
-    button_select: "Get Started",
+    button_select: "Select",
     copyright: "Copyright",
     copyright_arr: "All rights reserved.",
     copyright_company: "Calm Island Limited.",

@@ -1,4 +1,5 @@
 import Button from "@material-ui/core/Button";
+import Collapse from '@material-ui/core/Collapse';
 import Container from "@material-ui/core/Container";
 import Divider from "@material-ui/core/Divider";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
@@ -26,8 +27,10 @@ const useStyles = makeStyles((theme) => createStyles({
     productImgContainer: {
         textAlign: "center",
         minHeight: 90,
+        marginLeft: 16,
         [theme.breakpoints.down("sm")]: {
             minHeight: 70,
+            marginLeft: 0,
         },
     },
     productImg: {
@@ -46,6 +49,11 @@ const useStyles = makeStyles((theme) => createStyles({
             backgroundColor: "#58bcf5",
             boxShadow: "0px 0px 10px 0px rgba(24,150,234,1)",
             transform: "translateY(-1px)",
+        },
+        "marginLeft": 16,
+        [theme.breakpoints.down("sm")]: {
+            marginTop: 16,
+            marginLeft: 0,
         },
     },
     planSelectedBtn: {
@@ -118,7 +126,7 @@ export function Landing() {
     const store = useStore();
     const history = useHistory();
     const classes = useStyles();
-    const [step, setStep] = useState(1);
+    const [selected, setSelected] = useState(false);
     const [selectedPlan, setPlan] = useState("BLP");
     const learningApps = [
         createData("Badanamu: Bada Rhyme 1", <CheckRoundedIcon />, <CheckRoundedIcon />),
@@ -155,13 +163,16 @@ export function Landing() {
                         <img src={plan === "BLP" ? BLP : BLPPremium} className={classes.productImg} />
                     </Grid>
                     <Grid item xs={12} style={{ textAlign: "center" }}>
-                        <Button
+                        <BadanamuButton
                             className={clsx(classes.planSelectBtn, selectedPlan === plan && classes.planSelectedBtn)}
                             value={plan}
-                            onClick={(e) => setPlan(plan)}
+                            onClick={(e) => {
+                                setSelected(true);
+                                setPlan(plan);
+                            }}
                         >
                             <FormattedMessage id="button_select" />
-                        </Button>
+                        </BadanamuButton>
                     </Grid>
                 </Grid>
             </React.Fragment>
@@ -208,6 +219,26 @@ export function Landing() {
                     <Grid item xs={12} md={4} />
                     {createPlanButton("BLP")}
                     {createPlanButton("BLPPremium")}
+                </Grid>
+                <Grid container item xs={12}>
+                    <Grid item xs={12} md={4} />
+                    <Grid item xs={12} md={8}>
+                        <Collapse in={selected}>
+                            <BadanamuButton
+                                fullWidth
+                                size="large"
+                                onClick={(e) => {
+                                    store.dispatch({ type: ActionTypes.PRODUCT_ID, payload: selectedPlan });
+                                    history.push("/payment");
+                                }}
+                            >
+                                <FormattedMessage id="learning_pass_continue_btn" /> {selectedPlan === "BLP" ?
+                                    <FormattedMessage id="learning_pass" /> :
+                                    <FormattedMessage id="learning_pass_premium" />
+                                }
+                            </BadanamuButton>
+                        </Collapse>
+                    </Grid>
                 </Grid>
                 {/* Plan comparison */}
                 <Grid item xs={12}>
