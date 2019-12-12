@@ -11,13 +11,13 @@ import { useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { useSelector } from "react-redux";
 import { RouteComponentProps } from "react-router";
+import { useHistory } from "react-router";
 import BadanamuButton from "../components/button";
 import BadanamuTextField from "../components/textfield";
 import BadanamuLogo from "../img/badanamu_logo.png";
 import { useRestAPI } from "../restapi";
 import { RestAPIError } from "../restapi_errors";
 import { State } from "../store/store";
-import { useHistory } from "react-router";
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -67,16 +67,27 @@ export function PasswordRestore(props: RouteComponentProps) {
         const lang = "en"; // TODO: use locale
         try {
             setInFlight(true);
-            await restApi.restorePassword(email, newPassword, resetCode);
+            const result = await restApi.restorePassword(email, newPassword, resetCode);
+            if (result.status === 200) { history.push("/password-changed"); }
         } catch (e) {
-            if (e instanceof RestAPIError) {
-                const id = e.getErrorMessageID();
-                setGeneralError(<FormattedMessage id={id} />);
-            }
+            handleError(e);
         } finally {
             setInFlight(false);
         }
-        history.push("/password-changed");
+    }
+
+    function handleError(e: RestAPIError | Error) {
+        if (!(e instanceof RestAPIError)) {
+            console.error(e);
+            return;
+        }
+        const id = e.getErrorMessageID();
+        const errorMessage = <FormattedMessage id={id} />;
+        switch (e.getErrorMessageType()) {
+            default:
+                setGeneralError(errorMessage);
+                break;
+        }
     }
 
     return (
