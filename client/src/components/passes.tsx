@@ -5,12 +5,12 @@ import Typography from "@material-ui/core/Typography";
 import ClassIcon from "@material-ui/icons/Class";
 import React, { useEffect, useState } from "react";
 import { FormattedDate, FormattedMessage } from "react-intl";
+import { useStore } from "react-redux";
 import { useHistory } from "react-router-dom";
 import BLP from "../img/logo_learning_pass.png";
 import BLPPremium from "../img/logo_learning_pass_premium.png";
 import { useRestAPI } from "../restapi";
 import { ActionTypes } from "../store/actions";
-import { useStore } from "react-redux";
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -45,8 +45,6 @@ export function Passes() {
     const [getPassesInFlight, setPassesInFlight] = useState(false);
 
     const store = useStore();
-    const classes = useStyles();
-    const history = useHistory();
     const restApi = useRestAPI();
 
     async function getPasses() {
@@ -71,7 +69,7 @@ export function Passes() {
                 getPassesInFlight ?
                     <CircularProgress /> :
                     passes ?
-                        passes.map((pass) => <Pass pass={pass} />) :
+                        passes.map((pass, i) => <Pass pass={pass} key={i} />) :
                         getPassesError
             }
         </React.Fragment >
@@ -99,7 +97,7 @@ export function Pass({ pass }: Props) {
     }
 
     return (
-        <Grid item xs={12}>
+        <Grid item xs={12} key={pass.passId}>
             <Grid item className={classes.productImgContainer}>
                 {getImage(pass.passId)}
             </Grid>

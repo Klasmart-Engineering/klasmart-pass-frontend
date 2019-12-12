@@ -97,18 +97,6 @@ export function MyAccount() {
         <Container maxWidth="lg" >
             <div className={classes.emptySpace} />
             <Grid container direction="row" spacing={4} >
-                {/* <Hidden only="xs">
-                    <Grid container item direction="row" alignItems="center" spacing={4} xs={12}>
-                        <Grid item>
-                            <Avatar alt={defaultEmail} src="" className={classes.bigAvatar} />
-                        </Grid>
-                        <Grid item>
-                            <Typography variant="h4">{defaultEmail}</Typography>
-                            <Typography variant="body1"><b>{selectedProduct === "BLP" ? "Badanamu Learning Pass" : "Badanamu Learning Pass Premium"},</b> expires <b><FormattedDate value={expiration} /></b>.</Typography>
-                        </Grid>
-                    </Grid>
-                    <div className={classes.emptySpace} />
-                </Hidden> */}
                 <Grid item xs={12}>
                     <Typography variant="h2">
                         <FormattedMessage id="my_account_header" />

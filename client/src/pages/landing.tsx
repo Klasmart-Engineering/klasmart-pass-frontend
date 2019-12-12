@@ -118,7 +118,7 @@ const useStyles = makeStyles((theme) => createStyles({
 type Plan = JSX.Element | string | number;
 
 // tslint:enable:object-literal-sort-keys
-function createData(name: string | JSX.Element, blp: Plan, blpPlus: Plan) {
+function createData(name: string, blp: Plan, blpPlus: Plan) {
     return { name, blp, blpPlus };
 }
 
@@ -144,20 +144,20 @@ export function Landing() {
         createData("Badanamu: Books", <ClearRoundedIcon />, <CheckRoundedIcon />),
     ];
     const details = [
-        createData(<FormattedMessage id="learning_pass_additional_apps" />, 8, 10),
-        createData(<FormattedMessage id="learning_pass_esl_lessons" />, "300+", "300+"),
-        createData(<FormattedMessage id="learning_pass_program_levels" />, <CheckRoundedIcon />, <CheckRoundedIcon />),
-        createData(<FormattedMessage id="learning_pass_hd_content" />, <CheckRoundedIcon />, <CheckRoundedIcon />),
-        createData(<FormattedMessage id="learning_pass_ad_free" />, <CheckRoundedIcon />, <CheckRoundedIcon />),
-        createData(<FormattedMessage id="learning_pass_animated_series" />, <ClearRoundedIcon />, <FormattedMessage id="landing_number_episodes" />),
-        createData(<FormattedMessage id="learning_pass_premium_songs" />, <ClearRoundedIcon />, <FormattedMessage id="landing_number_minutes" />),
-        createData(<FormattedMessage id="learning_pass_premium_apps" />, <ClearRoundedIcon />, 5),
-        createData(<FormattedMessage id="learning_pass_ot_purchase" />, "US$20.00", "US$50.00"),
+        createData("learning_pass_additional_apps", 8, 10),
+        createData("learning_pass_esl_lessons", "300+", "300+"),
+        createData("learning_pass_program_levels", <CheckRoundedIcon />, <CheckRoundedIcon />),
+        createData("learning_pass_hd_content", <CheckRoundedIcon />, <CheckRoundedIcon />),
+        createData("learning_pass_ad_free", <CheckRoundedIcon />, <CheckRoundedIcon />),
+        createData("learning_pass_animated_series", <ClearRoundedIcon />, <FormattedMessage id="landing_number_episodes" />),
+        createData("learning_pass_premium_songs", <ClearRoundedIcon />, <FormattedMessage id="landing_number_minutes" />),
+        createData("learning_pass_premium_apps", <ClearRoundedIcon />, 5),
+        createData("learning_pass_ot_purchase", "US$20.00", "US$50.00"),
     ];
 
     function createPlanButton(plan: string) {
         return (
-            <React.Fragment>
+            <React.Fragment key={plan}>
                 <Grid item xs={6} md={4}>
                     <Grid item xs={12} className={classes.productImgContainer}>
                         <img src={plan === "BLP" ? BLP : BLPPremium} className={classes.productImg} />
@@ -179,12 +179,12 @@ export function Landing() {
         );
     }
 
-    function createDetailsRow(detail: { name: string | JSX.Element, blp: Plan, blpPlus: Plan }) {
+    function createDetailsRow(detail: { name: string, blp: Plan, blpPlus: Plan }) {
         return (
-            <React.Fragment>
+            <React.Fragment key={detail.name}>
                 <Grid container spacing={2} className={classes.row}>
                     <Grid item xs={12} md={4}>
-                        <Typography className={classes.heading}>{detail.name}</Typography>
+                        <Typography className={classes.heading}><FormattedMessage id={detail.name} /></Typography>
                     </Grid>
                     <Grid item xs={6} md={4}>
                         <Typography className={selectedPlan === "BLP" ? classes.selected : classes.notSelected}>{detail.blp}</Typography>
@@ -264,7 +264,7 @@ export function Landing() {
                         <ExpansionPanelDetails className={classes.details}>
                             <Grid container spacing={1} className={classes.noIconPadding}>
                                 {learningApps.map((app) => (
-                                    <React.Fragment>
+                                    <React.Fragment key={app.name}>
                                         <Grid item xs={12} md={4}>
                                             <Typography className={clsx(classes.heading, classes.headingInner)}>{app.name}</Typography>
                                         </Grid>

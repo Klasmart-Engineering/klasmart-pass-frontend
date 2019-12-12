@@ -1,9 +1,9 @@
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import TableBody from "@material-ui/core/TableBody";
 import Typography from "@material-ui/core/Typography";
 import { mergeClasses } from "@material-ui/styles";
 import React from "react";
@@ -75,11 +75,13 @@ export function Transactions(props: Props) {
                         <TableCell align="right"><FormattedMessage id="my_account_total" /></TableCell>
                     </TableRow>
                 </TableHead>
-                {
-                    props.transactions.map((transaction, i) => (
-                        <Transaction transaction={transaction} />
-                    ))
-                }
+                <TableBody>
+                    {
+                        props.transactions.map((transaction, i) => (
+                            <Transaction transaction={transaction} key={i} />
+                        ))
+                    }
+                </TableBody>
             </Table>
         </Paper>
     );
