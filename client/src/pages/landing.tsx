@@ -6,6 +6,7 @@ import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import Grid from "@material-ui/core/Grid";
+import Link from "@material-ui/core/Link";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import CheckRoundedIcon from "@material-ui/icons/CheckRounded";
@@ -160,7 +161,15 @@ export function Landing() {
             <React.Fragment key={plan}>
                 <Grid item xs={6} md={4}>
                     <Grid item xs={12} className={classes.productImgContainer}>
-                        <img src={plan === "BLP" ? BLP : BLPPremium} className={classes.productImg} />
+                        <Link
+                            href="#"
+                            onClick={(e: React.MouseEvent) => {
+                                store.dispatch({ type: ActionTypes.PRODUCT_ID, payload: plan });
+                                history.push("/payment");
+                                e.preventDefault();
+                            }}>
+                            <img src={plan === "BLP" ? BLP : BLPPremium} className={classes.productImg} />
+                        </Link>
                     </Grid>
                     <Grid item xs={12} style={{ textAlign: "center" }}>
                         <BadanamuButton
