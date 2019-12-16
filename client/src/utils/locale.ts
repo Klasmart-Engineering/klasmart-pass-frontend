@@ -3,7 +3,13 @@ import { fallbackLocale, getIntl, localeCodes } from "../locale/locale";
 const localeCache = new Map<string, ReturnType<typeof getIntl>>();
 
 export function getDefaultLanguageCode() {
-    for (const language of navigator.languages) {
+    const languages = navigator.languages || [
+        (navigator as any).language,
+        (navigator as any).browerLanguage,
+        (navigator as any).userLanguage,
+        (navigator as any).systemLanguage,
+    ];
+    for (const language of languages) {
         if (localeCodes.indexOf(language) !== -1) {
             return language;
         }
