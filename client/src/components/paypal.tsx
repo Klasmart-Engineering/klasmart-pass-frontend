@@ -31,6 +31,9 @@ export function PayPalButton() {
     useEffect(() => {
         if (!paypal) { return; }
         if (!buttonRef.current) { return; }
+        for (const child of buttonRef.current.childNodes) {
+            child.remove();
+        }
         const button = paypal.Buttons({
             createOrder(data: any, actions: any) {
                 // This function sets up the details of the transaction, including the amount and line item details.
@@ -55,7 +58,7 @@ export function PayPalButton() {
             },
         });
         button.render(buttonRef.current);
-    }, [paypal]);
+    }, [paypal, selectedProduct]);
     return < >
         <div ref={buttonRef} style={{ visibility: inFlight ? "hidden" : "visible" }} />
         {inFlight ?
