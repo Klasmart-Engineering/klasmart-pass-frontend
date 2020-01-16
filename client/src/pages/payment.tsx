@@ -97,7 +97,7 @@ export function Payment() {
     const passes = useSelector((state: State) => state.account.passes || []);
 
     const standardPass = passes.find((element) => element.passId === "com.calmid.learnandplay.blp.standard");
-    const premiumPass = passes.find((element) => element.passId === "com.calmid.learnandplay.blp.premium");
+    const premiumPass = passes.find((element) => (element.passId === "com.calmid.learnandplay.blp.premium" || element.passId === "com.calmid.badanamu.esl.premium"));
 
     const validStandardPass = standardPass !== undefined ? standardPass.expirationDate > Date.now() : false;
     const validPremiumPass = premiumPass !== undefined ? premiumPass.expirationDate > Date.now() : false;
@@ -123,7 +123,7 @@ export function Payment() {
                                 <Grid container item justify="space-between" alignItems="center" xs={12} spacing={2}>
                                     <img src={selectedProduct === "BLP" ? BLP : BLPPremium} className={classes.productImg} />
                                     <Typography variant="h5">
-                                        {selectedProduct === "BLP" ? "US$20" : "US$50"}
+                                        {selectedProduct === "BLP" ? "US$20" : "US$40"}
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={12} className={classes.emptySpace} />

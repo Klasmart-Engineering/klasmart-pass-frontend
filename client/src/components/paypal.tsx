@@ -20,7 +20,7 @@ export function PayPalButton() {
             case "BLP":
                 return { productCode: "com.calmid.learnandplay.blp.standard", price: "20.00" };
             case "BLPPremium":
-                return { productCode: "com.calmid.learnandplay.blp.premium", price: "50.00" };
+                return { productCode: "com.calmid.badanamu.esl.premium", price: "40.00" };
             default:
                 throw new Error("Unknown product");
         }

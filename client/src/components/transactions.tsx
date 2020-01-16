@@ -1,27 +1,23 @@
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import TableBody from "@material-ui/core/TableBody";
-import Typography from "@material-ui/core/Typography";
-import { mergeClasses } from "@material-ui/styles";
 import React from "react";
 import { FormattedDate, FormattedMessage } from "react-intl";
-import { useSelector } from "react-redux";
-import { State } from "../store/store";
 
 // TODO: Get pass information from DB later
 function PassIDName(id: string) {
     switch (id) {
-        case "com.calmid.learnandplay.blap.standard":
         case "com.calmid.learnandplay.blp.standard":
-            return <FormattedMessage id="pass_name_standard" values={{ b: (...chunks: any[]) => <strong>{chunks}</strong> }} />;
-        case "com.calmid.learnandplay.blap.premium":
+            return { name: <FormattedMessage id="pass_name_standard" values={{ b: (...chunks: any[]) => <strong>{chunks}</strong> }} />, price: "US$20" };
         case "com.calmid.learnandplay.blp.premium":
-            return <FormattedMessage id="pass_name_premium" values={{ b: (...chunks: any[]) => <strong>{chunks}</strong> }} />;
+            return { name: <FormattedMessage id="pass_name_premium" values={{ b: (...chunks: any[]) => <strong>{chunks}</strong> }} />, price: "US$50" };
+        case "com.calmid.badanamu.esl.premium":
+            return { name: <FormattedMessage id="pass_name_premium" values={{ b: (...chunks: any[]) => <strong>{chunks}</strong> }} />, price: "US$40" };
         default:
-            return id;
+            return { name: id, price: "N/A" };
     }
 }
 
@@ -39,7 +35,7 @@ function Transaction(props: { transaction: any }) {
         return {
             end: pass.ExpirationDate as number,
             passId: pass.ItemID as string,
-            passName: PassIDName(pass.ItemID),
+            passName: PassIDName(pass.ItemID).name,
             start: pass.StartDate as number,
         };
     });
@@ -51,7 +47,7 @@ function Transaction(props: { transaction: any }) {
                         <TableCell>{date}</TableCell>
                         <TableCell>{pass.passName}</TableCell>
                         <TableCell style={{ textTransform: "capitalize" }}>{store}</TableCell>
-                        <TableCell align="right">{pass.passId === "com.calmid.learnandplay.blp.standard" ? "US$20" : "US$50"}</TableCell>
+                        <TableCell align="right">{PassIDName(pass.passId).price}</TableCell>
                     </TableRow>
                 ))
             }

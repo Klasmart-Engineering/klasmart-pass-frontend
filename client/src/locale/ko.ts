@@ -30,6 +30,7 @@ const messages: Record<string, string> = {
     landing_number_episodes: "52개의 에피소드",
     landing_number_minutes: "5,000분 이상의 콘텐츠",
     landing_select_header: "당신에게 맞는 <b>바다나무 러닝 패스</b>를 선택해 보세요!",
+    landing_select_header_single: "오늘 바로 <b>20개 이상의 앱</b>과 <b>300개 이상의 ESL 레슨</b>을 사용해 보세요!",
     landing_select_subheader: "구매하신 패스는 1년간 사용할 수 있습니다.",
     learning_pass: "바다나무 러닝 패스",
     learning_pass_ad_free: "광고 없음",

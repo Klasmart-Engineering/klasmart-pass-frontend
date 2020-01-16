@@ -30,6 +30,7 @@ const messages: Record<string, string> = {
     landing_number_episodes: "52 episodes ",
     landing_number_minutes: "5,000+ minutes ",
     landing_select_header: "Choose the <b>Badanamu Learning Pass</b> that's right for you!",
+    landing_select_header_single: "Unlock <b>20+ apps</b> and <b>300+ ESL lessons</b> today!",
     landing_select_subheader: "Your pass will be valid for one (1) year.",
     learning_pass: "Learning Pass",
     learning_pass_ad_free: "Ad free",

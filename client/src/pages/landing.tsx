@@ -1,5 +1,7 @@
 import Button from "@material-ui/core/Button";
-import Collapse from '@material-ui/core/Collapse';
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
+import Collapse from "@material-ui/core/Collapse";
 import Container from "@material-ui/core/Container";
 import Divider from "@material-ui/core/Divider";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
@@ -35,9 +37,10 @@ const useStyles = makeStyles((theme) => createStyles({
         },
     },
     productImg: {
-        maxWidth: 200,
+        width: "100%",
+        margin: "0 auto",
         [theme.breakpoints.down("sm")]: {
-            maxWidth: 150,
+            width: "100%",
         },
     },
     planSelectBtn: {
@@ -51,18 +54,21 @@ const useStyles = makeStyles((theme) => createStyles({
             boxShadow: "0px 0px 10px 0px rgba(24,150,234,1)",
             transform: "translateY(-1px)",
         },
-        "marginLeft": 16,
+        "marginTop": 48,
         [theme.breakpoints.down("sm")]: {
-            marginTop: 16,
+            margin: "32px 0 16px 0",
             marginLeft: 0,
+        },
+    },
+    planSelectBtnBottom: {
+        display: "none",
+        [theme.breakpoints.down("sm")]: {
+            display: "inline-flex",
         },
     },
     planSelectedBtn: {
         backgroundColor: "#1896ea",
         boxShadow: "0px 0px 10px 0px rgba(24,150,234,1)",
-    },
-    smTableTitle: {
-        borderBottom: 0,
     },
     selected: {
         textAlign: "center",
@@ -89,12 +95,19 @@ const useStyles = makeStyles((theme) => createStyles({
             padding: "0 24px",
         },
     },
-    columnHead: {
-        flexBasis: "33.33%",
-    },
     headingInner: {
         [theme.breakpoints.up("md")]: {
             paddingLeft: 20,
+        },
+    },
+    card: {
+        display: "flex",
+        padding: "48px 32px !important",
+    },
+    emptySpace: {
+        height: theme.spacing(8),
+        [theme.breakpoints.down("xs")]: {
+            height: theme.spacing(4),
         },
     },
     column: {
@@ -104,14 +117,14 @@ const useStyles = makeStyles((theme) => createStyles({
     noIconPadding: {
         paddingRight: 28,
     },
-    noIconMargin: {
-        [theme.breakpoints.up("md")]: {
-            marginRight: 48,
-        },
-    },
     row: {
         alignItems: "center",
         padding: "12px 56px 12px 24px",
+    },
+    responsiveText: {
+        [theme.breakpoints.down("xs")]: {
+            justifyContent: "left",
+        },
     },
 }),
 );
@@ -127,8 +140,8 @@ export function Landing() {
     const store = useStore();
     const history = useHistory();
     const classes = useStyles();
-    const [selected, setSelected] = useState(false);
-    const [selectedPlan, setPlan] = useState("BLP");
+    const [selected, setSelected] = useState(true);
+    const [selectedPlan, setPlan] = useState("BLPPremium");
     const learningApps = [
         createData("Badanamu: Bada Rhyme 1", <CheckRoundedIcon />, <CheckRoundedIcon />),
         createData("Badanamu: Bada Rhyme 2", <CheckRoundedIcon />, <CheckRoundedIcon />),
@@ -153,7 +166,7 @@ export function Landing() {
         createData("learning_pass_animated_series", <ClearRoundedIcon />, <FormattedMessage id="landing_number_episodes" />),
         createData("learning_pass_premium_songs", <ClearRoundedIcon />, <FormattedMessage id="landing_number_minutes" />),
         createData("learning_pass_premium_apps", <ClearRoundedIcon />, 5),
-        createData("learning_pass_ot_purchase", "US$20.00", "US$50.00"),
+        createData("learning_pass_ot_purchase", "US$20.00", "US$40.00"),
     ];
 
     function createPlanButton(plan: string) {
@@ -171,18 +184,6 @@ export function Landing() {
                             <img src={plan === "BLP" ? BLP : BLPPremium} className={classes.productImg} />
                         </Link>
                     </Grid>
-                    <Grid item xs={12} style={{ textAlign: "center" }}>
-                        <BadanamuButton
-                            className={clsx(classes.planSelectBtn, selectedPlan === plan && classes.planSelectedBtn)}
-                            value={plan}
-                            onClick={(e) => {
-                                setSelected(true);
-                                setPlan(plan);
-                            }}
-                        >
-                            <FormattedMessage id="button_select" />
-                        </BadanamuButton>
-                    </Grid>
                 </Grid>
             </React.Fragment>
         );
@@ -192,13 +193,10 @@ export function Landing() {
         return (
             <React.Fragment key={detail.name}>
                 <Grid container spacing={2} className={classes.row}>
-                    <Grid item xs={12} md={4}>
+                    <Grid item xs={12} md={6}>
                         <Typography className={classes.heading}><FormattedMessage id={detail.name} /></Typography>
                     </Grid>
-                    <Grid item xs={6} md={4}>
-                        <Typography className={selectedPlan === "BLP" ? classes.selected : classes.notSelected}>{detail.blp}</Typography>
-                    </Grid>
-                    <Grid item xs={6} md={4}>
+                    <Grid item xs={12} md={6}>
                         <Typography className={selectedPlan === "BLPPremium" ? classes.selected : classes.notSelected}>{detail.blpPlus}</Typography>
                     </Grid>
                 </Grid>
@@ -208,32 +206,74 @@ export function Landing() {
     }
 
     return (
-        <Container maxWidth="lg">
-            {/* Onboarding */}
-            <Grid container spacing={2} style={{ margin: "32px 0" }}>
-                <Grid item xs={12}>
-                    <Typography variant="h4">
-                        <FormattedMessage id="landing_select_header" values={{ b: (...chunks: any[]) => <strong>{chunks}</strong> }} />
-                    </Typography>
-                </Grid>
-                <Grid item xs={12}>
-                    <Typography variant="body1">
-                        <FormattedMessage id="landing_select_subheader" />
-                    </Typography>
-                </Grid>
-            </Grid>
-            {/* Plan Selection Button */}
-            <Grid container spacing={2}>
-                <Grid container item xs={12} className={classes.noIconMargin}>
-                    <Grid item xs={12} md={4} />
-                    {createPlanButton("BLP")}
-                    {createPlanButton("BLPPremium")}
-                </Grid>
-                <Grid container item xs={12}>
-                    <Grid item xs={12} md={4} />
-                    <Grid item xs={12} md={8}>
-                        <Collapse in={selected}>
+        <Container maxWidth="lg" style={{ margin: "auto 0" }}>
+            <Card>
+                <CardContent className={classes.card}>
+                    <Grid container direction="row" spacing={4}>
+                        <Grid container item xs={12} justify="center">
+                            <Typography variant="h4"><FormattedMessage id="landing_select_header_single" values={{ b: (...chunks: any[]) => <strong>{chunks}</strong> }} /></Typography>
+                        </Grid>
+                        <Grid container item xs={12} justify="center" className={classes.responsiveText}>
+                            <Typography variant="body1" ><FormattedMessage id="landing_select_subheader" /></Typography>
+                        </Grid>
+                        <Grid item xs={12} className={classes.emptySpace} />
+                        <Grid container item justify="flex-start" xs={12} sm={6} spacing={2}>
+                            <Grid container item direction="column" justify="flex-start" alignItems="flex-start" xs={12} spacing={2}>
+                                <img src={BLPPremium} className={classes.productImg} />
+                                <BadanamuButton
+                                    className={clsx(classes.planSelectBtn, classes.planSelectedBtn)}
+                                    fullWidth
+                                    size="large"
+                                    onClick={(e) => {
+                                        store.dispatch({ type: ActionTypes.PRODUCT_ID, payload: selectedPlan });
+                                        history.push("/payment");
+                                    }}
+                                >
+                                    <FormattedMessage id="learning_pass_continue_btn" /> {selectedPlan === "BLP" ?
+                                        <FormattedMessage id="learning_pass" /> :
+                                        <FormattedMessage id="learning_pass_premium" />
+                                    }
+                                </BadanamuButton>
+                            </Grid>
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <Divider />
+                            <ExpansionPanel elevation={0}>
+                                <ExpansionPanelSummary
+                                    expandIcon={<ExpandMoreIcon fontSize={"small"} />}
+                                    aria-controls="learning-apps"
+                                    id="learning-apps"
+                                >
+                                    <Grid container spacing={2}>
+                                        <Grid item xs={12} md={6}>
+                                            <Typography className={classes.heading}><FormattedMessage id="learning_pass_apps" /></Typography>
+                                        </Grid>
+                                        <Grid item xs={12} md={6}>
+                                            <Typography className={selectedPlan === "BLPPremium" ? classes.selected : classes.notSelected}>13</Typography>
+                                        </Grid>
+                                    </Grid>
+                                </ExpansionPanelSummary>
+                                <ExpansionPanelDetails className={classes.details}>
+                                    <Grid container spacing={1} className={classes.noIconPadding}>
+                                        {learningApps.map((app) => (
+                                            <React.Fragment key={app.name}>
+                                                <Grid item xs={12} md={10}>
+                                                    <Typography className={clsx(classes.heading, classes.headingInner)}>{app.name}</Typography>
+                                                </Grid>
+                                                <Grid item xs={6} md={2}>
+                                                    <Typography className={selectedPlan === "BLPPremium" ? classes.selected : classes.notSelected}>{app.blpPlus}</Typography>
+                                                </Grid>
+                                            </React.Fragment>
+                                        ))}
+                                    </Grid>
+                                </ExpansionPanelDetails>
+                            </ExpansionPanel>
+                            <Divider />
+                            {details.map((detail) => (
+                                createDetailsRow(detail)
+                            ))}
                             <BadanamuButton
+                                className={clsx(classes.planSelectBtn, classes.planSelectedBtn, classes.planSelectBtnBottom)}
                                 fullWidth
                                 size="large"
                                 onClick={(e) => {
@@ -246,70 +286,10 @@ export function Landing() {
                                     <FormattedMessage id="learning_pass_premium" />
                                 }
                             </BadanamuButton>
-                        </Collapse>
+                        </Grid>
                     </Grid>
-                </Grid>
-                {/* Plan comparison */}
-                <Grid item xs={12}>
-                    <Divider />
-                    <ExpansionPanel elevation={0}>
-                        <ExpansionPanelSummary
-                            expandIcon={<ExpandMoreIcon fontSize={"small"} />}
-                            aria-controls="learning-apps"
-                            id="learning-apps"
-                        >
-                            <Grid container spacing={2}>
-                                <Grid item xs={12} md={4}>
-                                    <Typography className={classes.heading}><FormattedMessage id="learning_pass_apps" /></Typography>
-                                </Grid>
-                                <Grid item xs={6} md={4}>
-                                    <Typography className={selectedPlan === "BLP" ? classes.selected : classes.notSelected}>10</Typography>
-                                </Grid>
-                                <Grid item xs={6} md={4}>
-                                    <Typography className={selectedPlan === "BLPPremium" ? classes.selected : classes.notSelected}>13</Typography>
-                                </Grid>
-                            </Grid>
-                        </ExpansionPanelSummary>
-                        <ExpansionPanelDetails className={classes.details}>
-                            <Grid container spacing={1} className={classes.noIconPadding}>
-                                {learningApps.map((app) => (
-                                    <React.Fragment key={app.name}>
-                                        <Grid item xs={12} md={4}>
-                                            <Typography className={clsx(classes.heading, classes.headingInner)}>{app.name}</Typography>
-                                        </Grid>
-                                        <Grid item xs={6} md={4}>
-                                            <Typography className={selectedPlan === "BLP" ? classes.selected : classes.notSelected}>{app.blp}</Typography>
-                                        </Grid>
-                                        <Grid item xs={6} md={4}>
-                                            <Typography className={selectedPlan === "BLPPremium" ? classes.selected : classes.notSelected}>{app.blpPlus}</Typography>
-                                        </Grid>
-                                    </React.Fragment>
-                                ))}
-                            </Grid>
-
-                        </ExpansionPanelDetails>
-                    </ExpansionPanel>
-                    <Divider />
-                    {details.map((detail) => (
-                        createDetailsRow(detail)
-                    ))}
-                </Grid>
-                <Grid item xs={12}>
-                    <BadanamuButton
-                        fullWidth
-                        size="large"
-                        onClick={(e) => {
-                            store.dispatch({ type: ActionTypes.PRODUCT_ID, payload: selectedPlan });
-                            history.push("/payment");
-                        }}
-                    >
-                        <FormattedMessage id="learning_pass_continue_btn" /> {selectedPlan === "BLP" ?
-                            <FormattedMessage id="learning_pass" /> :
-                            <FormattedMessage id="learning_pass_premium" />
-                        }
-                    </BadanamuButton>
-                </Grid>
-            </Grid>
+                </CardContent>
+            </Card>
         </Container>
     );
 }
