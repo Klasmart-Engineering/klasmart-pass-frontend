@@ -158,14 +158,14 @@ export function Landing() {
         createData("Badanamu: Books", <ClearRoundedIcon />, <CheckRoundedIcon />),
     ];
     const details = [
-        createData("learning_pass_additional_apps", 8, 10),
+        // createData("learning_pass_additional_apps", 8, 10),
         createData("learning_pass_esl_lessons", "300+", "300+"),
         createData("learning_pass_program_levels", <CheckRoundedIcon />, <CheckRoundedIcon />),
         createData("learning_pass_hd_content", <CheckRoundedIcon />, <CheckRoundedIcon />),
         createData("learning_pass_ad_free", <CheckRoundedIcon />, <CheckRoundedIcon />),
         createData("learning_pass_animated_series", <ClearRoundedIcon />, <FormattedMessage id="landing_number_episodes" />),
         createData("learning_pass_premium_songs", <ClearRoundedIcon />, <FormattedMessage id="landing_number_minutes" />),
-        createData("learning_pass_premium_apps", <ClearRoundedIcon />, 5),
+        createData("learning_pass_premium_apps", <ClearRoundedIcon />, 3),
         createData("learning_pass_ot_purchase", "US$20.00", "US$40.00"),
     ];
 
