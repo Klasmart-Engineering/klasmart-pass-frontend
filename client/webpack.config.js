@@ -66,7 +66,7 @@ module.exports = {
             template: 'src/index.html',
         }),
         new webpack.ProvidePlugin({
-            'fetch': 'imports-loader?this=>global!exports-loader?global.fetch!whatwg-fetch'
+            //'fetch': 'imports-loader?this=>global!exports-loader?global.fetch!whatwg-fetch'
         }),
     ],
     devServer: {
