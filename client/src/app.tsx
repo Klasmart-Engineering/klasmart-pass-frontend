@@ -19,6 +19,7 @@ import { Signup } from "./pages/signup";
 import { Verify } from "./pages/verify";
 import { VerifyLink } from "./pages/verify-link";
 import { IdentityType } from "./utils/accountType";
+import { RedeemTicket } from "./pages/redeem-ticket";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -63,6 +64,7 @@ export function App() {
                 <Route path="/password-changed" component={PasswordChanged} />
                 <Route path="/password-forgot" component={PasswordForgot} />
                 <Route path="/password-restore" component={PasswordRestore} />
+                <Route path="/redeem-ticket" component={RedeemTicket} />
                 <Route path="/" component={Landing} />
             </Switch>
             <Grid container className={classes.footer}>

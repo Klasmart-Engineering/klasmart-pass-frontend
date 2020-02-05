@@ -18,6 +18,7 @@ export class RestAPI {
     private authPrefix = "https://beta.auth.badanamu.net/";
     private apiPrefix = "https://beta.account.badanamu.net/";
     private productPrefix = "https://beta.product.badanamu.net/";
+    private organizationPrefix = "https://seoul-beta.organization-api.badanamu.net/"
 
     private store: Store;
 
@@ -271,6 +272,12 @@ export class RestAPI {
         return body;
     }
 
+    public async redeemTicket(ticketId: string) {
+        const response = await this.organizationCall("POST", "v1/ticket/" + ticketId + "/activate")
+        const body = await response.json();
+        return body;
+    }
+
     private async autoRefreshSesion() {
         try {
             await this.refreshSession();
@@ -291,6 +298,9 @@ export class RestAPI {
     }
     private apiCall(method: "GET" | "POST", route: string, body?: string, refresh = true) {
         return this.call(method, this.apiPrefix, route, body, refresh);
+    }
+    private organizationCall(method: "GET" | "POST", route: string, body?: string, refresh = true) {
+        return this.call(method, this.organizationPrefix, route, body, refresh);
     }
 
     private async call(method: string, prefix: string, route: string, body: string | undefined, refresh: boolean) {
