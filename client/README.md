@@ -1,38 +1,28 @@
 # Badanamu Learning Pass Frontend
 
-BLP Frontend uses two different branches for testing and deploying (`master` and `production`). Please do not merge these two branches together. 
+BLP Frontend uses 3 differents branches for developing, testing and deploying (`master`, `beta` and `prod`).
 
-To push changes from `master` to `production`, use `git rebase master` while on the `production` branch.
-
+To push changes from `master` to `beta`, simply, create a Pull-Request with Fast-Forward merge strategy to merge from master to beta. To push on prod, same idea with `beta` to `prod`.
 
 ## Building and Deploying
-
 
 ### Prerequisites
 
 Install the dependencies: `npm install`
 
+### Run locally
 
-### Building from `master` or a branch from `master` (pre-production)
+Make sure to be on a local development branch based on `master` and then `npm run start`
 
-Check API Endpoints in `restapi.ts`, ensure that the subdomain is not `prod` (lines 16-19).
+### Build for Beta
 
-Building: `npm run build`
+Make sure to be on `beta` and then `npm run build`
 
-Running on a local server: `npm run start` (Please check console for localhost address).
+### Build for Production
 
-
-### Building from `production` (production)
-
-Check API Endpoints in `restapi.ts`, ensure that the subdomain is `prod` (lines 16-19).
-
-Building: `npm run build`
-
-Running on a local server: `npm run start` (Please check console for localhost address).
-
+Make sure to be on `prod` and then `npm run build:prod`
 
 ### Deploying
-
 
 #### Amazon S3 Buckets
 
@@ -44,7 +34,6 @@ For steps 2-4 in the upload process, proceed with the default settings, you do n
 [AWS S3 Beta](https://s3.console.aws.amazon.com/s3/buckets/badanamu-beta-pass-site/?region=us-west-2&tab=overview)
 
 [AWS S3 Production](https://s3.console.aws.amazon.com/s3/buckets/badanamu-pass-site/?region=us-west-2&tab=overview) 
-
 
 
 #### Amazon Cloudfront

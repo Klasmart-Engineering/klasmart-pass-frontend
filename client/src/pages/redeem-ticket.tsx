@@ -79,7 +79,8 @@ export function RedeemTicket(props: RouteComponentProps) {
         if (inFlight) { return; }
         try {
             setInFlight(true);
-            await restApi.redeemTicket(ticketId)
+            const response = await restApi.getTicketRegion(ticketId)
+            await restApi.redeemTicket(ticketId, response.region)
             console.log("redeemed ticket")
         } catch (e) {
             handleError(e);

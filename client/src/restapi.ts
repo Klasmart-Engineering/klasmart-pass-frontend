@@ -3,6 +3,8 @@ import { RestAPIError, RestAPIErrorType } from "./restapi_errors";
 import { ActionTypes } from "./store/actions";
 import { Store } from "./store/store";
 import { IdentityType } from "./utils/accountType";
+import { getServers } from "dns";
+import { getStage } from "./config";
 
 function phoneOrEmail(str: string): { phoneNr?: string, email?: string } {
     if (str.indexOf("@") === -1) {
@@ -14,11 +16,12 @@ function phoneOrEmail(str: string): { phoneNr?: string, email?: string } {
 
 export class RestAPI {
 
-    private paymentPrefix = "https://beta.payment.badanamu.net/";
-    private authPrefix = "https://beta.auth.badanamu.net/";
-    private apiPrefix = "https://beta.account.badanamu.net/";
-    private productPrefix = "https://beta.product.badanamu.net/";
-    private organizationPrefix = "https://seoul-beta.organization-api.badanamu.net/"
+    private endpointPrefix = "https://"
+    private paymentPrefix = ".payment.badanamu.net/";
+    private authPrefix = ".auth.badanamu.net/";
+    private apiPrefix = ".account.badanamu.net/";
+    private productPrefix = ".product.badanamu.net/";
+    private organizationPrefix = ".organization-api.badanamu.net/"
 
     private store: Store;
 
@@ -28,7 +31,7 @@ export class RestAPI {
 
     public async signup(id: string, pw: string, lang: string) {
         const { phoneNr, email } = phoneOrEmail(id);
-        const result = await this.apiCall("POST", "v1/signup", JSON.stringify({
+        const result = await this.accountCall("POST", "v1/signup", JSON.stringify({
             email,
             lang,
             phoneNr,
@@ -46,9 +49,9 @@ export class RestAPI {
         if (accountId === null) { throw new Error("Unknown AccountID"); }
         switch (type) {
             case IdentityType.Phone:
-                return this.apiCall("POST", "v1/verify/phonenumber", JSON.stringify({ accountId, verificationCode }));
+                return this.accountCall("POST", "v1/verify/phonenumber", JSON.stringify({ accountId, verificationCode }));
             case IdentityType.Email:
-                return this.apiCall("POST", "v1/verify/email", JSON.stringify({ accountId, verificationCode }));
+                return this.accountCall("POST", "v1/verify/email", JSON.stringify({ accountId, verificationCode }));
             default:
                 throw new Error("Unknown Account Type");
         }
@@ -70,7 +73,7 @@ export class RestAPI {
             default:
                 throw new Error("Unknown Account Type");
         }
-        const response = await this.apiCall("GET", `${url}?${params}`);
+        const response = await this.accountCall("GET", `${url}?${params}`);
         const body = await response.json();
         if (typeof body === "object" && typeof body.verified === "boolean") {
             return body.verified;
@@ -80,7 +83,7 @@ export class RestAPI {
 
     public forgotPassword(id: string, lang: string) {
         const { phoneNr, email } = phoneOrEmail(id);
-        return this.apiCall("POST", "v1/forgotpassword", JSON.stringify({
+        return this.accountCall("POST", "v1/forgotpassword", JSON.stringify({
             email,
             lang,
             phoneNr,
@@ -90,7 +93,7 @@ export class RestAPI {
     public restorePassword(id: string, password: string, resetCode: string) {
         const { phoneNr, email } = phoneOrEmail(id);
 
-        return this.apiCall("POST", "v1/restorepassword", JSON.stringify({
+        return this.accountCall("POST", "v1/restorepassword", JSON.stringify({
             accountEmail: email,
             accountPhoneNr: phoneNr,
             pw: password,
@@ -99,7 +102,7 @@ export class RestAPI {
     }
 
     public changePassword(currentPassword: string, newPassword: string) {
-        return this.apiCall("POST", "v1/self/password", JSON.stringify({
+        return this.accountCall("POST", "v1/self/password", JSON.stringify({
             currPass: currentPassword,
             newPass: newPassword,
         }));
@@ -272,8 +275,14 @@ export class RestAPI {
         return body;
     }
 
-    public async redeemTicket(ticketId: string) {
-        const response = await this.organizationCall("POST", "v1/ticket/" + ticketId + "/activate")
+    public async getTicketRegion(ticketId: string) {
+        const response = await this.productCall("GET", "v1/ticket/" + ticketId + "/region")
+        const body = await response.json();
+        return body;
+    }
+
+    public async redeemTicket(ticketId: string, region: string) {
+        const response = await this.organizationCall("POST", "v1/ticket/" + ticketId + "/activate", region)
         const body = await response.json();
         return body;
     }
@@ -288,19 +297,19 @@ export class RestAPI {
     }
 
     private paymentCall(method: "POST" | "GET" | "DELETE", route: string, body?: string, refresh = true) {
-        return this.call(method, this.paymentPrefix, route, body, refresh);
+        return this.call(method, this.endpointPrefix + getStage() + this.paymentPrefix, route, body, refresh);
     }
     private productCall(method: "GET" | "POST", route: string, body?: string, refresh = true) {
-        return this.call(method, this.productPrefix, route, body, refresh);
+        return this.call(method, this.endpointPrefix + getStage() + this.productPrefix, route, body, refresh);
     }
     private authCall(route: string, body: string, refresh = true) {
-        return this.call("POST", this.authPrefix, route, body, refresh);
+        return this.call("POST", this.endpointPrefix + getStage() + this.authPrefix, route, body, refresh);
     }
-    private apiCall(method: "GET" | "POST", route: string, body?: string, refresh = true) {
-        return this.call(method, this.apiPrefix, route, body, refresh);
+    private accountCall(method: "GET" | "POST", route: string, body?: string, refresh = true) {
+        return this.call(method, this.endpointPrefix + getStage() + this.apiPrefix, route, body, refresh);
     }
-    private organizationCall(method: "GET" | "POST", route: string, body?: string, refresh = true) {
-        return this.call(method, this.organizationPrefix, route, body, refresh);
+    private organizationCall(method: "GET" | "POST", route: string, region: string, body?: string, refresh = true) {
+        return this.call(method, this.endpointPrefix + region + '-' + getStage() + this.organizationPrefix, route, body, refresh);
     }
 
     private async call(method: string, prefix: string, route: string, body: string | undefined, refresh: boolean) {
