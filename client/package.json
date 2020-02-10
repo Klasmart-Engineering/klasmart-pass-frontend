@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "webpack",
+    "build": "rm dist/*;webpack --config webpack.beta.config.js",
+    "build:prod": "rm dist/*;webpack --config webpack.prod.config.js",
     "start": "webpack-dev-server"
   },
   "author": "",
@@ -12,9 +13,13 @@
     "@babel/core": "^7.6.4",
     "@babel/plugin-proposal-class-properties": "^7.5.5",
     "@babel/plugin-proposal-object-rest-spread": "^7.6.2",
+    "@babel/plugin-proposal-decorators": "^7.7.4",
+    "@babel/plugin-transform-object-assign": "^7.7.4",
+    "@babel/plugin-transform-runtime": "^7.7.4",
     "@babel/preset-env": "^7.6.3",
     "@babel/preset-react": "^7.6.3",
     "@babel/preset-typescript": "^7.6.0",
+    "@babel/runtime": "^7.7.4",
     "@types/braintree-web-drop-in": "^1.18.0",
     "@types/react": "^16.9.11",
     "@types/react-dom": "^16.9.3",
@@ -38,7 +43,8 @@
     "url-loader": "^2.3.0",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.9",
-    "webpack-dev-server": "^3.9.0"
+    "webpack-dev-server": "^3.9.0",
+    "webpack-visualizer-plugin": "^0.1.11"
   },
   "dependencies": {
     "@babel/polyfill": "^7.7.0",
@@ -47,6 +53,7 @@
     "braintree-web-drop-in": "^1.20.4",
     "cookies-js": "^1.2.3",
     "fetch-ie8": "^1.5.0",
+    "interpolate-html-plugin": "^3.0.0",
     "logrocket": "^1.0.5",
     "query-string": "^6.9.0",
     "react": "^16.11.0",
