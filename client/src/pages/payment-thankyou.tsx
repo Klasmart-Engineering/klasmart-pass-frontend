@@ -5,11 +5,12 @@ import Divider from "@material-ui/core/Divider";
 import Grid from "@material-ui/core/Grid";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
+import * as QueryString from "query-string";
 import * as React from "react";
 import { useState } from "react";
 import { FormattedDate, FormattedMessage } from "react-intl";
 import { useSelector, useStore } from "react-redux";
-import { useHistory } from "react-router";
+import { Route, RouteComponentProps, useHistory } from "react-router";
 import BadanamuButton from "../components/button";
 import BadanamuTextField from "../components/textfield";
 import BadanamuLogo from "../img/badanamu_logo.png";
@@ -31,13 +32,16 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 }),
 );
 // tslint:enable:object-literal-sort-keys
-export function PaymentThankyou() {
+export function PaymentThankyou(props: RouteComponentProps) {
+    const params = QueryString.parse(props.location.search);
+    const fromTicket = typeof params.ticket === "string" ? params.ticket : "";
+
     const classes = useStyles();
     const history = useHistory();
 
-    const expiration = useSelector((state: State) => state.account.expireDate);
+    // const expiration = useSelector((state: State) => state.account.expireDate);
     const selectedProduct = useSelector((state: State) => state.account.productId);
-    const defaultEmail = useSelector((state: State) => state.account.email || "");
+    // const defaultEmail = useSelector((state: State) => state.account.email || "");
 
     return (
         <Container maxWidth="sm">
@@ -49,15 +53,26 @@ export function PaymentThankyou() {
                         </Grid>
                         <Grid item xs={12}>
                             <Typography variant="h4" align="center">
-                                <FormattedMessage id="thank_you_heading"
-                                    values={{
-                                        br: <br />,
-                                        pass: <FormattedMessage
-                                            id={selectedProduct === "BLP" ? "pass_name_standard" : "pass_name_premium"}
-                                            values={{ b: (...chunks: any[]) => <strong>{chunks}</strong> }}
-                                        />,
-                                    }}
-                                />
+                                {fromTicket === "1" ?
+                                    <FormattedMessage id="thank_you_ticket_heading"
+                                        values={{
+                                            br: <br />,
+                                            pass: <FormattedMessage
+                                                id={selectedProduct === "BLP" ? "pass_name_standard" : "pass_name_premium"}
+                                                values={{ b: (...chunks: any[]) => <strong>{chunks}</strong> }}
+                                            />,
+                                        }}
+                                    /> :
+                                    <FormattedMessage id="thank_you_heading"
+                                        values={{
+                                            br: <br />,
+                                            pass: <FormattedMessage
+                                                id={selectedProduct === "BLP" ? "pass_name_standard" : "pass_name_premium"}
+                                                values={{ b: (...chunks: any[]) => <strong>{chunks}</strong> }}
+                                            />,
+                                        }}
+                                    />
+                                }
                             </Typography>
                         </Grid>
                         <Grid item xs={12}>
@@ -71,19 +86,6 @@ export function PaymentThankyou() {
                         <Grid item xs={12}>
                             <Typography variant="body1" align="center">
                                 <FormattedMessage id="thank_you_intro2" />
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Typography variant="body1" align="center">
-                                <FormattedMessage
-                                    id="thank_you_promo1"
-                                    values={{ b: (...chunks: any[]) => <strong>{chunks}</strong> }}
-                                />
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Typography variant="body1" align="center">
-                                <FormattedMessage id="thank_you_promo2" />
                             </Typography>
                         </Grid>
                         <Grid item xs={12} style={{ width: "100%" }}>

@@ -1,87 +1,57 @@
+import { Card, CardContent, CircularProgress, Grid } from "@material-ui/core";
 import Container from "@material-ui/core/Container";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
+import * as QueryString from "query-string";
 import React, { useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
+import { RouteComponentProps } from "react-router";
+import { useHistory } from "react-router";
 import { redirectIfUnauthorized } from "../components/authorized";
+import BadanamuButton from "../components/button";
+import BadanamuTextField from "../components/textfield";
+import BadanamuLogo from "../img/badanamu_logo.png";
 import { useRestAPI } from "../restapi";
 import { RestAPIError } from "../restapi_errors";
-import * as QueryString from "query-string";
-import { RouteComponentProps } from "react-router";
-import { string } from "prop-types";
+import { email } from "../store/reducers";
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme: Theme) => createStyles({
     card: {
-        alignItems: "center",
         display: "flex",
+        alignItems: "center",
         padding: "48px 40px !important",
     },
-    row: {
-        textAlign: "left",
-    },
-    emptySpace: {
-        padding: theme.spacing(4),
-        [theme.breakpoints.down("xs")]: {
-            padding: theme.spacing(2),
-        },
-    },
-    bigAvatar: {
-        width: 96,
-        height: 96,
-    },
-    sectionDivider: {
-        margin: theme.spacing(2, 0),
-    },
-    productImgContainer: {
-        textAlign: "right",
-        minHeight: 96,
-        margin: 0,
+    links: {
         padding: theme.spacing(4, 0),
-        [theme.breakpoints.down("sm")]: {
-            minHeight: 72,
-        },
-    },
-    productImg: {
-        maxWidth: 192,
-        [theme.breakpoints.down("sm")]: {
-            maxWidth: 128,
-        },
-    },
-    sectionTypography: {
         textAlign: "right",
-        [theme.breakpoints.down("xs")]: {
-            textAlign: "left",
-        },
+    },
+    formContainer: {
+        width: "100%",
     },
 }),
 );
 
 export function RedeemTicket(props: RouteComponentProps) {
+    const params = QueryString.parse(props.location.search);
     const [inFlight, setInFlight] = React.useState(false);
     const [generalError, setGeneralError] = useState<JSX.Element | null>(null);
-
-    const params = QueryString.parse(props.location.search);
-    const ticketId = (typeof params.ticketId === "string" ? params.ticketId : string)
+    const [ticketId, setTicketId] = useState(typeof params.ticketId === "string" ? params.ticketId : "");
 
     redirectIfUnauthorized("/redeem-ticket?ticketId=" + ticketId);
 
+    const history = useHistory();
     const classes = useStyles();
     const restApi = useRestAPI();
 
-    useEffect(() => {
-        if (typeof ticketId === "string") {
-            redeemTicket(ticketId);
-        }
-    }, []);
-
-    async function redeemTicket(ticketId: string) {
+    async function redeemTicket(e: React.FormEvent) {
         if (inFlight) { return; }
         try {
             setInFlight(true);
-            const response = await restApi.getTicketRegion(ticketId)
-            await restApi.redeemTicket(ticketId, response.region)
-            console.log("redeemed ticket")
+            const response = await restApi.getTicketRegion(ticketId);
+            const result = await restApi.redeemTicket(ticketId, response.region);
+            console.log("redeemed ticket");
+            if (result.status === 200) { history.push("/payment-thankyou?ticket=1"); }
         } catch (e) {
             handleError(e);
         } finally {
@@ -104,14 +74,57 @@ export function RedeemTicket(props: RouteComponentProps) {
     }
 
     return (
-        <Container maxWidth="lg" >
-            <div className={classes.emptySpace} />
-            {
-                generalError === null ? null :
-                    <Typography color="error">
-                        {generalError}
-                    </Typography>
-            }
-        </Container >
+        <Container maxWidth="sm" style={{ margin: "auto 0" }}>
+            <Card>
+                <CardContent className={classes.card}>
+                    <Grid container direction="column" justify="center" alignItems="center" spacing={4}>
+                        <Grid item xs={12}>
+                            <img src={BadanamuLogo} style={{ marginBottom: 12 }} />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Typography variant="h5">
+                                <FormattedMessage
+                                    id="ticket_redeem_heading"
+                                    values={{ b: (...chunks: any[]) => <strong>{chunks}</strong> }}
+                                />
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={12} className={classes.formContainer}>
+                            <form onSubmit={(e) => redeemTicket(e)}>
+                                <Grid container spacing={2}>
+                                    <Grid item xs={12}>
+                                        <BadanamuTextField
+                                            required
+                                            fullWidth
+                                            label={<FormattedMessage id="ticket" />}
+                                            value={ticketId}
+                                            onChange={(e) => setTicketId(e.target.value)}
+                                        />
+                                    </Grid>
+                                </Grid>
+                                <BadanamuButton
+                                    type="submit"
+                                    fullWidth
+                                    size="large"
+                                    disabled={inFlight}
+                                >
+                                    {
+                                        inFlight ?
+                                            <CircularProgress size={25} /> :
+                                            <FormattedMessage id="ticket_redeem_btn" />
+                                    }
+                                </BadanamuButton>
+                                {
+                                    generalError === null ? null :
+                                        <Typography color="error">
+                                            {generalError}
+                                        </Typography>
+                                }
+                            </form>
+                        </Grid>
+                    </Grid>
+                </CardContent>
+            </Card>
+        </Container>
     );
 }
