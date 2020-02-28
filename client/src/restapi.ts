@@ -274,8 +274,20 @@ export class RestAPI {
         return body;
     }
 
+    public async getEventTicketRegion(ticketId: string) {
+        const response = await this.productCall("GET", "v1/eventTicket/" + ticketId + "/region")
+        const body = await response.json();
+        return body;
+    }
+
     public async redeemTicket(ticketId: string, region: string) {
         const response = await this.organizationCall("POST", "v1/ticket/" + ticketId + "/activate", region)
+        const body = await response.json();
+        return body;
+    }
+
+    public async redeemEventTicket(ticketId: string, region: string) {
+        const response = await this.organizationCall("POST", "v1/eventTicket/" + ticketId + "/activate", region)
         const body = await response.json();
         return body;
     }
@@ -302,7 +314,7 @@ export class RestAPI {
         return this.call(method, getAccountEndpoint(), route, body, refresh);
     }
     private organizationCall(method: "GET" | "POST", route: string, region: string, body?: string, refresh = true) {
-        return this.call(method, getOrganizationEndpoint(), route, body, refresh);
+        return this.call(method, getOrganizationEndpoint(region), route, body, refresh);
     }
 
     private async call(method: string, prefix: string, route: string, body: string | undefined, refresh: boolean) {

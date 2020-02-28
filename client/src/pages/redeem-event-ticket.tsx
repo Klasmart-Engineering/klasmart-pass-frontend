@@ -13,7 +13,6 @@ import BadanamuTextField from "../components/textfield";
 import BadanamuLogo from "../img/badanamu_logo.png";
 import { useRestAPI } from "../restapi";
 import { RestAPIError } from "../restapi_errors";
-import { email } from "../store/reducers";
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -32,24 +31,24 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 }),
 );
 
-export function RedeemTicket(props: RouteComponentProps) {
+export function RedeemEventTicket(props: RouteComponentProps) {
     const params = QueryString.parse(props.location.search);
     const [inFlight, setInFlight] = React.useState(false);
     const [generalError, setGeneralError] = useState<JSX.Element | null>(null);
     const [ticketId, setTicketId] = useState(typeof params.ticketId === "string" ? params.ticketId : "");
 
-    redirectIfUnauthorized("/redeem-ticket?ticketId=" + ticketId);
+    redirectIfUnauthorized("/redeem-event-ticket?ticketId=" + ticketId);
 
     const history = useHistory();
     const classes = useStyles();
     const restApi = useRestAPI();
 
-    async function redeemTicket(e: React.FormEvent) {
+    async function redeemEventTicket(e: React.FormEvent) {
         if (inFlight) { return; }
         try {
             setInFlight(true);
-            const response = await restApi.getTicketRegion(ticketId);
-            await restApi.redeemTicket(ticketId, response.regionId);
+            const response = await restApi.getEventTicketRegion(ticketId);
+            await restApi.redeemEventTicket(ticketId, response.regionId);
             history.push("/payment-thankyou?ticket=1");
         } catch (e) {
             handleError(e);
@@ -89,7 +88,7 @@ export function RedeemTicket(props: RouteComponentProps) {
                             </Typography>
                         </Grid>
                         <Grid item xs={12} className={classes.formContainer}>
-                            <form onSubmit={(e) => redeemTicket(e)}>
+                            <form onSubmit={(e) => redeemEventTicket(e)}>
                                 <Grid container spacing={2}>
                                     <Grid item xs={12}>
                                         <BadanamuTextField
