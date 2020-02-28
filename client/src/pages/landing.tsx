@@ -211,6 +211,28 @@ export function Landing() {
                 <CardContent className={classes.card}>
                     <Grid container direction="row" spacing={4}>
                         <Grid container item xs={12} justify="center">
+                            <BadanamuButton
+                                className={clsx(classes.planSelectBtn, classes.planSelectedBtn)}
+                                fullWidth
+                                size="large"
+                                onClick={(e) => {
+                                    history.push("/redeem-ticket");
+                                }}
+                            >
+                                Redeem Ticket
+                            </BadanamuButton>
+                            <BadanamuButton
+                                className={clsx(classes.planSelectBtn, classes.planSelectedBtn)}
+                                fullWidth
+                                size="large"
+                                onClick={(e) => {
+                                    history.push("/redeem-event-ticket");
+                                }}
+                            >
+                                Redeem Event Ticket
+                            </BadanamuButton>
+                        </Grid>
+                        <Grid container item xs={12} justify="center">
                             <Typography variant="h4"><FormattedMessage id="landing_select_header_single" values={{ b: (...chunks: any[]) => <strong>{chunks}</strong> }} /></Typography>
                         </Grid>
                         <Grid container item xs={12} justify="center" className={classes.responsiveText}>
