@@ -72,7 +72,11 @@ module.exports = {
         }),
         new Visualizer({ filename: '../webpack-stats.html' }),
         new webpack.EnvironmentPlugin({
-            "STAGE": "beta"
+            "PAYMENT_ENDPOINT": "https://beta.payment.badanamu.net/",
+            "AUTH_ENDPOINT": "https://beta.auth.badanamu.net/",
+            "ACCOUNT_ENDPOINT": "https://beta.account.badanamu.net/",
+            "PRODUCT_ENDPOINT": "https://beta.product.badanamu.net/",
+            "ORGANIZATION_ENDPOINT": "https://beta.organization-api.badanamu.net/",
         })
     ],
     optimization: {

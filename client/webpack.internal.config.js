@@ -69,11 +69,11 @@ module.exports = {
             //'fetch': 'imports-loader?this=>global!exports-loader?global.fetch!whatwg-fetch'
         }),
         new webpack.EnvironmentPlugin({
-            "PAYMENT_ENDPOINT": "http://localhost:8092/",
-            "AUTH_ENDPOINT": "http://localhost:8080/",
-            "ACCOUNT_ENDPOINT": "http://localhost:8089/",
-            "PRODUCT_ENDPOINT": "http://localhost:8044/",
-            "ORGANIZATION_ENDPOINT": "http://localhost:8084/",
+            "PAYMENT_ENDPOINT": "https://payment.internal.badanamu.net/",
+            "AUTH_ENDPOINT": "https://auth.internal.badanamu.net/",
+            "ACCOUNT_ENDPOINT": "https://account.internal.badanamu.net/",
+            "PRODUCT_ENDPOINT": "https://product.internal.badanamu.net/",
+            "ORGANIZATION_ENDPOINT": "https://organization-api.internal.badanamu.net",
         })
     ],
     devServer: {

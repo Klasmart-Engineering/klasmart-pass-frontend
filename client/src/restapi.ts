@@ -4,7 +4,7 @@ import { ActionTypes } from "./store/actions";
 import { Store } from "./store/store";
 import { IdentityType } from "./utils/accountType";
 import { getServers } from "dns";
-import { getStage } from "./config";
+import { getPaymentEndpoint, getAuthEndpoint, getAccountEndpoint, getProductEndpoint, getOrganizationEndpoint } from "./config";
 
 function phoneOrEmail(str: string): { phoneNr?: string, email?: string } {
     if (str.indexOf("@") === -1) {
@@ -15,13 +15,6 @@ function phoneOrEmail(str: string): { phoneNr?: string, email?: string } {
 }
 
 export class RestAPI {
-
-    private endpointPrefix = "https://"
-    private paymentPrefix = ".payment.badanamu.net/";
-    private authPrefix = ".auth.badanamu.net/";
-    private apiPrefix = ".account.badanamu.net/";
-    private productPrefix = ".product.badanamu.net/";
-    private organizationPrefix = ".organization-api.badanamu.net/"
 
     private store: Store;
 
@@ -297,19 +290,19 @@ export class RestAPI {
     }
 
     private paymentCall(method: "POST" | "GET" | "DELETE", route: string, body?: string, refresh = true) {
-        return this.call(method, this.endpointPrefix + getStage() + this.paymentPrefix, route, body, refresh);
+        return this.call(method, getPaymentEndpoint(), route, body, refresh);
     }
     private productCall(method: "GET" | "POST", route: string, body?: string, refresh = true) {
-        return this.call(method, this.endpointPrefix + getStage() + this.productPrefix, route, body, refresh);
+        return this.call(method, getProductEndpoint(), route, body, refresh);
     }
     private authCall(route: string, body: string, refresh = true) {
-        return this.call("POST", this.endpointPrefix + getStage() + this.authPrefix, route, body, refresh);
+        return this.call("POST", getAuthEndpoint(), route, body, refresh);
     }
     private accountCall(method: "GET" | "POST", route: string, body?: string, refresh = true) {
-        return this.call(method, this.endpointPrefix + getStage() + this.apiPrefix, route, body, refresh);
+        return this.call(method, getAccountEndpoint(), route, body, refresh);
     }
     private organizationCall(method: "GET" | "POST", route: string, region: string, body?: string, refresh = true) {
-        return this.call(method, this.endpointPrefix + region + '-' + getStage() + this.organizationPrefix, route, body, refresh);
+        return this.call(method, getOrganizationEndpoint(), route, body, refresh);
     }
 
     private async call(method: string, prefix: string, route: string, body: string | undefined, refresh: boolean) {
