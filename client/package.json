@@ -5,7 +5,8 @@
   "scripts": {
     "build": "rm dist/*;webpack --config webpack.beta.config.js",
     "build:prod": "rm dist/*;webpack --config webpack.prod.config.js",
-    "start": "webpack-dev-server"
+    "start": "webpack-dev-server",
+    "start:internal": "webpack-dev-server --config webpack.internal.config.js"
   },
   "author": "",
   "license": "ISC",

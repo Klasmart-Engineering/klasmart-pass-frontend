@@ -12,7 +12,15 @@ Install the dependencies: `npm install`
 
 ### Run locally
 
-Make sure to be on a local development branch based on `master` and then `npm run start`
+Make sure to be on a local development branch based on `master`
+
+#### Use local server
+
+`npm run start`
+
+#### Use internal server
+
+`npm run start:internal`
 
 ### Build for Beta
 
