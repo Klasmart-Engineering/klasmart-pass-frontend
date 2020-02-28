@@ -76,7 +76,11 @@ module.exports = {
             "AUTH_ENDPOINT": "https://prod.auth.badanamu.net/",
             "ACCOUNT_ENDPOINT": "https://prod.account.badanamu.net/",
             "PRODUCT_ENDPOINT": "https://prod.product.badanamu.net/",
-            "ORGANIZATION_ENDPOINT": "https://prod.organization-api.badanamu.net/",
+            "ORGANIZATION_SEOUL_ENDPOINT": "https://seoul.organization-api.badanamu.net/",
+            "ORGANIZATION_MUMBAI_ENDPOINT": "https://mumbai.organization-api.badanamu.net/",
+            "ORGANIZATION_TOKYO_ENDPOINT": "https://tokyo.organization-api.badanamu.net/",
+            "ORGANIZATION_FRANKFURT_ENDPOINT": "https://frankfurt.organization-api.badanamu.net/",
+            "ORGANIZATION_OREGON_ENDPOINT": "https://oregon.organization-api.badanamu.net/",
         })
     ],
     optimization: {
