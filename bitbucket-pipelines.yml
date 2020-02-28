@@ -1,0 +1,12 @@
+image: node:10.15.3
+
+pipelines:
+  default:
+    - step:
+        caches:
+          - node
+        script:
+          - cd client
+          - npm install
+          - npm run build
+          - npm run build:prod
