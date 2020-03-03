@@ -1,6 +1,7 @@
 import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
+import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import Collapse from "@material-ui/core/Collapse";
 import Container from "@material-ui/core/Container";
 import Divider from "@material-ui/core/Divider";
@@ -10,10 +11,12 @@ import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
+import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography";
 import CheckRoundedIcon from "@material-ui/icons/CheckRounded";
 import ClearRoundedIcon from "@material-ui/icons/ClearRounded";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import HelpRounded from "@material-ui/icons/HelpRounded";
 import clsx from "clsx";
 import React, { useState } from "react";
 import { FormattedDate, FormattedMessage } from "react-intl";
@@ -43,7 +46,7 @@ const useStyles = makeStyles((theme) => createStyles({
             width: "100%",
         },
     },
-    planSelectBtn: {
+    activeSelectBtn: {
         "padding": theme.spacing(1, 2),
         "fontWeight": 600,
         "color": "white",
@@ -54,26 +57,46 @@ const useStyles = makeStyles((theme) => createStyles({
             boxShadow: "0px 0px 10px 0px rgba(24,150,234,1)",
             transform: "translateY(-1px)",
         },
-        "marginTop": 48,
+    },
+    activeSelectedBtn: {
+        backgroundColor: "#1896ea",
+        boxShadow: "0px 0px 10px 0px rgba(24,150,234,1)",
+    },
+    inactiveSelectBtn: {
+        "padding": theme.spacing(1, 2),
+        "fontWeight": 600,
+        "color": "black",
+        "backgroundColor": "#d8efff",
+        "&:hover": {
+            color: "white",
+            backgroundColor: "#58bcf5",
+            boxShadow: "0px 0px 10px 0px rgba(24,150,234,1)",
+            transform: "translateY(-1px)",
+        },
+    },
+    spacingBtn: {
+        margin: "48px 0",
         [theme.breakpoints.down("sm")]: {
             margin: "32px 0 16px 0",
             marginLeft: 0,
         },
     },
-    planSelectBtnBottom: {
-        display: "none",
+    spacingGrid: {
+        marginTop: 48,
         [theme.breakpoints.down("sm")]: {
-            display: "inline-flex",
+            marginTop: 32,
         },
-    },
-    planSelectedBtn: {
-        backgroundColor: "#1896ea",
-        boxShadow: "0px 0px 10px 0px rgba(24,150,234,1)",
     },
     selected: {
         textAlign: "center",
         color: "#1896ea",
         fontWeight: 600,
+    },
+    noMaxWidth: {
+        maxWidth: "none",
+        [theme.breakpoints.down("sm")]: {
+            maxWidth: 300,
+        },
     },
     notSelected: {
         textAlign: "center",
@@ -140,8 +163,20 @@ export function Landing() {
     const store = useStore();
     const history = useHistory();
     const classes = useStyles();
+
     const [selected, setSelected] = useState(true);
     const [selectedPlan, setPlan] = useState("BLPPremium");
+    const [pressedTicketButton, setTicketButton] = useState(false);
+    const [open, setOpen] = useState(false);
+
+    const handleTooltipClose = () => {
+        setOpen(false);
+    };
+
+    const handleTooltipOpen = () => {
+        setOpen(true);
+    };
+
     const learningApps = [
         createData("Badanamu: Bada Rhyme 1", <CheckRoundedIcon />, <CheckRoundedIcon />),
         createData("Badanamu: Bada Rhyme 2", <CheckRoundedIcon />, <CheckRoundedIcon />),
@@ -153,6 +188,7 @@ export function Landing() {
         createData("Badanamu: Bada Sound", <CheckRoundedIcon />, <CheckRoundedIcon />),
         createData("Badanamu: Bada Read", <CheckRoundedIcon />, <CheckRoundedIcon />),
         createData("Badanamu: Dino Park ESL", <CheckRoundedIcon />, <CheckRoundedIcon />),
+        createData("Badanamu: Zoo Party ESL", <CheckRoundedIcon />, <CheckRoundedIcon />),
         createData("Badanamu: Cadets", <ClearRoundedIcon />, <CheckRoundedIcon />),
         createData("Badanamu: Songs", <ClearRoundedIcon />, <CheckRoundedIcon />),
         createData("Badanamu: Books", <ClearRoundedIcon />, <CheckRoundedIcon />),
@@ -211,28 +247,6 @@ export function Landing() {
                 <CardContent className={classes.card}>
                     <Grid container direction="row" spacing={4}>
                         <Grid container item xs={12} justify="center">
-                            <BadanamuButton
-                                className={clsx(classes.planSelectBtn, classes.planSelectedBtn)}
-                                fullWidth
-                                size="large"
-                                onClick={(e) => {
-                                    history.push("/redeem-ticket");
-                                }}
-                            >
-                                Redeem Ticket
-                            </BadanamuButton>
-                            <BadanamuButton
-                                className={clsx(classes.planSelectBtn, classes.planSelectedBtn)}
-                                fullWidth
-                                size="large"
-                                onClick={(e) => {
-                                    history.push("/redeem-event-ticket");
-                                }}
-                            >
-                                Redeem Event Ticket
-                            </BadanamuButton>
-                        </Grid>
-                        <Grid container item xs={12} justify="center">
                             <Typography variant="h4"><FormattedMessage id="landing_select_header_single" values={{ b: (...chunks: any[]) => <strong>{chunks}</strong> }} /></Typography>
                         </Grid>
                         <Grid container item xs={12} justify="center" className={classes.responsiveText}>
@@ -240,10 +254,10 @@ export function Landing() {
                         </Grid>
                         <Grid item xs={12} className={classes.emptySpace} />
                         <Grid container item justify="flex-start" xs={12} sm={6} spacing={2}>
-                            <Grid container item direction="column" justify="flex-start" alignItems="flex-start" xs={12} spacing={2}>
+                            <Grid item xs={12}>
                                 <img src={BLPPremium} className={classes.productImg} />
                                 <BadanamuButton
-                                    className={clsx(classes.planSelectBtn, classes.planSelectedBtn)}
+                                    className={pressedTicketButton ? clsx(classes.inactiveSelectBtn, classes.spacingBtn) : clsx(classes.activeSelectBtn, classes.activeSelectedBtn, classes.spacingBtn)}
                                     fullWidth
                                     size="large"
                                     onClick={(e) => {
@@ -256,6 +270,70 @@ export function Landing() {
                                         <FormattedMessage id="learning_pass_premium" />
                                     }
                                 </BadanamuButton>
+                                <Typography variant="body1" align="center">Have a Learning Pass Ticket ID?</Typography>
+                                {pressedTicketButton ?
+                                    <Grid container direction="row" justify="space-between" alignItems="center" spacing={2}>
+                                        <Grid item xs={12} sm={6} className={classes.spacingGrid}>
+                                            <BadanamuButton
+                                                className={clsx(classes.activeSelectBtn, classes.activeSelectedBtn)}
+                                                fullWidth
+                                                size="large"
+                                                onClick={(e) => {
+                                                    history.push("/redeem-ticket");
+                                                }}
+                                            >
+                                                Redeem Ticket
+                                            </BadanamuButton>
+                                        </Grid>
+                                        <Grid item xs={12} sm={6} className={classes.spacingGrid}>
+                                            <BadanamuButton
+                                                className={clsx(classes.activeSelectBtn, classes.activeSelectedBtn)}
+                                                fullWidth
+                                                size="large"
+                                                onClick={(e) => {
+                                                    history.push("/redeem-event-ticket");
+                                                }}
+                                            >
+                                                Redeem Event Ticket
+                                            </BadanamuButton>
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <div style={{
+                                                alignItems: "center",
+                                            }}>
+                                                <span style={{
+                                                    display: "flex",
+                                                    flexDirection: "row-reverse",
+                                                }}>
+                                                    <HelpRounded fontSize="small" style={{ marginLeft: 8 }} onClick={handleTooltipOpen} />
+                                                    <ClickAwayListener onClickAway={handleTooltipClose}>
+                                                        <Tooltip
+                                                            aria-label="add"
+                                                            arrow
+                                                            classes={{ tooltip: classes.noMaxWidth }}
+                                                            disableFocusListener
+                                                            onClose={handleTooltipClose}
+                                                            open={open}
+                                                            placement="bottom"
+                                                            title="An event ticket is a ticket ID you might have received through social media."
+                                                        >
+                                                            <Typography variant="caption" onClick={handleTooltipOpen}>What's an Event Ticket?</Typography>
+                                                        </Tooltip>
+                                                    </ClickAwayListener>
+                                                </span>
+                                            </div>
+                                        </Grid>
+                                    </Grid>
+                                    : <BadanamuButton
+                                        className={clsx(classes.inactiveSelectBtn, classes.spacingBtn)}
+                                        fullWidth
+                                        size="large"
+                                        onClick={(e) => {
+                                            setTicketButton(true);
+                                        }}
+                                    >
+                                        Redeem Here
+                                    </BadanamuButton>}
                             </Grid>
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -271,7 +349,7 @@ export function Landing() {
                                             <Typography className={classes.heading}><FormattedMessage id="learning_pass_apps" /></Typography>
                                         </Grid>
                                         <Grid item xs={12} md={6}>
-                                            <Typography className={selectedPlan === "BLPPremium" ? classes.selected : classes.notSelected}>13</Typography>
+                                            <Typography className={selectedPlan === "BLPPremium" ? classes.selected : classes.notSelected}>{learningApps.length}</Typography>
                                         </Grid>
                                     </Grid>
                                 </ExpansionPanelSummary>
@@ -294,24 +372,10 @@ export function Landing() {
                             {details.map((detail) => (
                                 createDetailsRow(detail)
                             ))}
-                            <BadanamuButton
-                                className={clsx(classes.planSelectBtn, classes.planSelectedBtn, classes.planSelectBtnBottom)}
-                                fullWidth
-                                size="large"
-                                onClick={(e) => {
-                                    store.dispatch({ type: ActionTypes.PRODUCT_ID, payload: selectedPlan });
-                                    history.push("/payment");
-                                }}
-                            >
-                                <FormattedMessage id="learning_pass_continue_btn" /> {selectedPlan === "BLP" ?
-                                    <FormattedMessage id="learning_pass" /> :
-                                    <FormattedMessage id="learning_pass_premium" />
-                                }
-                            </BadanamuButton>
                         </Grid>
                     </Grid>
                 </CardContent>
             </Card>
-        </Container>
+        </Container >
     );
 }
