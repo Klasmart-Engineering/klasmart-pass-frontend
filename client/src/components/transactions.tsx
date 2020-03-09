@@ -21,6 +21,16 @@ function PassIDName(id: string) {
     }
 }
 
+function GetPurchasePrice(passId: string, store: string) {
+    var passInfo = PassIDName(passId)
+    switch (store.toLocaleLowerCase()) {
+        case "ticket":
+            passInfo.price = "US$0"
+            break
+    }
+    return passInfo
+}
+
 function Transaction(props: { transaction: any }) {
     // TODO: typechecking
     const transactionId: string = props.transaction.TransactionID;
@@ -31,11 +41,10 @@ function Transaction(props: { transaction: any }) {
     const date = new Date(createdTimestamp).toLocaleString();
     const products = (props.transaction.ProductList as any[]).map((product: any) => JSON.stringify(product));
     const passes = (props.transaction.PassList as any[]).map((pass: any) => {
-        // return JSON.stringify(pass);
         return {
             end: pass.ExpirationDate as number,
-            passId: pass.ItemID as string,
-            passName: PassIDName(pass.ItemID).name,
+            passId: pass.PassID as string,
+            passName: GetPurchasePrice(pass.PassID, store).name,
             start: pass.StartDate as number,
         };
     });
@@ -47,7 +56,7 @@ function Transaction(props: { transaction: any }) {
                         <TableCell>{date}</TableCell>
                         <TableCell>{pass.passName}</TableCell>
                         <TableCell style={{ textTransform: "capitalize" }}>{store}</TableCell>
-                        <TableCell align="right">{PassIDName(pass.passId).price}</TableCell>
+                        <TableCell align="right">{GetPurchasePrice(pass.passId, store).price}</TableCell>
                     </TableRow>
                 ))
             }
