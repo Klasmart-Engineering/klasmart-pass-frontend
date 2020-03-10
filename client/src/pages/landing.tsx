@@ -18,15 +18,17 @@ import ClearRoundedIcon from "@material-ui/icons/ClearRounded";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import HelpRounded from "@material-ui/icons/HelpRounded";
 import clsx from "clsx";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FormattedDate, FormattedMessage } from "react-intl";
 import { useStore } from "react-redux";
 import { useHistory } from "react-router";
 import BadanamuButton from "../components/button";
-import BLP from "../img/logo_learning_pass.png";
-import BLPPremium from "../img/logo_learning_pass_premium.png";
 import { ActionTypes } from "../store/actions";
 import { getExpiration } from "../utils/date";
+import { useRestAPI } from "../restapi";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import { getImgByPassId, getDetailsByPass } from "./../config";
+import { config } from "react-transition-group";
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme) => createStyles({
@@ -163,11 +165,16 @@ export function Landing() {
     const store = useStore();
     const history = useHistory();
     const classes = useStyles();
+    const restApi = useRestAPI();
 
     const [selected, setSelected] = useState(true);
     const [selectedPlan, setPlan] = useState("BLPPremium");
     const [pressedTicketButton, setTicketButton] = useState(false);
     const [open, setOpen] = useState(false);
+
+    const [passList, setPassList] = useState<any[] | undefined>(undefined);
+    const [passListError, setPassListError] = useState<JSX.Element | undefined>(undefined);
+    const [passListInFlight, setPassListInFlight] = useState(false);
 
     const handleTooltipClose = () => {
         setOpen(false);
@@ -177,55 +184,36 @@ export function Landing() {
         setOpen(true);
     };
 
-    const learningApps = [
-        createData("Badanamu: Bada Rhyme 1", <CheckRoundedIcon />, <CheckRoundedIcon />),
-        createData("Badanamu: Bada Rhyme 2", <CheckRoundedIcon />, <CheckRoundedIcon />),
-        createData("Badanamu: Bada Genius", <CheckRoundedIcon />, <CheckRoundedIcon />),
-        createData("Badanamu: Bada Genius STEM", <CheckRoundedIcon />, <CheckRoundedIcon />),
-        createData("Badanamu: Bada Genius Nature", <CheckRoundedIcon />, <CheckRoundedIcon />),
-        createData("Badanamu: Bada Talk 1", <CheckRoundedIcon />, <CheckRoundedIcon />),
-        createData("Badanamu: Bada Talk 2", <CheckRoundedIcon />, <CheckRoundedIcon />),
-        createData("Badanamu: Bada Sound", <CheckRoundedIcon />, <CheckRoundedIcon />),
-        createData("Badanamu: Bada Read", <CheckRoundedIcon />, <CheckRoundedIcon />),
-        createData("Badanamu: Dino Park ESL", <CheckRoundedIcon />, <CheckRoundedIcon />),
-        createData("Badanamu: Zoo Party ESL", <CheckRoundedIcon />, <CheckRoundedIcon />),
-        createData("Badanamu: Cadets", <ClearRoundedIcon />, <CheckRoundedIcon />),
-        createData("Badanamu: Songs", <ClearRoundedIcon />, <CheckRoundedIcon />),
-        createData("Badanamu: Books", <ClearRoundedIcon />, <CheckRoundedIcon />),
-    ];
-    const details = [
-        // createData("learning_pass_additional_apps", 8, 10),
-        createData("learning_pass_esl_lessons", "300+", "300+"),
-        createData("learning_pass_program_levels", <CheckRoundedIcon />, <CheckRoundedIcon />),
-        createData("learning_pass_hd_content", <CheckRoundedIcon />, <CheckRoundedIcon />),
-        createData("learning_pass_ad_free", <CheckRoundedIcon />, <CheckRoundedIcon />),
-        createData("learning_pass_animated_series", <ClearRoundedIcon />, <FormattedMessage id="landing_number_episodes" />),
-        createData("learning_pass_premium_songs", <ClearRoundedIcon />, <FormattedMessage id="landing_number_minutes" />),
-        createData("learning_pass_premium_apps", <ClearRoundedIcon />, 3),
-        createData("learning_pass_ot_purchase", "US$20.00", "US$40.00"),
-    ];
-
-    function createPlanButton(plan: string) {
-        return (
-            <React.Fragment key={plan}>
-                <Grid item xs={6} md={4}>
-                    <Grid item xs={12} className={classes.productImgContainer}>
-                        <Link
-                            href="#"
-                            onClick={(e: React.MouseEvent) => {
-                                store.dispatch({ type: ActionTypes.PRODUCT_ID, payload: plan });
-                                history.push("/payment");
-                                e.preventDefault();
-                            }}>
-                            <img src={plan === "BLP" ? BLP : BLPPremium} className={classes.productImg} />
-                        </Link>
-                    </Grid>
-                </Grid>
-            </React.Fragment>
-        );
+    async function getProductListByIds(ids: string[]) {
+        const response = await restApi.getProductInfoByIds(ids);
+        var products = response.products;
+        products.sort((productA: any, productB: any) => productB.title - productA.title);
+        return products;
     }
 
-    function createDetailsRow(detail: { name: string, blp: Plan, blpPlus: Plan }) {
+    async function getPassList() {
+        if (passListInFlight) { return; }
+        try {
+            setPassListInFlight(true);
+            const response = await restApi.getPassList();
+            var passes = response.passes;
+            passes.sort((passA: any, passB: any) => passA.price - passB.price);
+            for (var i = 0; i < passes.length; ++i) {
+                passes[i].productInfoList = await getProductListByIds(passes[i].productIds)
+                passes[i].details = getDetailsByPass(passes[i])
+            }
+            setPassList(passes);
+        } catch (e) {
+            // TODO: More specific error message
+            setPassListError(<FormattedMessage id="ERROR_UNKOWN" />);
+        } finally {
+            setPassListInFlight(false);
+        }
+    }
+
+    useEffect(() => { getPassList(); }, []);
+
+    function createPassDetailsRow(detail: any) {
         return (
             <React.Fragment key={detail.name}>
                 <Grid container spacing={2} className={classes.row}>
@@ -233,12 +221,137 @@ export function Landing() {
                         <Typography className={classes.heading}><FormattedMessage id={detail.name} /></Typography>
                     </Grid>
                     <Grid item xs={12} md={6}>
-                        <Typography className={selectedPlan === "BLPPremium" ? classes.selected : classes.notSelected}>{detail.blpPlus}</Typography>
+                        <Typography className={classes.selected}>{detail.value}</Typography>
                     </Grid>
                 </Grid>
                 <Divider />
             </React.Fragment>
         );
+    }
+
+    function createPassPresentation(pass: any) {
+        return (
+            <React.Fragment key={pass.passId}>
+                <Grid item xs={12} className={classes.emptySpace} />
+                <Grid container item justify="flex-start" xs={12} sm={6} spacing={2}>
+                    <Grid item xs={12}>
+                        <img src={getImgByPassId(pass.passId)} className={classes.productImg} />
+                        <BadanamuButton
+                            className={pressedTicketButton ? clsx(classes.inactiveSelectBtn, classes.spacingBtn) : clsx(classes.activeSelectBtn, classes.activeSelectedBtn, classes.spacingBtn)}
+                            fullWidth
+                            size="large"
+                            onClick={(e) => {
+                                store.dispatch({ type: ActionTypes.PASS, payload: pass });
+                                history.push("/payment");
+                            }}
+                        >
+                            <FormattedMessage id="learning_pass_continue_btn" />
+                        </BadanamuButton>
+                        <Typography variant="body1" align="center">Have a Learning Pass Ticket ID?</Typography>
+                        {pressedTicketButton ?
+                            <Grid container direction="row" justify="space-between" alignItems="center" spacing={2}>
+                                <Grid item xs={12} sm={6} className={classes.spacingGrid}>
+                                    <BadanamuButton
+                                        className={clsx(classes.activeSelectBtn, classes.activeSelectedBtn)}
+                                        fullWidth
+                                        size="large"
+                                        onClick={(e) => {
+                                            history.push("/redeem-ticket");
+                                        }}
+                                    >
+                                        Redeem Ticket
+                                                </BadanamuButton>
+                                </Grid>
+                                <Grid item xs={12} sm={6} className={classes.spacingGrid}>
+                                    <BadanamuButton
+                                        className={clsx(classes.activeSelectBtn, classes.activeSelectedBtn)}
+                                        fullWidth
+                                        size="large"
+                                        onClick={(e) => {
+                                            history.push("/redeem-event-ticket");
+                                        }}
+                                    >
+                                        Redeem Event Ticket
+                                                </BadanamuButton>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <div style={{
+                                        alignItems: "center",
+                                    }}>
+                                        <span style={{
+                                            display: "flex",
+                                            flexDirection: "row-reverse",
+                                        }}>
+                                            <HelpRounded fontSize="small" style={{ marginLeft: 8 }} onClick={handleTooltipOpen} />
+                                            <ClickAwayListener onClickAway={handleTooltipClose}>
+                                                <Tooltip
+                                                    aria-label="add"
+                                                    arrow
+                                                    classes={{ tooltip: classes.noMaxWidth }}
+                                                    disableFocusListener
+                                                    onClose={handleTooltipClose}
+                                                    open={open}
+                                                    placement="bottom"
+                                                    title="An event ticket is a ticket ID you might have received through social media."
+                                                >
+                                                    <Typography variant="caption" onClick={handleTooltipOpen}>What's an Event Ticket?</Typography>
+                                                </Tooltip>
+                                            </ClickAwayListener>
+                                        </span>
+                                    </div>
+                                </Grid>
+                            </Grid>
+                            : <BadanamuButton
+                                className={clsx(classes.inactiveSelectBtn, classes.spacingBtn)}
+                                fullWidth
+                                size="large"
+                                onClick={(e) => {
+                                    setTicketButton(true);
+                                }}
+                            >
+                                Redeem Here
+                                        </BadanamuButton>}
+                    </Grid>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <Divider />
+                    <ExpansionPanel elevation={0}>
+                        <ExpansionPanelSummary
+                            expandIcon={<ExpandMoreIcon fontSize={"small"} />}
+                            aria-controls="learning-apps"
+                            id="learning-apps"
+                        >
+                            <Grid container spacing={2}>
+                                <Grid item xs={12} md={6}>
+                                    <Typography className={classes.heading}><FormattedMessage id="learning_pass_apps" /></Typography>
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                    <Typography className={classes.selected}>{pass.productIds.length}</Typography>
+                                </Grid>
+                            </Grid>
+                        </ExpansionPanelSummary>
+                        <ExpansionPanelDetails className={classes.details}>
+                            <Grid container spacing={1} className={classes.noIconPadding}>
+                                {pass.productInfoList !== undefined ? pass.productInfoList.map((product: any) => (
+                                    <React.Fragment key={product.prodId}>
+                                        <Grid item xs={12} md={10}>
+                                            <Typography className={clsx(classes.heading, classes.headingInner)}>{product.title}</Typography>
+                                        </Grid>
+                                        <Grid item xs={6} md={2}>
+                                            <Typography className={classes.selected}><CheckRoundedIcon /></Typography>
+                                        </Grid>
+                                    </React.Fragment>
+                                )) : null}
+                            </Grid>
+                        </ExpansionPanelDetails>
+                    </ExpansionPanel>
+                    <Divider />
+                    {pass.details !== undefined ? pass.details.map((detail: any) => (
+                        createPassDetailsRow(detail)
+                    )) : null}
+                </Grid>
+            </React.Fragment>
+        )
     }
 
     return (
@@ -252,127 +365,16 @@ export function Landing() {
                         <Grid container item xs={12} justify="center" className={classes.responsiveText}>
                             <Typography variant="body1" ><FormattedMessage id="landing_select_subheader" /></Typography>
                         </Grid>
-                        <Grid item xs={12} className={classes.emptySpace} />
-                        <Grid container item justify="flex-start" xs={12} sm={6} spacing={2}>
-                            <Grid item xs={12}>
-                                <img src={BLPPremium} className={classes.productImg} />
-                                <BadanamuButton
-                                    className={pressedTicketButton ? clsx(classes.inactiveSelectBtn, classes.spacingBtn) : clsx(classes.activeSelectBtn, classes.activeSelectedBtn, classes.spacingBtn)}
-                                    fullWidth
-                                    size="large"
-                                    onClick={(e) => {
-                                        store.dispatch({ type: ActionTypes.PRODUCT_ID, payload: selectedPlan });
-                                        history.push("/payment");
-                                    }}
-                                >
-                                    <FormattedMessage id="learning_pass_continue_btn" /> {selectedPlan === "BLP" ?
-                                        <FormattedMessage id="learning_pass" /> :
-                                        <FormattedMessage id="learning_pass_premium" />
-                                    }
-                                </BadanamuButton>
-                                <Typography variant="body1" align="center">Have a Learning Pass Ticket ID?</Typography>
-                                {pressedTicketButton ?
-                                    <Grid container direction="row" justify="space-between" alignItems="center" spacing={2}>
-                                        <Grid item xs={12} sm={6} className={classes.spacingGrid}>
-                                            <BadanamuButton
-                                                className={clsx(classes.activeSelectBtn, classes.activeSelectedBtn)}
-                                                fullWidth
-                                                size="large"
-                                                onClick={(e) => {
-                                                    history.push("/redeem-ticket");
-                                                }}
-                                            >
-                                                Redeem Ticket
-                                            </BadanamuButton>
-                                        </Grid>
-                                        <Grid item xs={12} sm={6} className={classes.spacingGrid}>
-                                            <BadanamuButton
-                                                className={clsx(classes.activeSelectBtn, classes.activeSelectedBtn)}
-                                                fullWidth
-                                                size="large"
-                                                onClick={(e) => {
-                                                    history.push("/redeem-event-ticket");
-                                                }}
-                                            >
-                                                Redeem Event Ticket
-                                            </BadanamuButton>
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <div style={{
-                                                alignItems: "center",
-                                            }}>
-                                                <span style={{
-                                                    display: "flex",
-                                                    flexDirection: "row-reverse",
-                                                }}>
-                                                    <HelpRounded fontSize="small" style={{ marginLeft: 8 }} onClick={handleTooltipOpen} />
-                                                    <ClickAwayListener onClickAway={handleTooltipClose}>
-                                                        <Tooltip
-                                                            aria-label="add"
-                                                            arrow
-                                                            classes={{ tooltip: classes.noMaxWidth }}
-                                                            disableFocusListener
-                                                            onClose={handleTooltipClose}
-                                                            open={open}
-                                                            placement="bottom"
-                                                            title="An event ticket is a ticket ID you might have received through social media."
-                                                        >
-                                                            <Typography variant="caption" onClick={handleTooltipOpen}>What's an Event Ticket?</Typography>
-                                                        </Tooltip>
-                                                    </ClickAwayListener>
-                                                </span>
-                                            </div>
-                                        </Grid>
-                                    </Grid>
-                                    : <BadanamuButton
-                                        className={clsx(classes.inactiveSelectBtn, classes.spacingBtn)}
-                                        fullWidth
-                                        size="large"
-                                        onClick={(e) => {
-                                            setTicketButton(true);
-                                        }}
-                                    >
-                                        Redeem Here
-                                    </BadanamuButton>}
-                            </Grid>
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <Divider />
-                            <ExpansionPanel elevation={0}>
-                                <ExpansionPanelSummary
-                                    expandIcon={<ExpandMoreIcon fontSize={"small"} />}
-                                    aria-controls="learning-apps"
-                                    id="learning-apps"
-                                >
-                                    <Grid container spacing={2}>
-                                        <Grid item xs={12} md={6}>
-                                            <Typography className={classes.heading}><FormattedMessage id="learning_pass_apps" /></Typography>
-                                        </Grid>
-                                        <Grid item xs={12} md={6}>
-                                            <Typography className={selectedPlan === "BLPPremium" ? classes.selected : classes.notSelected}>{learningApps.length}</Typography>
-                                        </Grid>
-                                    </Grid>
-                                </ExpansionPanelSummary>
-                                <ExpansionPanelDetails className={classes.details}>
-                                    <Grid container spacing={1} className={classes.noIconPadding}>
-                                        {learningApps.map((app) => (
-                                            <React.Fragment key={app.name}>
-                                                <Grid item xs={12} md={10}>
-                                                    <Typography className={clsx(classes.heading, classes.headingInner)}>{app.name}</Typography>
-                                                </Grid>
-                                                <Grid item xs={6} md={2}>
-                                                    <Typography className={selectedPlan === "BLPPremium" ? classes.selected : classes.notSelected}>{app.blpPlus}</Typography>
-                                                </Grid>
-                                            </React.Fragment>
-                                        ))}
-                                    </Grid>
-                                </ExpansionPanelDetails>
-                            </ExpansionPanel>
-                            <Divider />
-                            {details.map((detail) => (
-                                createDetailsRow(detail)
-                            ))}
-                        </Grid>
+                        {
+                            passListInFlight ?
+                                <CircularProgress /> :
+                                passList !== undefined ?
+                                    passList.map((pass: any) => (
+                                        createPassPresentation(pass)
+                                    )) :
+                                    <Typography>{passListError}</Typography>
+                        }
+
                     </Grid>
                 </CardContent>
             </Card>

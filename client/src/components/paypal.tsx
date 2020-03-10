@@ -8,25 +8,15 @@ import { State } from "../store/store";
 
 export function PayPalButton() {
     const [inFlight, setInFlight] = useState(false);
-    const selectedProduct = useSelector((state: State) => state.account.productId);
+    const selectedPass = useSelector((state: State) => state.account.pass);
     const paypal = (window as any).paypal;
     const buttonRef = useRef<HTMLDivElement>(null);
 
     const history = useHistory();
     const api = useRestAPI();
 
-    function getProductCode() {
-        switch (selectedProduct) {
-            case "BLP":
-                return { productCode: "com.calmid.learnandplay.blp.standard", price: "20.00" };
-            case "BLPPremium":
-                return { productCode: "com.calmid.badanamu.esl.premium", price: "40.00" };
-            default:
-                throw new Error("Unknown product");
-        }
-    }
-
-    const { productCode, price } = getProductCode();
+    const productCode = selectedPass.passId
+    const price = selectedPass.price
 
     useEffect(() => {
         if (!paypal) { return; }
@@ -58,7 +48,7 @@ export function PayPalButton() {
             },
         });
         button.render(buttonRef.current);
-    }, [paypal, selectedProduct]);
+    }, [paypal, selectedPass.passId]);
     return < >
         <div ref={buttonRef} style={{ visibility: inFlight ? "hidden" : "visible" }} />
         {inFlight ?

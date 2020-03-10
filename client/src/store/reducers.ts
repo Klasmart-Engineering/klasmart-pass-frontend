@@ -142,6 +142,14 @@ export function productId(state = null, action: Actions) {
     }
 }
 
+export function pass(state = null, action: Actions) {
+    switch (action.type) {
+        case ActionTypes.PASS:
+            return action.payload;
+        default:
+            return state;
+    }
+}
 export function passes(state = null, action: Actions) {
     switch (action.type) {
         case ActionTypes.PASSES:
@@ -186,6 +194,7 @@ export const account = combineReducers({
     deviceId,
     email,
     locale,
+    pass,
     passes,
     productId,
     refreshToken,
