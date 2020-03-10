@@ -40,7 +40,7 @@ export function PaymentThankyou(props: RouteComponentProps) {
     const history = useHistory();
 
     // const expiration = useSelector((state: State) => state.account.expireDate);
-    const selectedProduct = useSelector((state: State) => state.account.productId);
+    // const selectedProduct = useSelector((state: State) => state.account.productId);
     // const defaultEmail = useSelector((state: State) => state.account.email || "");
 
     return (
@@ -58,7 +58,7 @@ export function PaymentThankyou(props: RouteComponentProps) {
                                         values={{
                                             br: <br />,
                                             pass: <FormattedMessage
-                                                id={selectedProduct === "BLP" ? "pass_name_standard" : "pass_name_premium"}
+                                                id={"pass_name"}
                                                 values={{ b: (...chunks: any[]) => <strong>{chunks}</strong> }}
                                             />,
                                         }}
@@ -67,7 +67,7 @@ export function PaymentThankyou(props: RouteComponentProps) {
                                         values={{
                                             br: <br />,
                                             pass: <FormattedMessage
-                                                id={selectedProduct === "BLP" ? "pass_name_standard" : "pass_name_premium"}
+                                                id={"pass_name"}
                                                 values={{ b: (...chunks: any[]) => <strong>{chunks}</strong> }}
                                             />,
                                         }}

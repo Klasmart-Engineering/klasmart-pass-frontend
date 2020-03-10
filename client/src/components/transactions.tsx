@@ -6,57 +6,27 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import React from "react";
 import { FormattedDate, FormattedMessage } from "react-intl";
-
-// TODO: Get pass information from DB later
-function PassIDName(id: string) {
-    switch (id) {
-        case "com.calmid.learnandplay.blp.standard":
-            return { name: <FormattedMessage id="pass_name_standard" values={{ b: (...chunks: any[]) => <strong>{chunks}</strong> }} />, price: "US$20" };
-        case "com.calmid.learnandplay.blp.premium":
-            return { name: <FormattedMessage id="pass_name_premium" values={{ b: (...chunks: any[]) => <strong>{chunks}</strong> }} />, price: "US$50" };
-        case "com.calmid.badanamu.esl.premium":
-            return { name: <FormattedMessage id="pass_name_premium" values={{ b: (...chunks: any[]) => <strong>{chunks}</strong> }} />, price: "US$40" };
-        default:
-            return { name: id, price: "N/A" };
-    }
-}
-
-function GetPurchasePrice(passId: string, store: string) {
-    var passInfo = PassIDName(passId)
-    switch (store.toLocaleLowerCase()) {
-        case "ticket":
-            passInfo.price = "US$0"
-            break
-    }
-    return passInfo
-}
+import { getPassNamePrice } from "../config";
 
 function Transaction(props: { transaction: any }) {
     // TODO: typechecking
-    const transactionId: string = props.transaction.TransactionID;
+    const transactionId: string = props.transaction.transactionId;
     const split = transactionId.indexOf("_");
     const store = transactionId.slice(0, split).toLocaleLowerCase();
     const id = transactionId.slice(split + 1).toLocaleLowerCase();
-    const createdTimestamp: number = props.transaction.CreatedDate;
+    const createdTimestamp: number = props.transaction.createdDate;
     const date = new Date(createdTimestamp).toLocaleString();
-    const products = (props.transaction.ProductList as any[]).map((product: any) => JSON.stringify(product));
-    const passes = (props.transaction.PassList as any[]).map((pass: any) => {
-        return {
-            end: pass.ExpirationDate as number,
-            passId: pass.PassID as string,
-            passName: GetPurchasePrice(pass.PassID, store).name,
-            start: pass.StartDate as number,
-        };
-    });
+    const products = (props.transaction.productList as any[]).map((product: any) => JSON.stringify(product));
+    const passes = (props.transaction.passList as any[])
     return (
         <React.Fragment>
             {
-                passes.map((pass) => (!pass ? null :
+                passes.map((pass: any) => (pass == undefined ? null :
                     <TableRow key={`${pass.start}-${pass.passId}`}>
                         <TableCell>{date}</TableCell>
-                        <TableCell>{pass.passName}</TableCell>
+                        <TableCell>{getPassNamePrice(pass).name}</TableCell>
                         <TableCell style={{ textTransform: "capitalize" }}>{store}</TableCell>
-                        <TableCell align="right">{GetPurchasePrice(pass.passId, store).price}</TableCell>
+                        <TableCell align="right">{getPassNamePrice(pass).price}</TableCell>
                     </TableRow>
                 ))
             }

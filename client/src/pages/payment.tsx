@@ -23,10 +23,10 @@ import { redirectIfUnauthorized } from "../components/authorized";
 import DropIn from "../components/braintree-web-drop-in-react";
 import BadanamuButton from "../components/button";
 import { PayPalButton } from "../components/paypal";
-import BLP from "../img/logo_learning_pass.png";
-import BLPPremium from "../img/logo_learning_pass_premium.png";
 import { ActionTypes } from "../store/actions";
 import { State } from "../store/store";
+import { getImgByPassId, formatCurrency } from "./../config";
+import { useRestAPI } from "../restapi";
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme: Theme) =>
@@ -89,24 +89,36 @@ export function Payment() {
     const store = useStore();
     const history = useHistory();
     const classes = useStyles();
+    const restApi = useRestAPI();
     const [acceptPolicy, setAcceptPolicy] = useState(false);
     const [paymentReady, setPaymentReady] = useState(false);
-    const [acceptUpgrade, setUpgrade] = useState(false);
 
-    const selectedProduct = useSelector((state: State) => state.account.productId);
-    const passes = useSelector((state: State) => state.account.passes || []);
+    const [hasPassAccess, setHasPassAccess] = useState(true);
+    const [getPassAccessError, setGetPassAccessError] = useState<JSX.Element | undefined>(undefined);
+    const [getPassAccessInFlight, setPassAccessInFlight] = useState(false);
 
-    const standardPass = passes.find((element) => element.passId === "com.calmid.learnandplay.blp.standard");
-    const premiumPass = passes.find((element) => (element.passId === "com.calmid.learnandplay.blp.premium" || element.passId === "com.calmid.badanamu.esl.premium"));
+    const selectedPass = useSelector((state: State) => state.account.pass);
 
-    const validStandardPass = standardPass !== undefined ? standardPass.expirationDate > Date.now() : false;
-    const validPremiumPass = premiumPass !== undefined ? premiumPass.expirationDate > Date.now() : false;
+    async function getPassAccess() {
+        if (getPassAccessInFlight) { return; }
+        try {
+            setPassAccessInFlight(true);
+            const response = await restApi.getPassAccess(selectedPass.passId);
+            setHasPassAccess(response.access);
+        } catch (e) {
+            // TODO: More specific error message
+            setGetPassAccessError(<FormattedMessage id="ERROR_UNKOWN" />);
+        } finally {
+            setPassAccessInFlight(false);
+        }
+    }
+    useEffect(() => { getPassAccess(); }, []);
 
     redirectIfUnauthorized("/payment");
 
     return (
-        <Container maxWidth={(validStandardPass && !acceptUpgrade) ? "md" : "lg"} style={{ margin: "auto 0" }}>
-            <Collapse in={!(validStandardPass || validPremiumPass) || acceptUpgrade}>
+        <Container maxWidth={"lg"} style={{ margin: "auto 0" }}>
+            <Collapse in={!hasPassAccess}>
                 <Card>
                     <CardContent className={classes.card}>
                         <Grid container direction="row" spacing={8}>
@@ -121,9 +133,9 @@ export function Payment() {
                                 </Grid>
                                 <Grid item xs={12} className={classes.emptySpace} />
                                 <Grid container item justify="space-between" alignItems="center" xs={12} spacing={2}>
-                                    <img src={selectedProduct === "BLP" ? BLP : BLPPremium} className={classes.productImg} />
+                                    <img src={getImgByPassId(selectedPass.passId)} className={classes.productImg} />
                                     <Typography variant="h5">
-                                        {selectedProduct === "BLP" ? "US$20" : "US$40"}
+                                        {formatCurrency(selectedPass.currency) + selectedPass.price}
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={12} className={classes.emptySpace} />
@@ -176,79 +188,40 @@ export function Payment() {
                     </CardContent>
                 </Card>
             </Collapse>
-            <Collapse in={(validStandardPass && !acceptUpgrade) || validPremiumPass}>
+            <Collapse in={hasPassAccess}>
                 <Card>
                     <CardContent className={classes.card}>
                         <Grid container direction="row" justify="center" alignItems="center" spacing={2}>
-                            {validPremiumPass ?
-                                <React.Fragment>
-                                    <Grid item xs={12}>
-                                        <Typography variant="body1" align="center">
-                                            <FormattedMessage id="thank_you_heading"
-                                                values={{
-                                                    br: <br />,
-                                                    pass: <FormattedMessage
-                                                        id={validPremiumPass ? "pass_name_premium" : "pass_name_standard"}
-                                                        values={{ b: (...chunks: any[]) => <strong>{chunks}</strong> }}
-                                                    />,
-                                                }} />.
-                                        </Typography>
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <Typography variant="h5" align="center"><FormattedMessage id="payment_thankyou_heading" /></Typography>
-                                    </Grid>
-                                    <Grid item xs={12} style={{ height: 16 }} />
-                                    <BadanamuButton
-                                        size="large"
-                                        onClick={(e) => {
-                                            history.push("/my-account"); e.preventDefault();
-                                        }}
-                                    >
-                                        <FormattedMessage id="thank_you_go_to_dashboard" />
-                                    </BadanamuButton>
-                                </React.Fragment>
-                                :
-                                <React.Fragment>
-                                    <Grid item xs={12}>
-                                        <Typography variant="body1" align="center">
-                                            <FormattedMessage
-                                                id="payment_prompt_have_standard_pass"
-                                                values={{ b: (...chunks: any[]) => <strong>{chunks}</strong> }} />!
-                                        </Typography>
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <Typography variant="h5" align="center">
-                                            <FormattedMessage
-                                                id="payment_prompt_upgrade"
-                                                values={{ b: (...chunks: any[]) => <strong>{chunks}</strong> }} />?
-                                        </Typography>
-                                    </Grid>
-                                    <Grid item xs={12} style={{ textAlign: "center" }}>
-                                        <BadanamuButton
-                                            size="large"
-                                            onClick={(e) => {
-                                                store.dispatch({ type: ActionTypes.PRODUCT_ID, payload: "BLPPremium" });
-                                                setUpgrade(true);
-                                            }}
-                                        >
-                                            <FormattedMessage id="payment_yes_upgrade_btn" />
-                                        </BadanamuButton>
-                                        <br />
-                                        <Link
-                                            href="#"
-                                            variant="caption"
-                                            onClick={(e: React.MouseEvent) => { history.push("/my-account"); e.preventDefault(); }}
-                                        >
-                                            <FormattedMessage id="payment_no_upgrade_btn" />
-                                        </Link>
-                                    </Grid>
-                                </React.Fragment>
-                            }
+                            <React.Fragment>
+                                <Grid item xs={12}>
+                                    <Typography variant="body1" align="center">
+                                        <FormattedMessage id="thank_you_heading"
+                                            values={{
+                                                br: <br />,
+                                                pass: <FormattedMessage
+                                                    id={"pass_name"}
+                                                    values={{ b: (...chunks: any[]) => <strong>{chunks}</strong> }}
+                                                />,
+                                            }} />.
+                                    </Typography>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Typography variant="h5" align="center"><FormattedMessage id="payment_thankyou_heading" /></Typography>
+                                </Grid>
+                                <Grid item xs={12} style={{ height: 16 }} />
+                                <BadanamuButton
+                                    size="large"
+                                    onClick={(e) => {
+                                        history.push("/my-account"); e.preventDefault();
+                                    }}
+                                >
+                                    <FormattedMessage id="thank_you_go_to_dashboard" />
+                                </BadanamuButton>
+                            </React.Fragment>
                         </Grid>
                     </CardContent>
                 </Card>
             </Collapse>
         </Container >
-
     );
 }

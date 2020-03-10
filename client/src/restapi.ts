@@ -256,14 +256,36 @@ export class RestAPI {
         throw new RestAPIError(RestAPIErrorType.UNKNOWN, body);
     }
 
+    public async getProductInfoByIds(ids: string[]) {
+        var queryParams = "?id=" + ids[0];
+        for (var i = 1; i < ids.length; ++i) {
+            queryParams += "&id=" + ids[i];
+        }
+        const response = await this.productCall("GET", "v1/product" + queryParams);
+        const body = await response.json();
+        return body;
+    }
+
     public async getProductAccesses() {
         const response = await this.productCall("GET", "v1/product/accesses");
         const body = await response.json();
         return body;
     }
 
+    public async getPassList() {
+        const response = await this.productCall("GET", "v1/pass/list");
+        const body = await response.json();
+        return body;
+    }
+
     public async getPassAccesses() {
         const response = await this.productCall("GET", "v1/pass/accesses");
+        const body = await response.json();
+        return body;
+    }
+
+    public async getPassAccess(passId: string) {
+        const response = await this.productCall("GET", "v1/pass/" + passId + "/access");
         const body = await response.json();
         return body;
     }

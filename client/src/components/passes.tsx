@@ -7,10 +7,9 @@ import React, { useEffect, useState } from "react";
 import { FormattedDate, FormattedMessage } from "react-intl";
 import { useStore } from "react-redux";
 import { useHistory } from "react-router-dom";
-import BLP from "../img/logo_learning_pass.png";
-import BLPPremium from "../img/logo_learning_pass_premium.png";
 import { useRestAPI } from "../restapi";
 import { ActionTypes } from "../store/actions";
+import { getImgByPassId } from "./../config"
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -82,24 +81,10 @@ interface Props {
 
 export function Pass({ pass }: Props) {
     const classes = useStyles();
-
-    function getImage(passId: string) {
-        switch (passId) {
-            case "com.calmid.badanamu.esl.premium":
-                return <img src={BLPPremium} alt={BLPPremium} aria-label={BLPPremium} className={classes.productImg} />;
-            case "com.calmid.learnandplay.blp.premium":
-                return <img src={BLPPremium} alt={BLPPremium} aria-label={BLPPremium} className={classes.productImg} />;
-            case "com.calmid.learnandplay.blp.standard":
-                return <img src={BLP} alt={BLP} aria-label={BLP} className={classes.productImg} />;
-            default:
-                return <ClassIcon />;
-        }
-    }
-
     return (
         <Grid item xs={12} key={pass.passId}>
             <Grid item className={classes.productImgContainer}>
-                {getImage(pass.passId)}
+                <img src={getImgByPassId(pass.passId)} alt={getImgByPassId(pass.passId)} aria-label={getImgByPassId(pass.passId)} className={classes.productImg} />
             </Grid>
             <Grid item>
                 <Typography variant="subtitle2" className={classes.productExpiration}>
