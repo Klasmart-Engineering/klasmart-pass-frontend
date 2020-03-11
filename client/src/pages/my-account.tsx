@@ -16,6 +16,7 @@ import { Passes } from "../components/passes";
 import { Transactions } from "../components/transactions";
 import { useRestAPI } from "../restapi";
 import { State } from "../store/store";
+import { Products } from "../components/products";
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -69,6 +70,10 @@ export function MyAccount() {
     const [transactionsError, setTransactionsError] = useState<JSX.Element | undefined>(undefined);
     const [transactionsInFlight, setTransactionsInFlight] = useState(false);
 
+    const [products, setProducts] = useState<any[] | undefined>(undefined);
+    const [productsError, setProductsError] = useState<JSX.Element | undefined>(undefined);
+    const [productsInFlight, setProductsInFlight] = useState(false);
+
     const classes = useStyles();
     const history = useHistory();
     const restApi = useRestAPI();
@@ -77,6 +82,31 @@ export function MyAccount() {
     const defaultEmail = useSelector((state: State) => state.account.email || "");
 
     redirectIfUnauthorized("/my-account");
+
+    async function getProductAccesses() {
+        if (productsInFlight) { return; }
+        try {
+            setProductsInFlight(true);
+            const response = await restApi.getProductAccesses();
+            var products = response.products;
+            const productIds = response.products.map((product: any) => { return product.productId })
+            const productInfoResponse = await restApi.getProductInfoByIds(productIds);
+            const productInfoList = productInfoResponse.products;
+            for (var i = 0; i < productInfoList.length; ++i) {
+                for (var j = 0; j < products.length; ++j) {
+                    if (products[j].productId === productInfoList[i].prodId) {
+                        products[j].title = productInfoList[i].title;
+                    }
+                }
+            }
+            setProducts(products);
+        } catch (e) {
+            // TODO: More specific error message
+            setProductsError(<FormattedMessage id="ERROR_UNKOWN" />);
+        } finally {
+            setProductsInFlight(false);
+        }
+    }
 
     async function getTransactionHistory() {
         if (transactionsInFlight) { return; }
@@ -92,7 +122,7 @@ export function MyAccount() {
             setTransactionsInFlight(false);
         }
     }
-    useEffect(() => { getTransactionHistory(); }, []);
+    useEffect(() => { getTransactionHistory(); getProductAccesses(); }, []);
     return (
         <Container maxWidth="lg" >
             <div className={classes.emptySpace} />
@@ -126,6 +156,21 @@ export function MyAccount() {
                         </Grid>
                         <Grid item xs={12} sm={8}>
                             <Passes />
+                        </Grid>
+                    </Grid>
+                    <div className={classes.emptySpace} />
+                    <Grid container item direction="row" spacing={4} xs={12}>
+                        <Grid item xs={12} sm={4}>
+                            <Typography variant="h6" style={{ color: "#aaa" }}><FormattedMessage id="my_account_product_access" /></Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                            {
+                                productsInFlight ?
+                                    <CircularProgress /> :
+                                    products !== undefined ?
+                                        <Products products={products} /> :
+                                        <Typography>{productsError}</Typography>
+                            }
                         </Grid>
                     </Grid>
                     <div className={classes.emptySpace} />
