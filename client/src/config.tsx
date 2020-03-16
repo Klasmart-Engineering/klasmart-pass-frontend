@@ -26,18 +26,6 @@ export function getOrganizationEndpoint(regionId: string) {
         case "seoul": {
             return "" + process.env.ORGANIZATION_SEOUL_ENDPOINT
         }
-        case "mumbai": {
-            return "" + process.env.ORGANIZATION_MUMBAI_ENDPOINT
-        }
-        case "tokyo": {
-            return "" + process.env.ORGANIZATION_TOKYO_ENDPOINT
-        }
-        case "frankfurt": {
-            return "" + process.env.ORGANIZATION_FRANKFURT_ENDPOINT
-        }
-        case "oregon": {
-            return "" + process.env.ORGANIZATION_OREGON_ENDPOINT
-        }
         default: {
             return "" + process.env.ORGANIZATION_ENDPOINT
         }
