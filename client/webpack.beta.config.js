@@ -77,7 +77,6 @@ module.exports = {
             "ACCOUNT_ENDPOINT": "https://beta.account.badanamu.net/",
             "PRODUCT_ENDPOINT": "https://beta.product.badanamu.net/",
             "ORGANIZATION_SEOUL_ENDPOINT": "https://seoul-beta.organization-api.badanamu.net/",
-            "ORGANIZATION_TOKYO_ENDPOINT": "https://tokyo-beta.organization-api.badanamu.net/",
         })
     ],
     optimization: {
