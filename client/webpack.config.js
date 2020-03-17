@@ -73,6 +73,7 @@ module.exports = {
             "AUTH_ENDPOINT": "http://localhost:8080/",
             "ACCOUNT_ENDPOINT": "http://localhost:8089/",
             "PRODUCT_ENDPOINT": "http://localhost:8044/",
+            "REGION_ENDPOINT": "http://localhost:8094/",
             "ORGANIZATION_ENDPOINT": "http://localhost:8084/",
         })
     ],

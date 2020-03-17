@@ -21,6 +21,10 @@ export function getProductEndpoint() {
     return "" + process.env.PRODUCT_ENDPOINT
 }
 
+export function getRegionEndpoint() {
+    return "" + process.env.REGION_ENDPOINT
+}
+
 export function getOrganizationEndpoint(regionId: string) {
     switch (regionId.toLowerCase()) {
         case "seoul": {

@@ -76,6 +76,7 @@ module.exports = {
             "AUTH_ENDPOINT": "https://prod.auth.badanamu.net/",
             "ACCOUNT_ENDPOINT": "https://prod.account.badanamu.net/",
             "PRODUCT_ENDPOINT": "https://prod.product.badanamu.net/",
+            "REGION_ENDPOINT": "https://prod.region.badanamu.net/",
             "ORGANIZATION_SEOUL_ENDPOINT": "https://seoul.organization-api.badanamu.net/",
         })
     ],
