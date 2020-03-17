@@ -4,7 +4,7 @@ import { ActionTypes } from "./store/actions";
 import { Store } from "./store/store";
 import { IdentityType } from "./utils/accountType";
 import { getServers } from "dns";
-import { getPaymentEndpoint, getAuthEndpoint, getAccountEndpoint, getProductEndpoint, getOrganizationEndpoint } from "./config";
+import { getPaymentEndpoint, getAuthEndpoint, getAccountEndpoint, getProductEndpoint, getOrganizationEndpoint, getRegionEndpoint } from "./config";
 
 function phoneOrEmail(str: string): { phoneNr?: string, email?: string } {
     if (str.indexOf("@") === -1) {
@@ -291,13 +291,13 @@ export class RestAPI {
     }
 
     public async getTicketRegion(ticketId: string) {
-        const response = await this.productCall("GET", "v1/ticket/" + ticketId + "/region")
+        const response = await this.regionCall("GET", "v1/ticket/" + ticketId)
         const body = await response.json();
         return body;
     }
 
     public async getEventTicketRegion(ticketId: string) {
-        const response = await this.productCall("GET", "v1/eventTicket/" + ticketId + "/region")
+        const response = await this.regionCall("GET", "v1/eventTicket/" + ticketId)
         const body = await response.json();
         return body;
     }
@@ -337,6 +337,9 @@ export class RestAPI {
     }
     private organizationCall(method: "GET" | "POST", route: string, region: string, body?: string, refresh = true) {
         return this.call(method, getOrganizationEndpoint(region), route, body, refresh);
+    }
+    private regionCall(method: "GET", route: string, body?: string, refresh = true) {
+        return this.call(method, getRegionEndpoint(), route, body, refresh);
     }
 
     private async call(method: string, prefix: string, route: string, body: string | undefined, refresh: boolean) {
