@@ -45,6 +45,7 @@ export function RedeemTicket(props: RouteComponentProps) {
     const restApi = useRestAPI();
 
     async function redeemTicket(e: React.FormEvent) {
+        e.preventDefault()
         if (inFlight) { return; }
         try {
             setInFlight(true);
