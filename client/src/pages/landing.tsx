@@ -29,6 +29,7 @@ import { useRestAPI } from "../restapi";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { getImgByPassId, getDetailsByPass } from "./../config";
 import { config } from "react-transition-group";
+import { Hidden } from "@material-ui/core";
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme) => createStyles({
@@ -278,30 +279,29 @@ export function Landing() {
                                     <div style={{
                                         alignItems: "center",
                                     }}>
-                                        <span style={{
-                                            display: "flex",
-                                            flexDirection: "row-reverse",
-                                        }}>
-                                            <HelpRounded fontSize="small" style={{ marginLeft: 8 }} onClick={handleTooltipOpen} />
-                                            <ClickAwayListener onClickAway={handleTooltipClose}>
+                                        <Hidden smDown>
+                                            <span style={{
+                                                display: "flex",
+                                                flexDirection: "row-reverse",
+                                            }}>
                                                 <Tooltip
-                                                    aria-label="add"
-                                                    arrow
-                                                    classes={{ tooltip: classes.noMaxWidth }}
-                                                    disableFocusListener
-                                                    onClose={handleTooltipClose}
-                                                    open={open}
-                                                    placement="bottom"
                                                     title="An event ticket is a ticket ID you might have received through social media."
                                                 >
-                                                    <Typography variant="caption" onClick={handleTooltipOpen}>What's an Event Ticket?</Typography>
+                                                    <HelpRounded fontSize="small" style={{ marginLeft: 8 }} />
                                                 </Tooltip>
-                                            </ClickAwayListener>
-                                        </span>
+                                                <Typography variant="caption">What's an Event Ticket?</Typography>
+                                            </span>
+                                        </Hidden>
+                                        <Hidden mdUp>
+                                            <span style={{ display: "flex" }}>
+                                                An event ticket is a ticket ID you might have received through social media.
+                                            </span>
+                                        </Hidden>
                                     </div>
                                 </Grid>
                             </Grid>
-                            : <BadanamuButton
+                            :
+                            <BadanamuButton
                                 className={clsx(classes.inactiveSelectBtn, classes.spacingBtn)}
                                 fullWidth
                                 size="large"
@@ -310,7 +310,7 @@ export function Landing() {
                                 }}
                             >
                                 Redeem Here
-                                        </BadanamuButton>}
+                            </BadanamuButton>}
                     </Grid>
                 </Grid>
                 <Grid item xs={12} sm={6}>
