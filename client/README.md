@@ -26,6 +26,10 @@ Make sure to be on a local development branch based on `master`
 
 Make sure to be on `beta` and then `npm run build`
 
+### Build for Pre-Production
+
+Make sure to be on `prod` and then `npm run build:test`
+
 ### Build for Production
 
 Make sure to be on `prod` and then `npm run build:prod`
