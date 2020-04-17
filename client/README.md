@@ -34,6 +34,10 @@ Make sure to be on `prod` and then `npm run build:test`
 
 Make sure to be on `prod` and then `npm run build:prod`
 
+### Open the development dashboard
+
+Append `?test#/` to the end of the URL.
+
 ### Deploying
 
 #### Amazon S3 Buckets
