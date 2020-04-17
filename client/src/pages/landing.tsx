@@ -1,6 +1,8 @@
+import { Hidden } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import Collapse from "@material-ui/core/Collapse";
 import Container from "@material-ui/core/Container";
@@ -22,14 +24,12 @@ import React, { useEffect, useState } from "react";
 import { FormattedDate, FormattedMessage } from "react-intl";
 import { useStore } from "react-redux";
 import { useHistory } from "react-router";
+import { config } from "react-transition-group";
 import BadanamuButton from "../components/button";
+import { useRestAPI } from "../restapi";
 import { ActionTypes } from "../store/actions";
 import { getExpiration } from "../utils/date";
-import { useRestAPI } from "../restapi";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import { getImgByPassId, getDetailsByPass } from "./../config";
-import { config } from "react-transition-group";
-import { Hidden } from "@material-ui/core";
+import { getDetailsByPass, getImgByPassId } from "./../config";
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme) => createStyles({
@@ -167,6 +167,7 @@ export function Landing() {
     const history = useHistory();
     const classes = useStyles();
     const restApi = useRestAPI();
+    const whitelist = [{prodId: "app.learnandplay.bada-rhyme-1", title: "Badanamu: Bada Rhyme 1", type: 5, description: "", updateTm: 0}, {prodId: "app.learnandplay.bada-rhyme-2", title: "Badanamu: Bada Rhyme 2", type: 5, description: "", updateTm: 0}, {prodId: "app.learnandplay.bada-genius", title: "Badanamu: Bada Genius", type: 5, description: "", updateTm: 0}, {prodId: "app.learnandplay.bada-genius-stem", title: "Badanamu: Bada Genius STEM", type: 5, description: "", updateTm: 0}, {prodId: "app.learnandplay.bada-genius-nature", title: "Badanamu: Bada Genius Nature", type: 5, description: "", updateTm: 0}, {prodId: "app.learnandplay.bada-talk-1", title: "Badanamu: Bada Talk 1", type: 5, description: "", updateTm: 0}, {prodId: "app.learnandplay.bada-talk-2", title: "Badanamu: Bada Talk 2", type: 5, description: "", updateTm: 0}, {prodId: "app.learnandplay.bada-sound", title: "Badanamu: Bada Sound", type: 5, description: "", updateTm: 0}, {prodId: "app.learnandplay.bada-read", title: "Badanamu: Bada Read", type: 5, description: "", updateTm: 0}, {prodId: "app.learnandplay.dino-park-esl", title: "Badanamu: Dino Park ESL", type: 5, description: "", updateTm: 0}, {prodId: "app.learnandplay.songs", title: "Badanamu: Songs", type: 5, description: "", updateTm: 0}, {prodId: "app.learnandplay.books", title: "Badanamu: Books", type: 5, description: "", updateTm: 0}, {prodId: "app.learnandplay.cadets", title: "Badanamu Cadets", type: 5, description: "", updateTm: 0}];
 
     const [selected, setSelected] = useState(true);
     const [selectedPlan, setPlan] = useState("BLPPremium");
@@ -186,9 +187,9 @@ export function Landing() {
     };
 
     async function getProductListByIds(ids: string[]) {
-        const response = await restApi.getProductInfoByIds(ids);
-        var products = response.products;
-        products.sort((productA: any, productB: any) => productB.title - productA.title);
+        // const response = await restApi.getProductInfoByIds(ids);
+        const products = whitelist;
+        // products.sort((productA: any, productB: any) => productB.title - productA.title);
         return products;
     }
 
@@ -197,11 +198,11 @@ export function Landing() {
         try {
             setPassListInFlight(true);
             const response = await restApi.getPassList();
-            var passes = response.passes;
+            const passes = response.passes;
             passes.sort((passA: any, passB: any) => passA.price - passB.price);
-            for (var i = 0; i < passes.length; ++i) {
-                passes[i].productInfoList = await getProductListByIds(passes[i].productIds)
-                passes[i].details = getDetailsByPass(passes[i])
+            for (let i = 0; i < passes.length; ++i) {
+                passes[i].productInfoList = whitelist;
+                passes[i].details = getDetailsByPass(passes[i]);
             }
             setPassList(passes);
         } catch (e) {
@@ -326,7 +327,7 @@ export function Landing() {
                                     <Typography className={classes.heading}><FormattedMessage id="learning_pass_apps" /></Typography>
                                 </Grid>
                                 <Grid item xs={12} md={6}>
-                                    <Typography className={classes.selected}>{pass.productIds.length}</Typography>
+                                    <Typography className={classes.selected}>{whitelist.length}</Typography>
                                 </Grid>
                             </Grid>
                         </ExpansionPanelSummary>
@@ -351,7 +352,7 @@ export function Landing() {
                     )) : null}
                 </Grid>
             </React.Fragment>
-        )
+        );
     }
 
     return (
