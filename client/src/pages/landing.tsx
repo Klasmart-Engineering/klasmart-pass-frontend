@@ -249,7 +249,7 @@ export function Landing() {
                         >
                             <FormattedMessage id="learning_pass_continue_btn" />
                         </BadanamuButton>
-                        <Typography variant="body1" align="center">Have a Learning Pass Ticket ID?</Typography>
+                        <Typography variant="body1" align="center"><FormattedMessage id="landing_tooltip_label" /></Typography>
                         {pressedTicketButton ?
                             <Grid container direction="row" justify="space-between" alignItems="center" spacing={2}>
                                 <Grid item xs={12} sm={6} className={classes.spacingGrid}>
@@ -261,7 +261,7 @@ export function Landing() {
                                             history.push("/redeem-ticket");
                                         }}
                                     >
-                                        Redeem Ticket
+                                        <FormattedMessage id="ticket_redeem_btn" />
                                                 </BadanamuButton>
                                 </Grid>
                                 <Grid item xs={12} sm={6} className={classes.spacingGrid}>
@@ -273,7 +273,7 @@ export function Landing() {
                                             history.push("/redeem-event-ticket");
                                         }}
                                     >
-                                        Redeem Event Ticket
+                                        <FormattedMessage id="landing_event_ticket_redeem_btn" />
                                                 </BadanamuButton>
                                 </Grid>
                                 <Grid item xs={12}>
@@ -286,16 +286,16 @@ export function Landing() {
                                                 flexDirection: "row-reverse",
                                             }}>
                                                 <Tooltip
-                                                    title="An event ticket is a ticket ID you might have received through social media."
+                                                    title={<FormattedMessage id="landing_tooltip_text" />}
                                                 >
                                                     <HelpRounded fontSize="small" style={{ marginLeft: 8 }} />
                                                 </Tooltip>
-                                                <Typography variant="caption">What's an Event Ticket?</Typography>
+                                                <Typography variant="caption"><FormattedMessage id="landing_tooltip_label" /></Typography>
                                             </span>
                                         </Hidden>
                                         <Hidden mdUp>
                                             <span style={{ display: "flex" }}>
-                                                An event ticket is a ticket ID you might have received through social media.
+                                                <FormattedMessage id="landing_tooltip_text" />
                                             </span>
                                         </Hidden>
                                     </div>
@@ -310,7 +310,7 @@ export function Landing() {
                                     setTicketButton(true);
                                 }}
                             >
-                                Redeem Here
+                                <FormattedMessage id="landing_event_ticket_redeem_here_btn" />
                             </BadanamuButton>}
                     </Grid>
                 </Grid>
