@@ -4,7 +4,7 @@ import { ActionTypes } from "./store/actions";
 import { Store } from "./store/store";
 import { IdentityType } from "./utils/accountType";
 import { getServers } from "dns";
-import { getPaymentEndpoint, getAuthEndpoint, getAccountEndpoint, getProductEndpoint, getOrganizationEndpoint, getRegionEndpoint } from "./config";
+import { getPaymentEndpoint, getAuthEndpoint, getAccountEndpoint, getProductEndpoint, getOrganizationEndpoint, getRegionEndpoint, getPassFilter } from "./config";
 
 function phoneOrEmail(str: string): { phoneNr?: string, email?: string } {
     if (str.indexOf("@") === -1) {
@@ -273,9 +273,20 @@ export class RestAPI {
     }
 
     public async getPassList() {
-        const response = await this.productCall("GET", "v1/pass/list");
-        const body = await response.json();
-        return body;
+        let passIds = getPassFilter();
+        if (passIds.length > 0) {
+            let requestQueryParams = "?id=" + passIds[0];
+            for (let i = 1; i < passIds.length; ++i) {
+                requestQueryParams += "&id=" + passIds[i];
+            }
+            const response = await this.productCall("GET", "v1/pass" + requestQueryParams);
+            const body = await response.json();
+            return body;
+        } else {
+            const response = await this.productCall("GET", "v1/pass/list");
+            const body = await response.json();
+            return body;
+        }
     }
 
     public async getPassAccesses() {
