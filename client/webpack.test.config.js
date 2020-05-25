@@ -78,6 +78,7 @@ module.exports = {
             "PRODUCT_ENDPOINT": "https://prod-test.product.badanamu.net/",
             "REGION_ENDPOINT": "https://prod-test.region.badanamu.net/",
             "ORGANIZATION_SEOUL_ENDPOINT": "https://seoul-test.organization-api.badanamu.net/",
+            "PASS_FILTER": ["com.calmid.badanamu.esl.premium"],
         })
     ],
     optimization: {
