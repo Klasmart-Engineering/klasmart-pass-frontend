@@ -36,6 +36,11 @@ export function getOrganizationEndpoint(regionId: string) {
     }
 }
 
+export function getPassFilter(): string[] {
+    let pass_filter = process.env.PASS_FILTER || []
+    return pass_filter as string[]
+}
+
 export function isPremiumPass(passId: string) {
     return passId == "com.calmid.badanamu.esl.premium"
 }
