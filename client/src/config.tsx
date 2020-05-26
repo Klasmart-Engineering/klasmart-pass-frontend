@@ -1,5 +1,6 @@
 import BLP from "./img/com_calmid_learnandplay_blp_standard.png";
 import BLPPremium from "./img/com_calmid_badanamu_esl_premium.png";
+import BLPTrial from "./img/com_calmid_badanamu_esl_trial.png";
 import CheckRoundedIcon from "@material-ui/icons/CheckRounded";
 import ClearRoundedIcon from "@material-ui/icons/ClearRounded";
 import { FormattedMessage } from "react-intl";
@@ -45,13 +46,20 @@ export function isPremiumPass(passId: string) {
     return passId == "com.calmid.badanamu.esl.premium"
 }
 
+export function isTrialPass(passId: string) {
+    return passId == "com.calmid.badanamu.esl.trial"
+}
+
 export function getImgByPassId(passId: string) {
     // Not fully dynamic because need to check everytime for every new pass
     // Could be more dynamic in the future (load image dynamically on the img path)
     if (isPremiumPass(passId)) {
         return BLPPremium
+    } else if (isTrialPass(passId)) {
+        return BLPTrial
+    } else {
+        return BLP
     }
-    return BLP
 }
 
 export function getDetailsByPass(pass: any) {
