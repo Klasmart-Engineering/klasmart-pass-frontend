@@ -111,7 +111,7 @@ export function App() {
                         <Route path="/verify-phone" render={(props) => <Verify type={IdentityType.Phone} {...props} />} />
                         <Route path="/verify-email" render={(props) => <Verify type={IdentityType.Email} {...props} />} />
                         <Route path="/verify_email" component={VerifyLink} />
-                        <Route path="/verify_email_token" component={VerifyLinkToken} />
+                        <Route path="/verify_email_with_token" component={VerifyLinkToken} />
                         <Route path="/payment" component={Payment} />
                         <Route path="/payment-thankyou" component={PaymentThankyou} />
                         <Route path="/payment-error" component={PaymentError} />

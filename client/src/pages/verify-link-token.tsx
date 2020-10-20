@@ -53,9 +53,6 @@ export function VerifyLinkToken(props: RouteComponentProps) {
     const classes = useStyles();
     const history = useHistory();
     const params = QueryString.parse(props.location.search);
-    if (typeof params.accountId === "string") {
-        store.dispatch({ type: ActionTypes.ACCOUNT_ID, payload: { accountId: params.accountId } });
-    }
 
     if (typeof params.verificationToken === "string") {
         store.dispatch({ type: ActionTypes.VERIFICATION_TOKEN, payload: { verificationToken: params.verificationToken } });
@@ -65,15 +62,12 @@ export function VerifyLinkToken(props: RouteComponentProps) {
     const [verifyInFlight, setVerifyInFlight] = React.useState(false);
     const restApi = useRestAPI();
 
-    async function verify(code: string) {
-        const thisRef = this
+    async function verify(code: string, verificationToken: string) {
         if (code === "") { return; }
         if (verifyInFlight) { return; }
         try {
             setVerifyInFlight(true);
-            console.log(thisRef.verificationToken);
-            console.log(thisRef.params.code);
-            await restApi.verifyWithToken(thisRef.verificationToken, thisRef.params.code);
+            await restApi.verifyWithToken(verificationToken, code);
         } catch (e) {
             if (e instanceof RestAPIError) {
                 const id = e.getErrorMessageID();
@@ -86,7 +80,7 @@ export function VerifyLinkToken(props: RouteComponentProps) {
 
     useEffect(() => {
         if (typeof params.code !== "string") return;
-        verify(params.code);
+        verify(params.code, params.verificationToken as string);
     }, []);
 
     redirectIfUnverifiable();
@@ -101,7 +95,7 @@ export function VerifyLinkToken(props: RouteComponentProps) {
                         </Grid>
                         <Grid item xs={12} style={{ textAlign: "center" }}>
                             <Typography component="h1" variant="h5">
-                                <FormattedMessage id="verify_email_token" />
+                                <FormattedMessage id="verify_email_with_token" />
                             </Typography>
                             {
                                 verifyInFlight ?
@@ -111,7 +105,7 @@ export function VerifyLinkToken(props: RouteComponentProps) {
                                                 {error}
                                             </Typography>
                                             :
-                                            < FormattedMessage id="verify_email_token_success" />
+                                            < FormattedMessage id="verify_email_with_token_success" />
                                     )
                             }
                         </Grid>
