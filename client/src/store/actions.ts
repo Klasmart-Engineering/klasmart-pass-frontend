@@ -57,6 +57,7 @@ export enum ActionTypes {
     // Testing
     FAKE_NONCE,
     SIMULATE_UNSTABLE_CONNECTION,
+    VERIFICATION_TOKEN,
 }
 
 export type Actions =

@@ -50,6 +50,10 @@ export class RestAPI {
         }
     }
 
+    public verifyWithToken(verificationToken: string, verificationCode: string) {
+        return this.accountCall("POST", "v2/signup/confirm", JSON.stringify({ verificationToken, verificationCode }));
+    }
+
     public async verifyCheck(type: IdentityType) {
         const state = this.store.getState();
         const accountId = state.account.accountId;
