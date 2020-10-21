@@ -53,7 +53,6 @@ export function VerifyLinkToken(props: RouteComponentProps) {
     const classes = useStyles();
     const history = useHistory();
     const params = QueryString.parse(props.location.search);
-
     if (typeof params.verificationToken === "string") {
         store.dispatch({ type: ActionTypes.VERIFICATION_TOKEN, payload: { verificationToken: params.verificationToken } });
     }

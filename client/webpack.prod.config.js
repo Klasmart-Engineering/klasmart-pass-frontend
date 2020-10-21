@@ -72,11 +72,11 @@ module.exports = {
         }),
         new Visualizer({ filename: '../webpack-stats.html' }),
         new webpack.EnvironmentPlugin({
-            "PAYMENT_ENDPOINT": "https://prod.payment.badanamu.net/",
-            "AUTH_ENDPOINT": "https://prod.auth.badanamu.net/",
-            "ACCOUNT_ENDPOINT": "https://prod.account.badanamu.net/",
-            "PRODUCT_ENDPOINT": "https://prod.product.badanamu.net/",
-            "REGION_ENDPOINT": "https://prod.region.badanamu.net/",
+            "PAYMENT_ENDPOINT": "https://payment.badanamu.net/",
+            "AUTH_ENDPOINT": "https://auth.badanamu.net/",
+            "ACCOUNT_ENDPOINT": "https://account.badanamu.net/",
+            "PRODUCT_ENDPOINT": "https://product.badanamu.net/",
+            "REGION_ENDPOINT": "https://region.badanamu.net/",
             "ORGANIZATION_SEOUL_ENDPOINT": "https://seoul.organization-api.badanamu.net/",
             "PASS_FILTER": ["com.calmid.badanamu.esl.premium"],
         })
