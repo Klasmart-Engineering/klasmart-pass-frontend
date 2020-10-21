@@ -72,10 +72,10 @@ module.exports = {
         }),
         new Visualizer({ filename: '../webpack-stats.html' }),
         new webpack.EnvironmentPlugin({
-            "PAYMENT_ENDPOINT": "https://payment.dev.badanamu.net/",
-            "AUTH_ENDPOINT": "https://auth.dev.badanamu.net/",
-            "ACCOUNT_ENDPOINT": "https://account.dev.badanamu.net/",
-            "PRODUCT_ENDPOINT": "https://product.dev.badanamu.net/",
+            "PAYMENT_ENDPOINT": "https://ams-payment.dev.badanamu.net/",
+            "AUTH_ENDPOINT": "https://ams-auth.dev.badanamu.net/",
+            "ACCOUNT_ENDPOINT": "https://ams-account.dev.badanamu.net/",
+            "PRODUCT_ENDPOINT": "https://ams-product.dev.badanamu.net/",
             "REGION_ENDPOINT": "https://beta.region.badanamu.net/",
             "ORGANIZATION_SEOUL_ENDPOINT": "https://seoul-beta.organization-api.badanamu.net/",
         })
