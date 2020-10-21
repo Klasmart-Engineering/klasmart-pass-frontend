@@ -76,7 +76,7 @@ module.exports = {
             "AUTH_ENDPOINT": "https://auth.badanamu.net/",
             "ACCOUNT_ENDPOINT": "https://account.badanamu.net/",
             "PRODUCT_ENDPOINT": "https://product.badanamu.net/",
-            "REGION_ENDPOINT": "https://region.badanamu.net/",
+            "REGION_ENDPOINT": "https://prod.region.badanamu.net/",
             "ORGANIZATION_SEOUL_ENDPOINT": "https://seoul.organization-api.badanamu.net/",
             "PASS_FILTER": ["com.calmid.badanamu.esl.premium"],
         })
