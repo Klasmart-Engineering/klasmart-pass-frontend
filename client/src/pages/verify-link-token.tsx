@@ -94,7 +94,7 @@ export function VerifyLinkToken(props: RouteComponentProps) {
                         </Grid>
                         <Grid item xs={12} style={{ textAlign: "center" }}>
                             <Typography component="h1" variant="h5">
-                                <FormattedMessage id="verify_email_with_token" />
+                                <FormattedMessage id="verify_email" />
                             </Typography>
                             {
                                 verifyInFlight ?
@@ -104,7 +104,7 @@ export function VerifyLinkToken(props: RouteComponentProps) {
                                                 {error}
                                             </Typography>
                                             :
-                                            < FormattedMessage id="verify_email_with_token_success" />
+                                            < FormattedMessage id="verify_email_success" />
                                     )
                             }
                         </Grid>
