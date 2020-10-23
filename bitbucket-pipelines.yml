@@ -8,5 +8,5 @@ pipelines:
         script:
           - cd client
           - npm install
-          - npm run build
+          - npm run build:beta
           - npm run build:prod
