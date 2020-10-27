@@ -5,6 +5,7 @@ const webpack = require('webpack');
 module.exports = {
     mode: 'development',
     entry: ['./src/client-entry.tsx'],
+    devtool: "source-map",
     module: {
         rules: [
             {

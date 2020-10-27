@@ -1,35 +1,33 @@
-import { Hidden } from "@material-ui/core";
-import Button from "@material-ui/core/Button";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import ClickAwayListener from "@material-ui/core/ClickAwayListener";
-import Collapse from "@material-ui/core/Collapse";
-import Container from "@material-ui/core/Container";
-import Divider from "@material-ui/core/Divider";
-import ExpansionPanel from "@material-ui/core/ExpansionPanel";
-import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
-import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
-import Grid from "@material-ui/core/Grid";
-import Link from "@material-ui/core/Link";
-import { createStyles, makeStyles } from "@material-ui/core/styles";
-import Tooltip from "@material-ui/core/Tooltip";
-import Typography from "@material-ui/core/Typography";
-import CheckRoundedIcon from "@material-ui/icons/CheckRounded";
-import ClearRoundedIcon from "@material-ui/icons/ClearRounded";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import HelpRounded from "@material-ui/icons/HelpRounded";
-import clsx from "clsx";
-import React, { useEffect, useState } from "react";
-import { FormattedDate, FormattedMessage } from "react-intl";
-import { useStore } from "react-redux";
-import { useHistory } from "react-router";
-import { config } from "react-transition-group";
-import BadanamuButton from "../components/button";
-import { useRestAPI } from "../restapi";
-import { ActionTypes } from "../store/actions";
-import { getExpiration } from "../utils/date";
-import { getDetailsByPass, getImgByPassId } from "./../config";
+import {
+    Accordion as ExpansionPanel,
+    AccordionDetails as ExpansionPanelDetails,
+    AccordionSummary as ExpansionPanelSummary,
+    Hidden,
+} from '@material-ui/core';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Container from '@material-ui/core/Container';
+import Divider from '@material-ui/core/Divider';
+import Grid from '@material-ui/core/Grid';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
+import Tooltip from '@material-ui/core/Tooltip';
+import Typography from '@material-ui/core/Typography';
+import CheckRoundedIcon from '@material-ui/icons/CheckRounded';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import HelpRounded from '@material-ui/icons/HelpRounded';
+import clsx from 'clsx';
+import React, { useEffect, useState } from 'react';
+import { FormattedMessage } from 'react-intl';
+import { useStore } from 'react-redux';
+import { useHistory } from 'react-router';
+
+import BadanamuButton from '../components/button';
+import { useRestAPI } from '../restapi';
+import { ActionTypes } from '../store/actions';
+import { getDetailsByPass, getImgByPassId } from './../config';
+
+
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme) => createStyles({
