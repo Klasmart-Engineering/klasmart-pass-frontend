@@ -112,9 +112,19 @@ export function Payment() {
             setPassAccessInFlight(false);
         }
     }
-    useEffect(() => { getPassAccess(); }, []);
 
     redirectIfUnauthorized("/payment");
+
+    const accessToken = useSelector((state: State) => state.account.accessToken);
+    const refreshToken = useSelector(
+      (state: State) => state.account.refreshToken
+    );
+
+    useEffect(() => {
+      if (accessToken !== null || refreshToken !== null) {
+        getPassAccess();
+      }
+    }, [accessToken, refreshToken]);
 
     return (
         <Container maxWidth={"lg"} style={{ margin: "auto 0" }}>
