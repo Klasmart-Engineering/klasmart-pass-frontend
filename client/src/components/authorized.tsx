@@ -1,3 +1,4 @@
+import React from "react"
 import { useSelector, useStore } from "react-redux";
 import { useHistory } from "react-router";
 import { ActionTypes } from "../store/actions";
@@ -33,9 +34,13 @@ export function redirectIfAuthorized(defaultRoute = "/") {
     const refreshToken = useSelector((state: State) => state.account.refreshToken);
     const postAuthorizationRoute = useSelector((state: State) => state.postAuthorizationRoute);
 
-    if (accessToken !== null || refreshToken !== null) {
-        history.replace(postAuthorizationRoute || defaultRoute);
-    }
+    React.useEffect(() => {
+        if (accessToken !== null || refreshToken !== null) {
+            history.replace(postAuthorizationRoute || defaultRoute);
+        }
+        
+    }, [accessToken, refreshToken])
+
 }
 
 export function redirectIfUnverifiable(defaultRoute = "/") {

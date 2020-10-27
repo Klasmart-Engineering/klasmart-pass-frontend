@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => createStyles({
 );
 // tslint:enable:object-literal-sort-keys
 
-export function Login() {
+export const Login: React.FC<{}> = ()  =>{
     const classes = useStyles();
     const [inFlight, setInFlight] = useState(false);
 
@@ -60,24 +60,30 @@ export function Login() {
     const history = useHistory();
     const restApi = useRestAPI();
 
-    redirectIfAuthorized();
+    redirectIfAuthorized();    
+
+    React.useEffect(() => {
+        if(email&&email.includes("@")){
+            LogRocket.identify(email);
+        }
+    }, [email])
+   
 
     async function login(e: React.FormEvent) {
         e.preventDefault();
         if (inFlight) { return; }
         if (email === "") { return; }
         if (password === "") { return; }
+
         try {
             setInFlight(true);
             await restApi.login(email, password);
             const { passes: newPasses } = await restApi.getPassAccesses();
             store.dispatch({ type: ActionTypes.PASSES, payload: newPasses });
-            LogRocket.identify(email);
         } catch (e) {
             handleError(e);
-        } finally {
             setInFlight(false);
-        }
+        } 
     }
 
     function handleError(e: RestAPIError | Error) {
