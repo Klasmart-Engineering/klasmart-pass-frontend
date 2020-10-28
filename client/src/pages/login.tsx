@@ -62,11 +62,18 @@ export const Login: React.FC<{}> = ()  =>{
 
     redirectIfAuthorized();    
 
+    const accessToken = useSelector((state: State) => state.account.accessToken);
+    const refreshToken = useSelector(
+      (state: State) => state.account.refreshToken
+    );
+  
     React.useEffect(() => {
-        if(email&&email.includes("@")){
-            LogRocket.identify(email);
+        if (accessToken !== null || refreshToken !== null) {
+            if(email&&email.includes("@")){
+                LogRocket.identify(email);
+            }   
         }
-    }, [email])
+    }, [accessToken, refreshToken, email])
    
 
     async function login(e: React.FormEvent) {
