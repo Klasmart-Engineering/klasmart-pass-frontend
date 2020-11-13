@@ -14,7 +14,7 @@ const messages: Record<string, string> = {
     button_select: "선택하기",
     copyright: "Copyright",
     copyright_arr: "All rights reserved.",
-    copyright_company: "Calm Island Limited.",
+    copyright_company: "Kidsloop Limited.",
     copyright_privacy: "개인정보처리방침",
     copyright_refund: "환불정책",
     copyright_terms: "이용약관",
