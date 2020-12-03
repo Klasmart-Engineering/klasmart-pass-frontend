@@ -9,7 +9,8 @@ import { FormattedMessage } from "react-intl";
 import { useHistory } from "react-router";
 
 import BadanamuButton from "../components/button";
-import BadanamuLogo from "../img/badanamu_logo.png";
+
+import KidsloopIcon from "../../../../../../../assets/img/kidsloop_icon.svg";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -25,33 +26,33 @@ export function PasswordChanged() {
   const history = useHistory();
   const classes = useStyles();
 
-  return (
-    <Container maxWidth="sm" style={{ margin: "auto 0" }}>
-      <Card>
-        <CardContent className={classes.card}>
-          <Grid container justify="center" spacing={4}>
-            <Grid item xs={12} style={{ textAlign: "center" }}>
-              <img src={BadanamuLogo} style={{ marginBottom: 12 }} />
-            </Grid>
-            <Grid item xs={12}>
-              <Typography variant="h5" align="center">
-                <FormattedMessage id="password_changed" />
-              </Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <BadanamuButton
-                fullWidth
-                size="large"
-                onClick={(e) => {
-                  history.push("/my-account");
-                }}
-              >
-                <FormattedMessage id="thank_you_go_to_dashboard" />
-              </BadanamuButton>
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
-    </Container>
-  );
+    return (
+        <Container maxWidth="sm" style={{ margin: "auto 0" }}>
+            <Card>
+                <CardContent className={classes.card}>
+                    <Grid container justify="center" spacing={4}>
+                        <Grid item xs={12} style={{ textAlign: "center" }}>
+                            <img src={KidsloopIcon} style={{ marginBottom: 12 }} height="50px" />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Typography variant="h5" align="center">
+                                <FormattedMessage id="password_changed" />
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <BadanamuButton
+                                fullWidth
+                                size="large"
+                                onClick={(e) => {
+                                    history.push("/my-account");
+                                }}
+                            >
+                                <FormattedMessage id="thank_you_go_to_dashboard" />
+                            </BadanamuButton>
+                        </Grid>
+                    </Grid>
+                </CardContent>
+            </Card>
+        </Container>
+    );
 }

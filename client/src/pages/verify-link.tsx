@@ -15,14 +15,14 @@ import { RouteComponentProps } from "react-router-dom";
 
 import { redirectIfUnverifiable } from "../components/authorized";
 import BadanamuButton from "../components/button";
-import BadanamuLogo from "../img/badanamu_logo.png";
 import { useRestAPI } from "../restapi";
 import { RestAPIError } from "../restapi_errors";
 import { ActionTypes } from "../store/actions";
 import { IdentityType } from "../utils/accountType";
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
+import KidsloopIcon from "../../../../../../../assets/img/kidsloop_icon.svg";
+
+const useStyles = makeStyles((theme) => createStyles({
     card: {
       display: "flex",
       alignItems: "center",
@@ -92,48 +92,45 @@ export function VerifyLink(props: RouteComponentProps) {
     }
   }, []);
 
-  redirectIfUnverifiable();
+    return (
+        <Container maxWidth="xs" style={{ margin: "auto 0" }}>
+            <Card>
+                <CardContent className={classes.card}>
+                    <Grid container direction="row" justify="center" alignItems="center" spacing={4}>
+                        <Grid item xs={12} style={{ textAlign: "center" }}>
+                            <img src={KidsloopIcon} style={{ marginBottom: 12 }} height="50px" />
+                        </Grid>
+                        <Grid item xs={12} style={{ textAlign: "center" }}>
+                            <Typography component="h1" variant="h5">
+                                <FormattedMessage id="verify_email" />
+                            </Typography>
+                            {
+                                verifyInFlight ?
+                                    <CircularProgress size={25} /> : (
+                                        error !== null ?
+                                            <Typography color="error">
+                                                {error}
+                                            </Typography>
+                                            :
+                                            < FormattedMessage id="verify_email_success" />
+                                    )
+                            }
+                        </Grid>
+                        <Grid item xs={12}>
 
-  return (
-    <Container maxWidth="xs" style={{ margin: "auto 0" }}>
-      <Card>
-        <CardContent className={classes.card}>
-          <Grid
-            container
-            direction="row"
-            justify="center"
-            alignItems="center"
-            spacing={4}
-          >
-            <Grid item xs={12} style={{ textAlign: "center" }}>
-              <img src={BadanamuLogo} style={{ marginBottom: 12 }} />
-            </Grid>
-            <Grid item xs={12} style={{ textAlign: "center" }}>
-              <Typography component="h1" variant="h5">
-                <FormattedMessage id="verify_email" />
-              </Typography>
-              {verifyInFlight ? (
-                <CircularProgress size={25} />
-              ) : error !== null ? (
-                <Typography color="error">{error}</Typography>
-              ) : (
-                <FormattedMessage id="verify_email_success" />
-              )}
-            </Grid>
-            <Grid item xs={12}>
-              <BadanamuButton
-                fullWidth
-                size="large"
-                onClick={(e) => {
-                  history.push("/login");
-                }}
-              >
-                <FormattedMessage id="login_button" />
-              </BadanamuButton>
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
-    </Container>
-  );
+                            <BadanamuButton
+                                fullWidth
+                                size="large"
+                                onClick={(e) => {
+                                    window.location.href="https://auth.kidsloop.net/";
+                                }}
+                            >
+                                <FormattedMessage id="login_button" />
+                            </BadanamuButton>
+                        </Grid>
+                    </Grid>
+                </CardContent>
+            </Card>
+        </Container>
+    );
 }

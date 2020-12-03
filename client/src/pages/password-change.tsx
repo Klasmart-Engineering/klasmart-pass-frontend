@@ -11,12 +11,12 @@ import { useHistory } from "react-router-dom";
 
 import BadanamuButton from "../components/button";
 import BadanamuTextField from "../components/textfield";
-import BadanamuLogo from "../img/badanamu_logo.png";
 import { useRestAPI } from "../restapi";
 import { RestAPIError } from "../restapi_errors";
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
+import KidsloopIcon from "../../../../../../../assets/img/kidsloop_icon.svg";
+
+const useStyles = makeStyles((theme: Theme) => createStyles({
     card: {
       display: "flex",
       alignItems: "center",
@@ -97,92 +97,83 @@ export function PasswordChange() {
     }
   }
 
-  return (
-    <Container maxWidth="xs" style={{ margin: "auto 0" }}>
-      <Card>
-        <CardContent className={classes.card}>
-          <Grid
-            container
-            direction="column"
-            justify="center"
-            alignItems="center"
-            spacing={4}
-          >
-            <Grid item xs={12}>
-              <img src={BadanamuLogo} style={{ marginBottom: 12 }} />
-            </Grid>
-            <Grid item xs={12}>
-              <Typography variant="h5">
-                <FormattedMessage
-                  id="password_change_heading"
-                  values={{
-                    b: (...chunks: any[]) => <strong>{chunks}</strong>,
-                  }}
-                />
-              </Typography>
-            </Grid>
-            <Grid item xs={12} className={classes.formContainer}>
-              <form onSubmit={(e) => changepassword(e)}>
-                <Grid container spacing={2}>
-                  <Grid item xs={12}>
-                    <BadanamuTextField
-                      required
-                      fullWidth
-                      type="password"
-                      value={currentPassword}
-                      onChange={(e) => setCurrentPassword(e.target.value)}
-                      label={<FormattedMessage id="password_current" />}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <BadanamuTextField
-                      required
-                      fullWidth
-                      type="password"
-                      error={passwordMatchError}
-                      value={newPassword}
-                      onChange={(e) => setNewPassword(e.target.value)}
-                      onBlur={() => checkPasswordMatch()}
-                      label={<FormattedMessage id="password_new" />}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <BadanamuTextField
-                      required
-                      fullWidth
-                      type="password"
-                      error={passwordMatchError}
-                      value={newPasswordConfirmation}
-                      onChange={(e) =>
-                        setNewPasswordConfirmation(e.target.value)
-                      }
-                      onBlur={() => checkPasswordMatch()}
-                      label={
-                        <FormattedMessage id="password_new_confirmation" />
-                      }
-                    />
-                  </Grid>
-                </Grid>
-                <BadanamuButton
-                  type="submit"
-                  fullWidth
-                  size="large"
-                  disabled={inFlight}
-                >
-                  {inFlight ? (
-                    <CircularProgress size={25} />
-                  ) : (
-                    <FormattedMessage id="password_change_button" />
-                  )}
-                </BadanamuButton>
-                {generalError === null ? null : (
-                  <Typography color="error">{generalError}</Typography>
-                )}
-              </form>
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
-    </Container>
-  );
+    return (
+        <Container maxWidth="xs" style={{ margin: "auto 0" }}>
+            <Card>
+                <CardContent className={classes.card}>
+                    <Grid container direction="column" justify="center" alignItems="center" spacing={4}>
+                        <Grid item xs={12}>
+                            <img src={KidsloopIcon} style={{ marginBottom: 12 }} height="50px" />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Typography variant="h5">
+                                <FormattedMessage
+                                    id="password_change_heading"
+                                    values={{ b: (...chunks: any[]) => <strong>{chunks}</strong> }}
+                                />
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={12} className={classes.formContainer}>
+                            <form onSubmit={(e) => changepassword(e)}>
+                                <Grid container spacing={2}>
+                                    <Grid item xs={12}>
+                                        <BadanamuTextField
+                                            required
+                                            fullWidth
+                                            type="password"
+                                            value={currentPassword}
+                                            onChange={(e) => setCurrentPassword(e.target.value)}
+                                            label={<FormattedMessage id="password_current" />}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <BadanamuTextField
+                                            required
+                                            fullWidth
+                                            type="password"
+                                            error={passwordMatchError}
+                                            value={newPassword}
+                                            onChange={(e) => setNewPassword(e.target.value)}
+                                            onBlur={() => checkPasswordMatch()}
+                                            label={<FormattedMessage id="password_new" />}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <BadanamuTextField
+                                            required
+                                            fullWidth
+                                            type="password"
+                                            error={passwordMatchError}
+                                            value={newPasswordConfirmation}
+                                            onChange={(e) => setNewPasswordConfirmation(e.target.value)}
+                                            onBlur={() => checkPasswordMatch()}
+                                            label={<FormattedMessage id="password_new_confirmation" />}
+                                        />
+                                    </Grid>
+                                </Grid>
+                                <BadanamuButton
+                                    type="submit"
+                                    fullWidth
+                                    size="large"
+                                    disabled={inFlight}
+                                >
+                                    {
+                                        inFlight ?
+                                            <CircularProgress size={25} /> :
+                                            <FormattedMessage id="password_change_button" />
+                                    }
+                                </BadanamuButton>
+                                {
+                                    generalError === null ? null :
+                                        <Typography color="error">
+                                            {generalError}
+                                        </Typography>
+                                }
+                            </form>
+                        </Grid>
+                    </Grid>
+                </CardContent>
+            </Card>
+        </Container>
+    );
 }

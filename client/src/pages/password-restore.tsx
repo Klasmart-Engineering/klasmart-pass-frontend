@@ -14,10 +14,11 @@ import { RouteComponentProps, useHistory } from "react-router";
 
 import BadanamuButton from "../components/button";
 import BadanamuTextField from "../components/textfield";
-import BadanamuLogo from "../img/badanamu_logo.png";
 import { useRestAPI } from "../restapi";
 import { RestAPIError } from "../restapi_errors";
 import { State } from "../store/store";
+
+import KidsloopIcon from "../../../../../../../assets/img/kidsloop_icon.svg";
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme: Theme) =>
@@ -108,101 +109,92 @@ export function PasswordRestore(props: RouteComponentProps) {
     }
   }
 
-  return (
-    <Container maxWidth="sm" style={{ margin: "auto 0" }}>
-      <Card>
-        <CardContent className={classes.card}>
-          <Grid
-            container
-            direction="column"
-            justify="center"
-            alignItems="center"
-            spacing={4}
-          >
-            <Grid item xs={12}>
-              <img src={BadanamuLogo} style={{ marginBottom: 12 }} />
-            </Grid>
-            <Grid item xs={12}>
-              <Typography variant="h5">
-                <FormattedMessage
-                  id="password_restore_heading"
-                  values={{
-                    b: (...chunks: any[]) => <strong>{chunks}</strong>,
-                  }}
-                />
-              </Typography>
-            </Grid>
-            <Grid item xs={12} className={classes.formContainer}>
-              <form onSubmit={(e) => restorePassword(e)}>
-                <Grid container spacing={2}>
-                  <Grid item xs={12}>
-                    <BadanamuTextField
-                      required
-                      fullWidth
-                      autoComplete="email"
-                      label={<FormattedMessage id="email" />}
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <BadanamuTextField
-                      required
-                      fullWidth
-                      type="password"
-                      error={passwordMatchError}
-                      value={newPassword}
-                      onChange={(e) => setNewPassword(e.target.value)}
-                      onBlur={() => checkPasswordMatch()}
-                      label={<FormattedMessage id="password_new" />}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <BadanamuTextField
-                      required
-                      fullWidth
-                      type="password"
-                      error={passwordMatchError}
-                      value={newPasswordConfirmation}
-                      onChange={(e) =>
-                        setNewPasswordConfirmation(e.target.value)
-                      }
-                      onBlur={() => checkPasswordMatch()}
-                      label={
-                        <FormattedMessage id="password_new_confirmation" />
-                      }
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <BadanamuTextField
-                      required
-                      fullWidth
-                      value={resetCode}
-                      onChange={(e) => setResetCode(e.target.value)}
-                      label={<FormattedMessage id="password_restore_code" />}
-                    />
-                  </Grid>
-                </Grid>
-                <BadanamuButton
-                  type="submit"
-                  fullWidth
-                  size="large"
-                  disabled={inFlight}
-                >
-                  {inFlight ? (
-                    <CircularProgress size={25} />
-                  ) : (
-                    <FormattedMessage id="password_restore_button" />
-                  )}
-                </BadanamuButton>
-                {generalError === null ? null : (
-                  <Typography color="error">{generalError}</Typography>
-                )}
-              </form>
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
-    </Container>
-  );
+    return (
+        <Container maxWidth="sm" style={{ margin: "auto 0" }}>
+            <Card>
+                <CardContent className={classes.card}>
+                    <Grid container direction="column" justify="center" alignItems="center" spacing={4}>
+                        <Grid item xs={12}>
+                            <img src={KidsloopIcon} style={{ marginBottom: 12 }} height="50px" />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Typography variant="h5">
+                                <FormattedMessage
+                                    id="password_restore_heading"
+                                    values={{ b: (...chunks: any[]) => <strong>{chunks}</strong> }}
+                                />
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={12} className={classes.formContainer}>
+                            <form onSubmit={(e) => restorePassword(e)}>
+                                <Grid container spacing={2}>
+                                    <Grid item xs={12}>
+                                        <BadanamuTextField
+                                            required
+                                            fullWidth
+                                            autoComplete="email"
+                                            label={<FormattedMessage id="email" />}
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <BadanamuTextField
+                                            required
+                                            fullWidth
+                                            type="password"
+                                            error={passwordMatchError}
+                                            value={newPassword}
+                                            onChange={(e) => setNewPassword(e.target.value)}
+                                            onBlur={() => checkPasswordMatch()}
+                                            label={<FormattedMessage id="password_new" />}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <BadanamuTextField
+                                            required
+                                            fullWidth
+                                            type="password"
+                                            error={passwordMatchError}
+                                            value={newPasswordConfirmation}
+                                            onChange={(e) => setNewPasswordConfirmation(e.target.value)}
+                                            onBlur={() => checkPasswordMatch()}
+                                            label={<FormattedMessage id="password_new_confirmation" />}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <BadanamuTextField
+                                            required
+                                            fullWidth
+                                            value={resetCode}
+                                            onChange={(e) => setResetCode(e.target.value)}
+                                            label={<FormattedMessage id="password_restore_code" />}
+                                        />
+                                    </Grid>
+                                </Grid>
+                                <BadanamuButton
+                                    type="submit"
+                                    fullWidth
+                                    size="large"
+                                    disabled={inFlight}
+                                >
+                                    {
+                                        inFlight ?
+                                            <CircularProgress size={25} /> :
+                                            <FormattedMessage id="password_restore_button" />
+                                    }
+                                </BadanamuButton>
+                                {
+                                    generalError === null ? null :
+                                        <Typography color="error">
+                                            {generalError}
+                                        </Typography>
+                                }
+                            </form>
+                        </Grid>
+                    </Grid>
+                </CardContent>
+            </Card>
+        </Container>
+    );
 }

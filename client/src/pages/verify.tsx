@@ -17,14 +17,14 @@ import { RouteComponentProps, useHistory } from "react-router-dom";
 
 import { redirectIfUnverifiable } from "../components/authorized";
 import BadanamuTextField from "../components/textfield";
-import BadanamuLogo from "../img/badanamu_logo.png";
 import { useRestAPI } from "../restapi";
 import { RestAPIError } from "../restapi_errors";
 import { ActionTypes } from "../store/actions";
 import { IdentityType } from "../utils/accountType";
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
+import KidsloopIcon from "../../../../../../../assets/img/kidsloop_icon.svg";
+
+const useStyles = makeStyles((theme) => createStyles({
     card: {
       display: "flex",
       alignItems: "center",
@@ -128,73 +128,70 @@ export function Verify(props: Props & RouteComponentProps) {
 
   const type = IdentityType[props.type].toLowerCase();
 
-  return (
-    <Container maxWidth="sm" style={{ margin: "auto 0" }}>
-      <Card>
-        <CardContent className={classes.card}>
-          <Grid container justify="center" spacing={4}>
-            <Grid item xs={12} align="center">
-              <img src={BadanamuLogo} style={{ marginBottom: 12 }} />
-            </Grid>
-            <Grid item xs={12}>
-              <Typography variant="h5" align="center">
-                <FormattedMessage id={`verify_${type}`} />
-              </Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography variant="body1" align="center">
-                <FormattedMessage id={`verify_${type}_directions`} />
-              </Typography>
-            </Grid>
-            <Grid item xs={8}>
-              <FormControl fullWidth>
-                <BadanamuTextField
-                  required
-                  fullWidth
-                  id="verify_code"
-                  label={<FormattedMessage id={`verify_${type}_code`} />}
-                  value={verificationCode}
-                  onChange={(e) => setVerificationCode(e.target.value)}
-                  inputProps={{
-                    style: { verticalAlign: "center", fontFamily: "monospace" },
-                  }}
-                  InputProps={{
-                    endAdornment: (
-                      <IconButton
-                        className={classes.iconButton}
-                        disabled={verifyInFlight}
-                        onClick={() => verify()}
-                        aria-label="submit"
-                      >
-                        {verifyInFlight ? (
-                          <CircularProgress size={25} />
-                        ) : (
-                          <ExitToAppRoundedIcon />
-                        )}
-                      </IconButton>
-                    ),
-                  }}
-                />
-                {error === null ? null : (
-                  <Typography color="error">{error}</Typography>
-                )}
-              </FormControl>
-            </Grid>
-            {props.type === IdentityType.Email ? (
-              <React.Fragment>
-                <Grid item xs={12} style={{ textAlign: "center" }}>
-                  <CircularProgress size={25} />
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography variant="body1" align="center">
-                    <FormattedMessage id={`verify_${type}_waiting`} />
-                  </Typography>
-                </Grid>
-              </React.Fragment>
-            ) : null}
-          </Grid>
-        </CardContent>
-      </Card>
-    </Container>
-  );
+    return (
+        <Container maxWidth="sm" style={{ margin: "auto 0" }}>
+            <Card>
+                <CardContent className={classes.card}>
+                    <Grid container justify="center" spacing={4}>
+                        <Grid item xs={12} align="center">
+                            <img src={KidsloopIcon} style={{ marginBottom: 12 }} height="50px" />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Typography variant="h5" align="center">
+                                <FormattedMessage id={`verify_${type}`} />
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Typography variant="body1" align="center">
+                                <FormattedMessage id={`verify_${type}_directions`} />
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={8}>
+                            <FormControl fullWidth>
+                                <BadanamuTextField
+                                    required
+                                    fullWidth
+                                    id="verify_code"
+                                    label={<FormattedMessage id={`verify_${type}_code`} />}
+                                    value={verificationCode}
+                                    onChange={(e) => setVerificationCode(e.target.value)}
+                                    inputProps={{ style: { verticalAlign: "center", fontFamily: "monospace" } }}
+                                    InputProps={{
+                                        endAdornment:
+                                            <IconButton
+                                                className={classes.iconButton}
+                                                disabled={verifyInFlight}
+                                                onClick={() => verify()}
+                                                aria-label="submit"
+                                            >
+                                                {verifyInFlight ? <CircularProgress size={25} /> : <ExitToAppRoundedIcon />}
+                                            </IconButton>,
+                                    }}
+                                />
+                                {
+                                    error === null ? null :
+                                        <Typography color="error">
+                                            {error}
+                                        </Typography>
+                                }
+                            </FormControl>
+                        </Grid>
+                        {props.type === IdentityType.Email ?
+                            <React.Fragment>
+                                <Grid item xs={12} style={{ textAlign: "center" }}>
+                                    <CircularProgress size={25} />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Typography variant="body1" align="center">
+                                        <FormattedMessage id={`verify_${type}_waiting`} />
+                                    </Typography>
+                                </Grid>
+                            </React.Fragment> :
+                            null
+                        }
+                    </Grid>
+                </CardContent>
+            </Card>
+        </Container>
+    );
 }

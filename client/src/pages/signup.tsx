@@ -14,10 +14,11 @@ import { redirectIfAuthorized } from "../components/authorized";
 import BadanamuButton from "../components/button";
 import PolicyLink from "../components/policyLinks";
 import BadanamuTextField from "../components/textfield";
-import BadanamuLogo from "../img/badanamu_logo.png";
 import { useRestAPI } from "../restapi";
 import { RestAPIError, RestAPIErrorType } from "../restapi_errors";
 import { getIdentityType, IdentityType } from "../utils/accountType";
+
+import KidsloopIcon from "../../../../../../../assets/img/kidsloop_icon.svg";
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme: Theme) =>
@@ -147,111 +148,103 @@ export function Signup() {
     }
   }
 
-  return (
-    <Container maxWidth="sm" style={{ margin: "auto 0" }}>
-      <Card>
-        <CardContent className={classes.card}>
-          <Grid
-            container
-            direction="column"
-            justify="center"
-            alignItems="center"
-            spacing={4}
-          >
-            <Grid item xs={12}>
-              <img src={BadanamuLogo} style={{ marginBottom: 12 }} />
-            </Grid>
-            <Grid item xs={12}>
-              <Typography variant="h5">
-                <FormattedMessage
-                  id="create_account"
-                  values={{
-                    b: (...chunks: any[]) => <strong>{chunks}</strong>,
-                  }}
-                />
-              </Typography>
-            </Grid>
-            <Grid item xs={12} className={classes.formContainer}>
-              <form onSubmit={(e) => signup(e)}>
-                <Grid container spacing={2}>
-                  <Grid item xs={12}>
-                    <BadanamuTextField
-                      required
-                      fullWidth
-                      autoComplete="email"
-                      label={<FormattedMessage id="email" />}
-                      value={email}
-                      error={emailError !== null}
-                      helperText={emailError}
-                      onChange={(e) => setEmail(e.target.value)}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <BadanamuTextField
-                      required
-                      fullWidth
-                      type="password"
-                      label={<FormattedMessage id="password" />}
-                      value={password}
-                      error={passwordError !== null || passwordMatchError}
-                      helperText={passwordError}
-                      onChange={(e) => setPassword(e.target.value)}
-                      onBlur={() => checkPasswordMatch()}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <BadanamuTextField
-                      required
-                      fullWidth
-                      value={passwordConfirmation}
-                      label={<FormattedMessage id="password_confirmation" />}
-                      type="password"
-                      error={passwordError !== null || passwordMatchError}
-                      helperText={passwordError}
-                      onChange={(e) => setPasswordConfirmation(e.target.value)}
-                      onBlur={() => checkPasswordMatch()}
-                    />
-                  </Grid>
-                </Grid>
-                <Grid item xs={12}>
-                  <BadanamuButton
-                    fullWidth
-                    type="submit"
-                    size="large"
-                    disabled={inFlight}
-                  >
-                    {inFlight ? (
-                      <CircularProgress size={25} />
-                    ) : (
-                      <FormattedMessage id="sign_up_button" />
-                    )}
-                  </BadanamuButton>
-                </Grid>
-                <Grid item xs={12}>
-                  {generalError === null ? null : (
-                    <Typography color="error">{generalError}</Typography>
-                  )}
-                </Grid>
-              </form>
-              <Grid container item xs={12} className={classes.link}>
-                <Grid item>
-                  <Link
-                    href="#"
-                    variant="subtitle2"
-                    onClick={(e: React.MouseEvent) => {
-                      history.push("/login");
-                      e.preventDefault();
-                    }}
-                  >
-                    <FormattedMessage id="sign_up_already" />
-                  </Link>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
-      <PolicyLink />
-    </Container>
-  );
+    return (
+        <Container maxWidth="sm" style={{ margin: "auto 0" }}>
+            <Card>
+                <CardContent className={classes.card}>
+                    <Grid container direction="column" justify="center" alignItems="center" spacing={4}>
+                        <Grid item xs={12}>
+                            <img src={KidsloopIcon} style={{ marginBottom: 12 }} height="50px" />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Typography variant="h5">
+                                <FormattedMessage
+                                    id="create_account"
+                                    values={{ b: (...chunks: any[]) => <strong>{chunks}</strong> }}
+                                />
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={12} className={classes.formContainer}>
+                            <form onSubmit={(e) => signup(e)}>
+                                <Grid container spacing={2}>
+                                    <Grid item xs={12}>
+                                        <BadanamuTextField
+                                            required
+                                            fullWidth
+                                            autoComplete="email"
+                                            label={<FormattedMessage id="email" />}
+                                            value={email}
+                                            error={emailError !== null}
+                                            helperText={emailError}
+                                            onChange={(e) => setEmail(e.target.value)}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <BadanamuTextField
+                                            required
+                                            fullWidth
+                                            type="password"
+                                            label={<FormattedMessage id="password" />}
+                                            value={password}
+                                            error={passwordError !== null || passwordMatchError}
+                                            helperText={passwordError}
+                                            onChange={(e) => setPassword(e.target.value)}
+                                            onBlur={() => checkPasswordMatch()}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <BadanamuTextField
+                                            required
+                                            fullWidth
+                                            value={passwordConfirmation}
+                                            label={<FormattedMessage id="password_confirmation" />}
+                                            type="password"
+                                            error={passwordError !== null || passwordMatchError}
+                                            helperText={passwordError}
+                                            onChange={(e) => setPasswordConfirmation(e.target.value)}
+                                            onBlur={() => checkPasswordMatch()}
+                                        />
+                                    </Grid>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <BadanamuButton
+                                        fullWidth
+                                        type="submit"
+                                        size="large"
+                                        disabled={inFlight}
+                                    >
+                                        {
+                                            inFlight ?
+                                                <CircularProgress size={25} /> :
+                                                <FormattedMessage id="sign_up_button" />
+                                        }
+                                    </BadanamuButton>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    {
+                                        generalError === null ? null :
+                                            <Typography color="error">
+                                                {generalError}
+                                            </Typography>
+                                    }
+                                </Grid>
+                            </form>
+                            <Grid container item xs={12} className={classes.link}>
+                                <Grid item>
+                                    <Link
+                                        href="#"
+                                        variant="subtitle2"
+                                        onClick={(e: React.MouseEvent) => { window.location.href="https://auth.kidsloop.net/"; e.preventDefault(); }}
+                                    >
+                                        <FormattedMessage id="sign_up_already" />
+                                    </Link>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </CardContent>
+            </Card>
+            <PolicyLink />
+        </Container>
+    );
 }

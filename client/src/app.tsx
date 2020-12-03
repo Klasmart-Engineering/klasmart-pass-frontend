@@ -1,24 +1,13 @@
 import Grid from "@material-ui/core/Grid";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
 import * as React from "react";
 import { Route, Switch } from "react-router-dom";
-
 import Copyright from "./components/copyright";
 import { BrowserList } from "./pages/browserList";
-import { Introduction } from "./pages/introduction";
-import { Landing } from "./pages/landing";
-import { Login } from "./pages/login";
-import { MyAccount } from "./pages/my-account";
 import { PasswordChange } from "./pages/password-change";
 import { PasswordChanged } from "./pages/password-changed";
 import { PasswordForgot } from "./pages/password-forgot";
 import { PasswordRestore } from "./pages/password-restore";
-import { Payment } from "./pages/payment";
-import { PaymentError } from "./pages/payment-error";
-import { PaymentThankyou } from "./pages/payment-thankyou";
-import { RedeemEventTicket } from "./pages/redeem-event-ticket";
-import { RedeemTicket } from "./pages/redeem-ticket";
 import { Signup } from "./pages/signup";
 import { Verify } from "./pages/verify";
 import { VerifyLink } from "./pages/verify-link";
