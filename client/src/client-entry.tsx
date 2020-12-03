@@ -80,7 +80,6 @@ function ClientSide() {
         <RawIntlProvider value={locale}>
             <ThemeProvider theme={theme}>
                 <CssBaseline />
-                <NavBar />
                 <App />
                 {testing ? <Dev /> : null}
             </ThemeProvider>
