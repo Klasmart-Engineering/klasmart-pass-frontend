@@ -39,6 +39,10 @@ export type SetLocale = Action<ActionTypes.LOCALE, string>;
 export type SimulateUnstableConnection = Action<ActionTypes.SIMULATE_UNSTABLE_CONNECTION, boolean>;
 export type SetFakeNonce = Action<ActionTypes.FAKE_NONCE, undefined | null | string>;
 
+export type VerificationToken = Action<ActionTypes.REFRESH_SESSION, {
+    verificationToken?: string | any,
+} | any | undefined>;
+
 export enum ActionTypes {
     LOGIN,
     LOGOUT,
@@ -54,10 +58,10 @@ export enum ActionTypes {
     PASSES,
     EMAIL,
     LOCALE,
+    VERIFICATION_TOKEN,
     // Testing
     FAKE_NONCE,
     SIMULATE_UNSTABLE_CONNECTION,
-    VERIFICATION_TOKEN,
 }
 
 export type Actions =
@@ -78,4 +82,5 @@ export type Actions =
     // Testing
     | SetFakeNonce
     | SimulateUnstableConnection
+    | VerificationToken
     | never;

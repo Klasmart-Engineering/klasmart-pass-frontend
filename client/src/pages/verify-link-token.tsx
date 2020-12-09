@@ -9,16 +9,17 @@ import * as QueryString from "query-string";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
-import { useStore } from "react-redux";
+import { useSelector, useStore } from "react-redux";
 import { useHistory } from "react-router";
 import { RouteComponentProps } from "react-router-dom";
-import { redirectIfUnverifiable } from "../components/authorized";
+import { redirectIfUnverifiable, redirectIfInvalidVeriricationToken } from "../components/authorized";
 import BadanamuButton from "../components/button";
 import BadanamuLogo from "../img/badanamu_logo.png";
 import { useRestAPI } from "../restapi";
 import { RestAPIError } from "../restapi_errors";
 import { ActionTypes } from "../store/actions";
 import { IdentityType } from "../utils/accountType";
+import { State } from "../store/store";
 
 const useStyles = makeStyles((theme) => createStyles({
     card: {
@@ -58,6 +59,8 @@ export function VerifyLinkToken(props: RouteComponentProps) {
     }
 
     const [error, setError] = React.useState<JSX.Element | null>(null);
+    const [targetLink, setTargetLink] = React.useState<string>("/login");
+    const [targetButton, setTargetButton] = React.useState<JSX.Element | null>(<FormattedMessage id="login_button" />);
     const [verifyInFlight, setVerifyInFlight] = React.useState(false);
     const restApi = useRestAPI();
 
@@ -66,11 +69,13 @@ export function VerifyLinkToken(props: RouteComponentProps) {
         if (verifyInFlight) { return; }
         try {
             setVerifyInFlight(true);
-            await restApi.verifyWithToken(verificationToken, code);
+            const accountId = await restApi.verifyWithToken(verificationToken, code);
+            store.dispatch({ type: ActionTypes.VERIFICATION_TOKEN, payload: { accountId } });
         } catch (e) {
             if (e instanceof RestAPIError) {
-                const id = e.getErrorMessageID();
-                setError(<FormattedMessage id={id} />);
+                setError(<FormattedMessage id="verify_account_failed" />);
+                setTargetLink("/signup");
+                setTargetButton(<FormattedMessage id="sign_up" />)
             }
         } finally {
             setVerifyInFlight(false);
@@ -81,8 +86,6 @@ export function VerifyLinkToken(props: RouteComponentProps) {
         if (typeof params.code !== "string") return;
         verify(params.code, params.verificationToken as string);
     }, []);
-
-    redirectIfUnverifiable();
 
     return (
         <Container maxWidth="xs" style={{ margin: "auto 0" }}>
@@ -109,15 +112,15 @@ export function VerifyLinkToken(props: RouteComponentProps) {
                             }
                         </Grid>
                         <Grid item xs={12}>
-
                             <BadanamuButton
                                 fullWidth
                                 size="large"
                                 onClick={(e) => {
-                                    history.push("/login");
+                                    history.push(targetLink);
                                 }}
                             >
-                                <FormattedMessage id="login_button" />
+                                {/* <FormattedMessage id="login_button" /> */}
+                                {targetButton}
                             </BadanamuButton>
                         </Grid>
                     </Grid>

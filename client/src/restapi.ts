@@ -50,8 +50,14 @@ export class RestAPI {
         }
     }
 
-    public verifyWithToken(verificationToken: string, verificationCode: string) {
-        return this.accountCall("POST", "v2/signup/confirm", JSON.stringify({ verificationToken, verificationCode }));
+    public async verifyWithToken(verificationToken: string, verificationCode: string) {
+        const response = await this.accountCall("POST", "v2/signup/confirm", JSON.stringify({ verificationToken, verificationCode }));
+        const body = await response.json();
+        if (typeof body === "object" && typeof body.accoundId === "string") {
+            return body.accountId;
+        } else {
+            return undefined;
+        }
     }
 
     public async verifyCheck(type: IdentityType) {

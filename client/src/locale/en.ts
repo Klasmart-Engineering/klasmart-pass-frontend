@@ -144,6 +144,7 @@ const messages: Record<string, string> = {
     verify_phone_directions: "Enter the verification code sent to your phone number.",
     verify_phone_input: "Please enter the SMS verification code",
     verify_phone_success: "Your phone has been verified",
+    verify_account_failed: "Your account has not been verified. Please try again",
 };
 
 export default messages;

@@ -144,6 +144,7 @@ const messages: Record<string, string> = {
     verify_phone_directions: "휴대폰 번호로 발송된 인증 코드를 입력하세요.",
     verify_phone_input: "문자메세지(SMS)로 발송된 인증 코드를 입력하세요.",
     verify_phone_success: "휴대폰 번호가 인증되었습니다.",
+    verify_account_failed: "계정 인증에 실패하였습니다. 다시 시도해 주세요",
 };
 
 export default messages;
