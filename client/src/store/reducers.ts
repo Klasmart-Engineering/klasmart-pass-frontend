@@ -187,6 +187,20 @@ export function unstableConnection(state = false, action: Actions) {
     }
 }
 
+
+export function verificationToken(state = null, action: Actions) {
+    switch (action.type) {
+        case ActionTypes.VERIFICATION_TOKEN:
+            if (typeof action.payload === "object" &&
+                typeof action.payload.verificationToken === "string") {
+                return action.payload.verificationToken;
+            }
+            return null;
+        default:
+            return state;
+    }
+}
+
 export const account = combineReducers({
     accessToken,
     accessTokenExpire,
@@ -200,6 +214,7 @@ export const account = combineReducers({
     refreshToken,
     refreshTokenExpire,
     sessionId,
+    verificationToken,
     // Testing
     // tslint:disable:object-literal-sort-keys
     unstableConnection,
