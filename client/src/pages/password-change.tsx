@@ -8,156 +8,181 @@ import Typography from "@material-ui/core/Typography";
 import React, { useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { useHistory } from "react-router-dom";
+
 import BadanamuButton from "../components/button";
 import BadanamuTextField from "../components/textfield";
 import BadanamuLogo from "../img/badanamu_logo.png";
 import { useRestAPI } from "../restapi";
 import { RestAPIError } from "../restapi_errors";
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
     card: {
-        display: "flex",
-        alignItems: "center",
-        padding: "48px 40px !important",
+      display: "flex",
+      alignItems: "center",
+      padding: "48px 40px !important",
     },
     links: {
-        padding: theme.spacing(4, 0),
-        textAlign: "right",
+      padding: theme.spacing(4, 0),
+      textAlign: "right",
     },
     formContainer: {
-        width: "100%",
+      width: "100%",
     },
-}),
+  })
 );
 
 export function PasswordChange() {
-    const [inFlight, setInFlight] = useState(false);
-    const [generalError, setGeneralError] = useState<JSX.Element | null>(null);
+  const [inFlight, setInFlight] = useState(false);
+  const [generalError, setGeneralError] = useState<JSX.Element | null>(null);
 
-    const [currentPassword, setCurrentPassword] = useState("");
-    const [newPassword, setNewPassword] = useState("");
-    const [newPasswordConfirmation, setNewPasswordConfirmation] = useState("");
-    const [passwordMatchError, setPasswordMatchError] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [newPasswordConfirmation, setNewPasswordConfirmation] = useState("");
+  const [passwordMatchError, setPasswordMatchError] = useState(false);
 
-    const classes = useStyles();
-    const history = useHistory();
-    const restApi = useRestAPI();
+  const classes = useStyles();
+  const history = useHistory();
+  const restApi = useRestAPI();
 
-    function checkPasswordMatch() {
-        if (newPassword === "") { return; }
-        if (newPasswordConfirmation === "") { return; }
-        const match = (newPassword !== newPasswordConfirmation);
-        setPasswordMatchError(match);
+  function checkPasswordMatch() {
+    if (newPassword === "") {
+      return;
     }
-
-    async function changepassword(e: React.FormEvent) {
-        e.preventDefault();
-        if (inFlight) { return; }
-        if (newPassword === "") { return; }
-        if (currentPassword === "") { return; }
-        if (newPassword !== newPasswordConfirmation) { return; }
-        try {
-            setInFlight(true);
-            const result = await restApi.changePassword(currentPassword, newPassword);
-            if (result.status === 200) { history.push("/password-changed"); }
-        } catch (e) {
-            handleError(e);
-        } finally {
-            setInFlight(false);
-        }
+    if (newPasswordConfirmation === "") {
+      return;
     }
+    const match = newPassword !== newPasswordConfirmation;
+    setPasswordMatchError(match);
+  }
 
-    function handleError(e: RestAPIError | Error) {
-        if (!(e instanceof RestAPIError)) {
-            console.error(e);
-            return;
-        }
-        const id = e.getErrorMessageID();
-        const errorMessage = <FormattedMessage id={id} />;
-        switch (e.getErrorMessageType()) {
-            default:
-                setGeneralError(errorMessage);
-                break;
-        }
+  async function changepassword(e: React.FormEvent) {
+    e.preventDefault();
+    if (inFlight) {
+      return;
     }
+    if (newPassword === "") {
+      return;
+    }
+    if (currentPassword === "") {
+      return;
+    }
+    if (newPassword !== newPasswordConfirmation) {
+      return;
+    }
+    try {
+      setInFlight(true);
+      const result = await restApi.changePassword(currentPassword, newPassword);
+      if (result.status === 200) {
+        history.push("/password-changed");
+      }
+    } catch (e) {
+      handleError(e);
+    } finally {
+      setInFlight(false);
+    }
+  }
 
-    return (
-        <Container maxWidth="xs" style={{ margin: "auto 0" }}>
-            <Card>
-                <CardContent className={classes.card}>
-                    <Grid container direction="column" justify="center" alignItems="center" spacing={4}>
-                        <Grid item xs={12}>
-                            <img src={BadanamuLogo} style={{ marginBottom: 12 }} />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Typography variant="h5">
-                                <FormattedMessage
-                                    id="password_change_heading"
-                                    values={{ b: (...chunks: any[]) => <strong>{chunks}</strong> }}
-                                />
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={12} className={classes.formContainer}>
-                            <form onSubmit={(e) => changepassword(e)}>
-                                <Grid container spacing={2}>
-                                    <Grid item xs={12}>
-                                        <BadanamuTextField
-                                            required
-                                            fullWidth
-                                            type="password"
-                                            value={currentPassword}
-                                            onChange={(e) => setCurrentPassword(e.target.value)}
-                                            label={<FormattedMessage id="password_current" />}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <BadanamuTextField
-                                            required
-                                            fullWidth
-                                            type="password"
-                                            error={passwordMatchError}
-                                            value={newPassword}
-                                            onChange={(e) => setNewPassword(e.target.value)}
-                                            onBlur={() => checkPasswordMatch()}
-                                            label={<FormattedMessage id="password_new" />}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <BadanamuTextField
-                                            required
-                                            fullWidth
-                                            type="password"
-                                            error={passwordMatchError}
-                                            value={newPasswordConfirmation}
-                                            onChange={(e) => setNewPasswordConfirmation(e.target.value)}
-                                            onBlur={() => checkPasswordMatch()}
-                                            label={<FormattedMessage id="password_new_confirmation" />}
-                                        />
-                                    </Grid>
-                                </Grid>
-                                <BadanamuButton
-                                    type="submit"
-                                    fullWidth
-                                    size="large"
-                                    disabled={inFlight}
-                                >
-                                    {
-                                        inFlight ?
-                                            <CircularProgress size={25} /> :
-                                            <FormattedMessage id="password_change_button" />
-                                    }
-                                </BadanamuButton>
-                                {
-                                    generalError === null ? null :
-                                        <Typography color="error">
-                                            {generalError}
-                                        </Typography>
-                                }
-                            </form>
-                        </Grid>
-                    </Grid>
-                </CardContent>
-            </Card>
-        </Container>
-    );
+  function handleError(e: RestAPIError | Error) {
+    if (!(e instanceof RestAPIError)) {
+      console.error(e);
+      return;
+    }
+    const id = e.getErrorMessageID();
+    const errorMessage = <FormattedMessage id={id} />;
+    switch (e.getErrorMessageType()) {
+      default:
+        setGeneralError(errorMessage);
+        break;
+    }
+  }
+
+  return (
+    <Container maxWidth="xs" style={{ margin: "auto 0" }}>
+      <Card>
+        <CardContent className={classes.card}>
+          <Grid
+            container
+            direction="column"
+            justify="center"
+            alignItems="center"
+            spacing={4}
+          >
+            <Grid item xs={12}>
+              <img src={BadanamuLogo} style={{ marginBottom: 12 }} />
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant="h5">
+                <FormattedMessage
+                  id="password_change_heading"
+                  values={{
+                    b: (...chunks: any[]) => <strong>{chunks}</strong>,
+                  }}
+                />
+              </Typography>
+            </Grid>
+            <Grid item xs={12} className={classes.formContainer}>
+              <form onSubmit={(e) => changepassword(e)}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <BadanamuTextField
+                      required
+                      fullWidth
+                      type="password"
+                      value={currentPassword}
+                      onChange={(e) => setCurrentPassword(e.target.value)}
+                      label={<FormattedMessage id="password_current" />}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <BadanamuTextField
+                      required
+                      fullWidth
+                      type="password"
+                      error={passwordMatchError}
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      onBlur={() => checkPasswordMatch()}
+                      label={<FormattedMessage id="password_new" />}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <BadanamuTextField
+                      required
+                      fullWidth
+                      type="password"
+                      error={passwordMatchError}
+                      value={newPasswordConfirmation}
+                      onChange={(e) =>
+                        setNewPasswordConfirmation(e.target.value)
+                      }
+                      onBlur={() => checkPasswordMatch()}
+                      label={
+                        <FormattedMessage id="password_new_confirmation" />
+                      }
+                    />
+                  </Grid>
+                </Grid>
+                <BadanamuButton
+                  type="submit"
+                  fullWidth
+                  size="large"
+                  disabled={inFlight}
+                >
+                  {inFlight ? (
+                    <CircularProgress size={25} />
+                  ) : (
+                    <FormattedMessage id="password_change_button" />
+                  )}
+                </BadanamuButton>
+                {generalError === null ? null : (
+                  <Typography color="error">{generalError}</Typography>
+                )}
+              </form>
+            </Grid>
+          </Grid>
+        </CardContent>
+      </Card>
+    </Container>
+  );
 }

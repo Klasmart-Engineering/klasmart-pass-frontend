@@ -24,7 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-import {Dropin, Options} from "braintree-web-drop-in";
+import { Dropin, Options } from "braintree-web-drop-in";
 import * as BraintreeWebDropIn from "braintree-web-drop-in";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
@@ -33,15 +33,13 @@ interface Props {
   options: Omit<Options, "container">;
   onInstance?: (braintree: Dropin) => any;
   onNoPaymentMethodRequestable?: () => void;
-  onPaymentMethodRequestable?: (
-    payload: {
-      type: "CreditCard" | "PayPalAccount";
-      paymentMethodIsSelected: boolean
-    },
-  ) => void;
-  onPaymentOptionSelected?: (
-    payload: { paymentOption: "card" | "paypal" | "paypalCredit" },
-  ) => void;
+  onPaymentMethodRequestable?: (payload: {
+    type: "CreditCard" | "PayPalAccount";
+    paymentMethodIsSelected: boolean;
+  }) => void;
+  onPaymentOptionSelected?: (payload: {
+    paymentOption: "card" | "paypal" | "paypalCredit";
+  }) => void;
 }
 export default class DropIn extends React.Component<Props> {
   public wrapper: HTMLElement | null;
@@ -58,13 +56,22 @@ export default class DropIn extends React.Component<Props> {
     });
 
     if (this.props.onNoPaymentMethodRequestable) {
-      this.instance.on("noPaymentMethodRequestable", this.props.onNoPaymentMethodRequestable);
+      this.instance.on(
+        "noPaymentMethodRequestable",
+        this.props.onNoPaymentMethodRequestable
+      );
     }
     if (this.props.onPaymentMethodRequestable) {
-      this.instance.on("paymentMethodRequestable", this.props.onPaymentMethodRequestable);
+      this.instance.on(
+        "paymentMethodRequestable",
+        this.props.onPaymentMethodRequestable
+      );
     }
     if (this.props.onPaymentOptionSelected) {
-      this.instance.on("paymentOptionSelected", this.props.onPaymentOptionSelected);
+      this.instance.on(
+        "paymentOptionSelected",
+        this.props.onPaymentOptionSelected
+      );
     }
     if (this.props.onInstance) {
       this.props.onInstance(this.instance);

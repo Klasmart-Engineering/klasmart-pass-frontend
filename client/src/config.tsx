@@ -1,10 +1,11 @@
-import BLP from "./img/com_calmid_learnandplay_blp_standard.png";
-import BLPPremium from "./img/com_calmid_badanamu_esl_premium.png";
-import BLPTrial from "./img/com_calmid_badanamu_esl_trial.png";
-import CheckRoundedIcon from "@material-ui/icons/CheckRounded";
-import ClearRoundedIcon from "@material-ui/icons/ClearRounded";
-import { FormattedMessage } from "react-intl";
-import React from "react";
+import CheckRoundedIcon from '@material-ui/icons/CheckRounded';
+import ClearRoundedIcon from '@material-ui/icons/ClearRounded';
+import React from 'react';
+import { FormattedMessage } from 'react-intl';
+
+import BLPPremium from './img/com_calmid_badanamu_esl_premium.png';
+import BLPTrial from './img/com_calmid_badanamu_esl_trial.png';
+import BLP from './img/com_calmid_learnandplay_blp_standard.png';
 
 export function getPaymentEndpoint() {
     return "" + process.env.PAYMENT_ENDPOINT

@@ -1,8 +1,9 @@
-import React from 'react';
-import { useSelector, useStore } from 'react-redux';
-import { useHistory } from 'react-router';
-import { ActionTypes } from '../store/actions';
-import { State } from '../store/store';
+import React from "react";
+import { useSelector, useStore } from "react-redux";
+import { useHistory } from "react-router";
+
+import { ActionTypes } from "../store/actions";
+import { State } from "../store/store";
 
 export function isLoggedIn() {
   const store = useStore();
@@ -13,7 +14,7 @@ export function isLoggedIn() {
   return accessToken === null && refreshToken === null;
 }
 
-export function redirectIfUnauthorized(returnRoute = '/') {
+export function redirectIfUnauthorized(returnRoute = "/") {
   const store = useStore();
   const history = useHistory();
   const accessToken = useSelector((state: State) => state.account.accessToken);
@@ -29,15 +30,15 @@ export function redirectIfUnauthorized(returnRoute = '/') {
         payload: returnRoute,
       });
       if (!email) {
-        history.replace('/signup');
+        history.replace("/signup");
       } else {
-        history.replace('/login');
+        history.replace("/login");
       }
     }
   }, [accessToken, refreshToken]);
 }
 
-export function redirectIfAuthorized(defaultRoute = '/') {
+export function redirectIfAuthorized(defaultRoute = "/") {
   const history = useHistory();
   const accessToken = useSelector((state: State) => state.account.accessToken);
   const refreshToken = useSelector(
@@ -54,7 +55,7 @@ export function redirectIfAuthorized(defaultRoute = '/') {
   }, [accessToken, refreshToken]);
 }
 
-export function redirectIfUnverifiable(defaultRoute = '/') {
+export function redirectIfUnverifiable(defaultRoute = "/") {
   const store = useStore();
   const history = useHistory();
   const accountId = useSelector((state: State) => state.account.accountId);

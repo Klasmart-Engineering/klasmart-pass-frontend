@@ -1,34 +1,36 @@
-import "@babel/polyfill";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
-import { PaletteOptions } from "@material-ui/core/styles/createPalette";
-import * as Sentry from "@sentry/react";
-import { Integrations } from "@sentry/tracing";
-import LogRocket from "logrocket";
-import * as QueryString from "query-string";
-import React, { useState } from "react";
-import * as ReactDOM from "react-dom";
-import { RawIntlProvider } from "react-intl";
-import { Provider, useSelector } from "react-redux";
-import { HashRouter } from "react-router-dom";
-import App from "./app";
-import { Dev } from "./components/dev/dev";
-import NavBar from "./components/navbar";
-import { createDefaultStore, State } from "./store/store";
-import { getLanguage } from "./utils/locale";
+import '@babel/polyfill';
+
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import { PaletteOptions } from '@material-ui/core/styles/createPalette';
+import * as Sentry from '@sentry/react';
+import { Integrations } from '@sentry/tracing';
+import LogRocket from 'logrocket';
+import * as QueryString from 'query-string';
+import React, { useState } from 'react';
+import * as ReactDOM from 'react-dom';
+import { RawIntlProvider } from 'react-intl';
+import { Provider, useSelector } from 'react-redux';
+import { HashRouter } from 'react-router-dom';
+
+import App from './app';
+import { Dev } from './components/dev/dev';
+import NavBar from './components/navbar';
+import { createDefaultStore, State } from './store/store';
+import { getLanguage } from './utils/locale';
 
 LogRocket.init("8qowji/badanamu-learning-pass");
 
 Sentry.init({
     dsn: "https://06373f63bf3749a5a70a73d31194b193@o412774.ingest.sentry.io/5494173",
     integrations: [
-      new Integrations.BrowserTracing(),
+        new Integrations.BrowserTracing(),
     ],
-  
+
     // We recommend adjusting this value in production, or using tracesSampler
     // for finer control
     tracesSampleRate: 1.0,
-  });
+});
 
 function ClientSide() {
     const params = QueryString.parse(window.location.search);

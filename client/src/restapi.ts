@@ -1,10 +1,18 @@
-import { useStore } from "react-redux";
-import { RestAPIError, RestAPIErrorType } from "./restapi_errors";
-import { ActionTypes } from "./store/actions";
-import { Store } from "./store/store";
-import { IdentityType } from "./utils/accountType";
-import { getServers } from "dns";
-import { getPaymentEndpoint, getAuthEndpoint, getAccountEndpoint, getProductEndpoint, getOrganizationEndpoint, getRegionEndpoint, getPassFilter } from "./config";
+import { useStore } from 'react-redux';
+
+import {
+    getAccountEndpoint,
+    getAuthEndpoint,
+    getOrganizationEndpoint,
+    getPassFilter,
+    getPaymentEndpoint,
+    getProductEndpoint,
+    getRegionEndpoint,
+} from './config';
+import { RestAPIError, RestAPIErrorType } from './restapi_errors';
+import { ActionTypes } from './store/actions';
+import { Store } from './store/store';
+import { IdentityType } from './utils/accountType';
 
 function phoneOrEmail(str: string): { phoneNr?: string, email?: string } {
     if (str.indexOf("@") === -1) {

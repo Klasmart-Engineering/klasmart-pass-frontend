@@ -1,27 +1,28 @@
-import { CircularProgress, Typography } from "@material-ui/core";
-import AppBar from "@material-ui/core/AppBar";
-import Button from "@material-ui/core/Button";
-import Grid from "@material-ui/core/Grid";
-import Hidden from "@material-ui/core/Hidden";
-import IconButton from "@material-ui/core/IconButton";
-import Menu, { MenuProps } from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import { createStyles, makeStyles, Theme, withStyles } from "@material-ui/core/styles";
-import Toolbar from "@material-ui/core/Toolbar";
-import Tooltip from "@material-ui/core/Tooltip";
-import AccountCircleRoundedIcon from "@material-ui/icons/AccountCircleRounded";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import LanguageIcon from "@material-ui/icons/Translate";
-import { useState } from "react";
-import * as React from "react";
-import { FormattedMessage } from "react-intl";
-import { useSelector, useStore } from "react-redux";
-import { useHistory } from "react-router-dom";
-import Logo from "../img/logo_learning_pass_header.png";
-import { useRestAPI } from "../restapi";
-import { ActionTypes } from "../store/actions";
-import { State } from "../store/store";
-import { isLoggedIn } from "./authorized";
+import { CircularProgress, Typography } from '@material-ui/core';
+import AppBar from '@material-ui/core/AppBar';
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
+import Hidden from '@material-ui/core/Hidden';
+import IconButton from '@material-ui/core/IconButton';
+import Menu, { MenuProps } from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import { createStyles, makeStyles, Theme, withStyles } from '@material-ui/core/styles';
+import Toolbar from '@material-ui/core/Toolbar';
+import Tooltip from '@material-ui/core/Tooltip';
+import AccountCircleRoundedIcon from '@material-ui/icons/AccountCircleRounded';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import LanguageIcon from '@material-ui/icons/Translate';
+import { useState } from 'react';
+import * as React from 'react';
+import { FormattedMessage } from 'react-intl';
+import { useSelector, useStore } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+
+import Logo from '../img/logo_learning_pass_header.png';
+import { useRestAPI } from '../restapi';
+import { ActionTypes } from '../store/actions';
+import { State } from '../store/store';
+import { isLoggedIn } from './authorized';
 
 const LANGUAGES_LABEL = [
     {
