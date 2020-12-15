@@ -9,10 +9,9 @@ import * as QueryString from "query-string";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
-import { useSelector, useStore } from "react-redux";
+import { useStore } from "react-redux";
 import { useHistory } from "react-router";
 import { RouteComponentProps } from "react-router-dom";
-import { redirectIfUnverifiable, redirectIfInvalidVeriricationToken } from "../components/authorized";
 import BadanamuButton from "../components/button";
 import BadanamuLogo from "../img/badanamu_logo.png";
 import { useRestAPI } from "../restapi";
@@ -73,9 +72,24 @@ export function VerifyLinkToken(props: RouteComponentProps) {
             store.dispatch({ type: ActionTypes.VERIFICATION_TOKEN, payload: { accountId } });
         } catch (e) {
             if (e instanceof RestAPIError) {
-                setError(<FormattedMessage id="verify_account_failed" />);
-                setTargetLink("/signup");
-                setTargetButton(<FormattedMessage id="sign_up" />)
+                const errParams = e.getBody();
+                if (errParams.errName === 'EMAIL_ALREADY_USED') {
+                    setError(<FormattedMessage id="verify_account_is_already_verified" />);
+                    setTargetLink("/login");
+                    setTargetButton(<FormattedMessage id="login_button" />);
+                } else if (errParams.errName === "INVALID_SIGNATURE") {
+                    setError(<FormattedMessage id="verify_account_failed" />);
+                    setTargetLink("/signup");
+                    setTargetButton(<FormattedMessage id="sign_up" />);
+                } else if (errParams.errName === "EXPIRED_VERIFICATION_TOKEN") {
+                    setError(<FormattedMessage id="verify_token_expired" />);
+                    setTargetLink("/signup");
+                    setTargetButton(<FormattedMessage id="sign_up" />);
+                } else {
+                    setError(<FormattedMessage id="verify_account_failed" />);
+                    setTargetLink("/signup");
+                    setTargetButton(<FormattedMessage id="sign_up" />)
+                }
             }
         } finally {
             setVerifyInFlight(false);

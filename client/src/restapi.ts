@@ -429,6 +429,11 @@ export class RestAPI {
         }
         if (typeof responseBody.errParams === "object") {
             errParams = responseBody.errParams;
+        } else {
+            errParams = {
+                errName: responseBody.errName,
+                errMessage: responseBody.errMessage
+            }
         }
         throw new RestAPIError(errCode, errParams);
 
