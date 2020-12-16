@@ -133,7 +133,7 @@ export function Verify(props: Props & RouteComponentProps) {
       <Card>
         <CardContent className={classes.card}>
           <Grid container justify="center" spacing={4}>
-            <Grid item xs={12} align="center">
+            <Grid item xs={12} alignItems="center" justify="center">
               <img src={BadanamuLogo} style={{ marginBottom: 12 }} />
             </Grid>
             <Grid item xs={12}>

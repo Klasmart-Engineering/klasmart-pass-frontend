@@ -1,3 +1,6 @@
 dist
 node_modules
 webpack-stats.html
+*.log
+.vscode
+.env

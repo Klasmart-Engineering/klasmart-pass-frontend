@@ -29,8 +29,8 @@ import { useHistory } from "react-router-dom";
 
 import { useRestAPI } from "../../restapi";
 import { Actions, ActionTypes } from "../../store/actions";
-import { State } from "../../store/store";
 import AccountInfo from "./accountInfo";
+import { RootState } from "../../redux-toolkit/rootReducer";
 
 const drawerWidth = 350;
 // tslint:disable:object-literal-sort-keys
@@ -101,10 +101,11 @@ export function DeveloperDrawer(props: Props) {
   const classes = useStyles();
   const history = useHistory();
   const api = useRestAPI();
+
   const simulateUnstableConnection = useSelector(
-    (state: State) => state.account.unstableConnection
+    (state: RootState) => state.account.unstableConnection
   );
-  const fakeNonce = useSelector((state: State) => state.account.fakeNonce);
+  const fakeNonce = useSelector((state: RootState) => state.account.fakeNonce);
   const dispatch = useDispatch<(action: Actions) => void>();
 
   function toggleSimulateUnstableConnection() {

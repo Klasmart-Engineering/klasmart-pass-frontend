@@ -72,6 +72,7 @@ module.exports = {
         }),
         new Visualizer({ filename: '../webpack-stats.html' }),
         new webpack.EnvironmentPlugin({
+            "PAYPAL_CLIENT_ID": "AeXq4HrXn-XALAQUrV8fj52OCcieKbKKKX52BwftvylJ-X2I8sX9fGtICqesPdfM8A9rl_nuedKJGsko",
             "PAYMENT_ENDPOINT": "https://payment.dev.badanamu.net/",
             "AUTH_ENDPOINT": "https://auth.dev.badanamu.net/",
             "ACCOUNT_ENDPOINT": "https://account.dev.badanamu.net/",

@@ -1,7 +1,8 @@
-import Grid from "@material-ui/core/Grid";
+import { Grid } from "@material-ui/core";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import * as React from "react";
-import { Route, Switch } from "react-router-dom";
+import { Redirect, Route, Switch } from "react-router-dom";
+import { useAuthState } from "./components/authorized";
 
 import Copyright from "./components/copyright";
 import { BrowserList } from "./pages/browserList";
@@ -112,7 +113,10 @@ export function App() {
           />
           <Route path="/verify_email" component={VerifyLink} />
           <Route path="/verify_email_with_token" component={VerifyLinkToken} />
-          <Route path="/payment" component={Payment} />
+
+          <PrivateRoute path="/payment">
+            <Payment />
+          </PrivateRoute>
           <Route path="/payment-thankyou" component={PaymentThankyou} />
           <Route path="/payment-error" component={PaymentError} />
           <Route path="/introduction" component={Introduction} />
@@ -131,5 +135,27 @@ export function App() {
     </Grid>
   );
 }
+
+const PrivateRoute = ({ children, ...rest }: any) => {
+  const { isLoggedIn } = useAuthState();
+
+  return (
+    <Route
+      {...rest}
+      render={({ location }) =>
+        isLoggedIn ? (
+          children
+        ) : (
+          <Redirect
+            to={{
+              pathname: "/",
+              state: { from: location },
+            }}
+          />
+        )
+      }
+    />
+  );
+};
 
 export default App;

@@ -15,9 +15,9 @@ import { RouteComponentProps, useHistory } from "react-router";
 import BadanamuButton from "../components/button";
 import BadanamuTextField from "../components/textfield";
 import BadanamuLogo from "../img/badanamu_logo.png";
+import { RootState } from "../redux-toolkit/rootReducer";
 import { useRestAPI } from "../restapi";
 import { RestAPIError } from "../restapi_errors";
-import { State } from "../store/store";
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme: Theme) =>
@@ -42,7 +42,8 @@ export function PasswordRestore(props: RouteComponentProps) {
   const params = QueryString.parse(props.location.search);
 
   const defaultEmail =
-    params.email || useSelector((state: State) => state.account.email || "");
+    params.email ||
+    useSelector((state: RootState) => state.account.email || "");
   const [email, setEmail] = useState(defaultEmail);
   const [newPassword, setNewPassword] = useState("");
   const [newPasswordConfirmation, setNewPasswordConfirmation] = useState("");
@@ -80,7 +81,7 @@ export function PasswordRestore(props: RouteComponentProps) {
     try {
       setInFlight(true);
       const result = await restApi.restorePassword(
-        email,
+        email as string,
         newPassword,
         resetCode
       );

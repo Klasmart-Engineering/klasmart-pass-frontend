@@ -14,10 +14,10 @@ import { useHistory } from "react-router";
 import BadanamuButton from "../components/button";
 import BadanamuTextField from "../components/textfield";
 import BadanamuLogo from "../img/badanamu_logo.png";
+import { RootState } from "../redux-toolkit/rootReducer";
 import { useRestAPI } from "../restapi";
 import { RestAPIError } from "../restapi_errors";
 import { ActionTypes } from "../store/actions";
-import { State } from "../store/store";
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme: Theme) =>
@@ -41,7 +41,9 @@ export function PasswordForgot() {
   const store = useStore();
   const [inFlight, setInFlight] = useState(false);
 
-  const defaultEmail = useSelector((state: State) => state.account.email || "");
+  const defaultEmail = useSelector(
+    (state: RootState) => state.account.email || ""
+  );
   const [email, setEmail] = useState(defaultEmail);
 
   const [generalError, setGeneralError] = useState<JSX.Element | null>(null);

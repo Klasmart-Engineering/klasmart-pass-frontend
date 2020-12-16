@@ -6,7 +6,7 @@ import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import LogRocket from "logrocket";
+// import LogRocket from "logrocket";
 import * as React from "react";
 import { useState } from "react";
 import { FormattedMessage } from "react-intl";
@@ -18,10 +18,10 @@ import BadanamuButton from "../components/button";
 import PolicyLink from "../components/policyLinks";
 import BadanamuTextField from "../components/textfield";
 import BadanamuLogo from "../img/badanamu_logo.png";
+import { RootState } from "../redux-toolkit/rootReducer";
 import { useRestAPI } from "../restapi";
 import { RestAPIError, RestAPIErrorType } from "../restapi_errors";
 import { ActionTypes } from "../store/actions";
-import { State } from "../store/store";
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme) =>
@@ -49,8 +49,10 @@ export const Login: React.FC<{}> = () => {
   const classes = useStyles();
   const [inFlight, setInFlight] = useState(false);
 
-  const defaultEmail = useSelector((state: State) => state.account.email || "");
-  const passes = useSelector((state: State) => state.account.passes || []);
+  const defaultEmail = useSelector(
+    (state: RootState) => state.account.email || ""
+  );
+  const passes = useSelector((state: RootState) => state.account.passes || []);
   const [email, setEmail] = useState(defaultEmail);
   const [password, setPassword] = useState("");
 
@@ -64,15 +66,17 @@ export const Login: React.FC<{}> = () => {
 
   redirectIfAuthorized();
 
-  const accessToken = useSelector((state: State) => state.account.accessToken);
+  const accessToken = useSelector(
+    (state: RootState) => state.account.accessToken
+  );
   const refreshToken = useSelector(
-    (state: State) => state.account.refreshToken
+    (state: RootState) => state.account.refreshToken
   );
 
   React.useEffect(() => {
     if (accessToken !== null || refreshToken !== null) {
       if (email && email.includes("@")) {
-        LogRocket.identify(email);
+        // LogRocket.identify(email);
       }
     }
   }, [accessToken, refreshToken, email]);

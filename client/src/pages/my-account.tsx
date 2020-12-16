@@ -14,8 +14,8 @@ import { redirectIfUnauthorized } from "../components/authorized";
 import { Passes } from "../components/passes";
 import { Products } from "../components/products";
 import { Transactions } from "../components/transactions";
+import { RootState } from "../redux-toolkit/rootReducer";
 import { useRestAPI } from "../restapi";
-import { State } from "../store/store";
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme: Theme) =>
@@ -85,7 +85,9 @@ export function MyAccount() {
   const restApi = useRestAPI();
 
   // const selectedProduct = useSelector((state: State) => state.account.productId);
-  const defaultEmail = useSelector((state: State) => state.account.email || "");
+  const defaultEmail = useSelector(
+    (state: RootState) => state.account.email || ""
+  );
 
   redirectIfUnauthorized("/my-account");
 

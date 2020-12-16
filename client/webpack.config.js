@@ -5,14 +5,14 @@ const webpack = require('webpack');
 module.exports = {
     mode: 'development',
     entry: ['./src/client-entry.tsx'],
-    devtool: "source-map",
+    devtool: "inline-source-map",
     module: {
         rules: [
             {
                 test: /\.tsx?$/,
                 exclude: /node_modules/,
                 use: {
-                    loader: 'babel-loader',
+                    loader: 'ts-loader',
                 }
             },
             {
@@ -70,6 +70,7 @@ module.exports = {
             //'fetch': 'imports-loader?this=>global!exports-loader?global.fetch!whatwg-fetch'
         }),
         new webpack.EnvironmentPlugin({
+            "PAYPAL_CLIENT_ID": "AeXq4HrXn-XALAQUrV8fj52OCcieKbKKKX52BwftvylJ-X2I8sX9fGtICqesPdfM8A9rl_nuedKJGsko",
             "PAYMENT_ENDPOINT": "http://localhost:8092/",
             "AUTH_ENDPOINT": "http://localhost:8080/",
             "ACCOUNT_ENDPOINT": "http://localhost:8089/",

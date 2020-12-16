@@ -1,13 +1,12 @@
 import List from "@material-ui/core/List";
 import Typography from "@material-ui/core/Typography";
 import * as React from "react";
-import { useState } from "react";
 import { useSelector } from "react-redux";
 
-import { State } from "../../store/store";
+import { RootState } from "../../redux-toolkit/rootReducer";
 
 export default function AccountInfo() {
-  const account = useSelector((state: State) => state.account);
+  const account = useSelector((state: RootState) => state.account);
 
   const items = [];
   // tslint:disable-next-line:forin

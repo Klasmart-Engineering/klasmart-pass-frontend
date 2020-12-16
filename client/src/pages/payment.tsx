@@ -17,10 +17,11 @@ import { useHistory } from "react-router";
 
 import { redirectIfUnauthorized } from "../components/authorized";
 import BadanamuButton from "../components/button";
-import { PayPalButton } from "../components/paypal";
+import { PayPalButtons } from "@paypal/react-paypal-js";
+
 import { useRestAPI } from "../restapi";
-import { State } from "../store/store";
 import { formatCurrency, getImgByPassId } from "./../config";
+import { RootState } from "../redux-toolkit/rootReducer";
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme: Theme) =>
@@ -93,7 +94,9 @@ export function Payment() {
   >(undefined);
   const [getPassAccessInFlight, setPassAccessInFlight] = useState(false);
 
-  const selectedPass = useSelector((state: State) => state.account.pass);
+  const selectedPass = useSelector((state: RootState) => state.account.pass);
+  const productCode = selectedPass.passId;
+  const price: string = selectedPass.price;
 
   async function getPassAccess() {
     if (getPassAccessInFlight) {
@@ -113,9 +116,11 @@ export function Payment() {
 
   redirectIfUnauthorized("/payment");
 
-  const accessToken = useSelector((state: State) => state.account.accessToken);
+  const accessToken = useSelector(
+    (state: RootState) => state.account.accessToken
+  );
   const refreshToken = useSelector(
-    (state: State) => state.account.refreshToken
+    (state: RootState) => state.account.refreshToken
   );
 
   useEffect(() => {
@@ -123,6 +128,8 @@ export function Payment() {
       getPassAccess();
     }
   }, [accessToken, refreshToken]);
+
+  const api = useRestAPI();
 
   return (
     <Container maxWidth={"lg"} style={{ margin: "auto 0" }}>
@@ -220,7 +227,32 @@ export function Payment() {
                 <Collapse in={acceptPolicy}>
                   <Grid item>
                     <Grid item xs={12} style={{ height: 48 }} />
-                    <PayPalButton />
+                    <PayPalButtons
+                      style={{ layout: "vertical" }}
+                      createOrder={(data, actions) => {
+                        // // This function sets up the details of the transaction, including the amount and line item details.
+                        // return actions.order.create({
+                        //   // application_context: {
+                        //   //   shipping_preference: "NO_SHIPPING",
+                        //   // },
+                        //   purchase_units: [{ amount: { value: price } }],
+                        // });
+                      }}
+                      onApprove={async (data, actions) => {
+                        //   try {
+                        //     const details = await actions.order(); //.capture();
+                        //     console.log(details);
+                        //     console.log(data);
+                        //     await api.reportPaypalOrder(
+                        //       data.orderID,
+                        //       productCode
+                        //     );
+                        //     history.push("/payment-thankyou");
+                        //   } catch (e) {
+                        //     history.push("/payment-error");
+                        //   }
+                      }}
+                    />
                   </Grid>
                 </Collapse>
               </Grid>

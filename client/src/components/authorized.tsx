@@ -1,51 +1,75 @@
 import React from "react";
-import { useSelector, useStore } from "react-redux";
+import { shallowEqual, useSelector, useStore } from "react-redux";
 import { useHistory } from "react-router";
+import { RootState } from "../redux-toolkit/rootReducer";
 
 import { ActionTypes } from "../store/actions";
-import { State } from "../store/store";
 
-export function isLoggedIn() {
-  const store = useStore();
-  const accessToken = useSelector((state: State) => state.account.accessToken);
-  const refreshToken = useSelector(
-    (state: State) => state.account.refreshToken
-  );
-  return accessToken === null && refreshToken === null;
+export function useAuthState() {
+  const { account } = useSelector((state: RootState) => {
+    return {
+      account: state.account,
+    };
+  }, shallowEqual);
+
+  const isLoggedIn = React.useMemo(() => {
+    return (
+      account != null &&
+      account.accessToken != null &&
+      account.refreshToken != null
+    );
+  }, [account]);
+
+  console.log({ isLoggedIn });
+
+  return { isLoggedIn, account };
 }
 
 export function redirectIfUnauthorized(returnRoute = "/") {
+  const { account } = useSelector((state: RootState) => {
+    return {
+      account: state.account,
+    };
+  }, shallowEqual);
+
   const store = useStore();
+
+  const authorized = React.useMemo(() => {
+    return (
+      account != null &&
+      account.accessToken != null &&
+      account.refreshToken != null
+    );
+  }, [account]);
+
   const history = useHistory();
-  const accessToken = useSelector((state: State) => state.account.accessToken);
-  const refreshToken = useSelector(
-    (state: State) => state.account.refreshToken
-  );
-  const email = useSelector((state: State) => state.account.email);
 
   React.useEffect(() => {
-    if (accessToken === null && refreshToken === null) {
+    if (authorized) {
       store.dispatch({
         type: ActionTypes.POST_AUTHORIZATION_ROUTE,
         payload: returnRoute,
       });
-      if (!email) {
+
+      if (!account.email) {
         history.replace("/signup");
       } else {
         history.replace("/login");
       }
     }
-  }, [accessToken, refreshToken]);
+  }, [account, authorized]);
 }
 
 export function redirectIfAuthorized(defaultRoute = "/") {
   const history = useHistory();
-  const accessToken = useSelector((state: State) => state.account.accessToken);
+  const accessToken = useSelector(
+    (state: RootState) => state.account.accessToken
+  );
   const refreshToken = useSelector(
-    (state: State) => state.account.refreshToken
+    (state: RootState) => state.account.refreshToken
   );
   const postAuthorizationRoute = useSelector(
-    (state: State) => state.postAuthorizationRoute
+    (state: RootState) => state.postAuthorizationRoute
   );
 
   React.useEffect(() => {
@@ -58,13 +82,15 @@ export function redirectIfAuthorized(defaultRoute = "/") {
 export function redirectIfUnverifiable(defaultRoute = "/") {
   const store = useStore();
   const history = useHistory();
-  const accountId = useSelector((state: State) => state.account.accountId);
-  const accessToken = useSelector((state: State) => state.account.accessToken);
+  const accountId = useSelector((state: RootState) => state.account.accountId);
+  const accessToken = useSelector(
+    (state: RootState) => state.account.accessToken
+  );
   const refreshToken = useSelector(
-    (state: State) => state.account.refreshToken
+    (state: RootState) => state.account.refreshToken
   );
   const postAuthorizationRoute = useSelector(
-    (state: State) => state.postAuthorizationRoute
+    (state: RootState) => state.postAuthorizationRoute
   );
 
   if (accessToken !== null || refreshToken !== null || accountId === null) {

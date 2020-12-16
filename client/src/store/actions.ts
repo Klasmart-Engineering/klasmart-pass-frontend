@@ -78,7 +78,7 @@ export type SetFakeNonce = Action<
 >;
 
 export type VerificationToken = Action<
-  ActionTypes.REFRESH_SESSION,
+  ActionTypes.VERIFICATION_TOKEN,
   | {
       verificationToken?: string | any;
     }
