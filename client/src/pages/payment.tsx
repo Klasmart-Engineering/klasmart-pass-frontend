@@ -21,7 +21,7 @@ import { PayPalButtons } from "@paypal/react-paypal-js";
 
 import { useRestAPI } from "../restapi";
 import { formatCurrency, getImgByPassId } from "./../config";
-import { RootState } from "../redux-toolkit/rootReducer";
+import { RootState } from "../store/rootReducer";
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme: Theme) =>

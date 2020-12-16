@@ -3,7 +3,7 @@ import Typography from "@material-ui/core/Typography";
 import * as React from "react";
 import { useSelector } from "react-redux";
 
-import { RootState } from "../../redux-toolkit/rootReducer";
+import { RootState } from "../../store/rootReducer";
 
 export default function AccountInfo() {
   const account = useSelector((state: RootState) => state.account);

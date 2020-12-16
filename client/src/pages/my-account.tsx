@@ -14,7 +14,7 @@ import { redirectIfUnauthorized } from "../components/authorized";
 import { Passes } from "../components/passes";
 import { Products } from "../components/products";
 import { Transactions } from "../components/transactions";
-import { RootState } from "../redux-toolkit/rootReducer";
+import { RootState } from "../store/rootReducer";
 import { useRestAPI } from "../restapi";
 
 // tslint:disable:object-literal-sort-keys

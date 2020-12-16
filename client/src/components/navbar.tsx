@@ -27,7 +27,7 @@ import Logo from "../img/logo_learning_pass_header.png";
 import { useRestAPI } from "../restapi";
 import { ActionTypes } from "../store/actions";
 import { useAuthState } from "./authorized";
-import { RootState } from "../redux-toolkit/rootReducer";
+import { RootState } from "../store/rootReducer";
 
 const LANGUAGES_LABEL = [
   {

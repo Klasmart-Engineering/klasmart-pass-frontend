@@ -1,7 +1,7 @@
 import React from "react";
 import { shallowEqual, useSelector, useStore } from "react-redux";
 import { useHistory } from "react-router";
-import { RootState } from "../redux-toolkit/rootReducer";
+import { RootState } from "../store/rootReducer";
 
 import { ActionTypes } from "../store/actions";
 

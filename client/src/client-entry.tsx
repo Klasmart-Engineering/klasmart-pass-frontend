@@ -19,8 +19,8 @@ import { Dev } from "./components/dev/dev";
 import NavBar from "./components/navbar";
 // import { createDefaultStore, State } from "./store/store";
 import { getLanguage } from "./utils/locale";
-import store from "./redux-toolkit/store";
-import { RootState } from "./redux-toolkit/rootReducer";
+import store from "./store/store";
+import { RootState } from "./store/rootReducer";
 
 // LogRocket.init("8qowji/badanamu-learning-pass");
 

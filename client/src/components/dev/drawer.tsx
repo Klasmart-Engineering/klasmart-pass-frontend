@@ -30,7 +30,7 @@ import { useHistory } from "react-router-dom";
 import { useRestAPI } from "../../restapi";
 import { Actions, ActionTypes } from "../../store/actions";
 import AccountInfo from "./accountInfo";
-import { RootState } from "../../redux-toolkit/rootReducer";
+import { RootState } from "../../store/rootReducer";
 
 const drawerWidth = 350;
 // tslint:disable:object-literal-sort-keys

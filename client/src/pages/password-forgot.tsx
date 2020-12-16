@@ -14,7 +14,7 @@ import { useHistory } from "react-router";
 import BadanamuButton from "../components/button";
 import BadanamuTextField from "../components/textfield";
 import BadanamuLogo from "../img/badanamu_logo.png";
-import { RootState } from "../redux-toolkit/rootReducer";
+import { RootState } from "../store/rootReducer";
 import { useRestAPI } from "../restapi";
 import { RestAPIError } from "../restapi_errors";
 import { ActionTypes } from "../store/actions";

@@ -5,7 +5,7 @@ import Typography from "@material-ui/core/Typography";
 import React, { useEffect, useState } from "react";
 import { FormattedDate, FormattedMessage } from "react-intl";
 import { useStore } from "react-redux";
-import { updatePassAccesses } from "../redux-toolkit/slices/account";
+import { updatePassAccesses } from "../store/slices/account";
 
 import { useRestAPI } from "../restapi";
 import { ActionTypes } from "../store/actions";

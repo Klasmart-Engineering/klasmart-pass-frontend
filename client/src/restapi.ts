@@ -11,10 +11,10 @@ import {
 } from "./config";
 import { RestAPIError, RestAPIErrorType } from "./restapi_errors";
 import { ActionTypes } from "./store/actions";
-import Store from "./redux-toolkit/store";
+import Store from "./store/store";
 import { IdentityType } from "./utils/accountType";
-import { login, logout, setDeviceId } from "./redux-toolkit/slices/account";
-import { RootState } from "./redux-toolkit/rootReducer";
+import { login, logout, setDeviceId } from "./store/slices/account";
+import { RootState } from "./store/rootReducer";
 
 function phoneOrEmail(str: string): { phoneNr?: string; email?: string } {
   if (str.indexOf("@") === -1) {
