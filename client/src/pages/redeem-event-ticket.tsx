@@ -7,7 +7,6 @@ import React, { useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { RouteComponentProps, useHistory } from "react-router";
 
-import { redirectIfUnauthorized } from "../components/authorized";
 import BadanamuButton from "../components/button";
 import BadanamuTextField from "../components/textfield";
 import BadanamuLogo from "../img/badanamu_logo.png";
@@ -39,8 +38,6 @@ export function RedeemEventTicket(props: RouteComponentProps) {
   const [ticketId, setTicketId] = useState(
     typeof params.ticketId === "string" ? params.ticketId : ""
   );
-
-  redirectIfUnauthorized("/redeem-event-ticket?ticketId=" + ticketId);
 
   const history = useHistory();
   const classes = useStyles();

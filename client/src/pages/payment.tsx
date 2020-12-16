@@ -15,13 +15,13 @@ import { FormattedMessage } from "react-intl";
 import { useSelector, useStore } from "react-redux";
 import { useHistory, useParams } from "react-router";
 
-import { redirectIfUnauthorized } from "../components/authorized";
 import BadanamuButton from "../components/button";
 import { PayPalButtons } from "@paypal/react-paypal-js";
 
 import { useRestAPI } from "../restapi";
 import { formatCurrency, getImgByPassId } from "./../config";
 import { RootState } from "../store/rootReducer";
+import _ from "lodash";
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme: Theme) =>
@@ -82,7 +82,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export function Payment() {
   const store = useStore();
-  const { passId } = useParams();
+  const { passId } = useParams() as { passId: string };
   const history = useHistory();
   const classes = useStyles();
   const restApi = useRestAPI();
@@ -95,9 +95,18 @@ export function Payment() {
   >(undefined);
   const [getPassAccessInFlight, setPassAccessInFlight] = useState(false);
 
-  const selectedPass = useSelector((state: RootState) => state.account.pass);
-  const productCode = selectedPass.passId;
-  const price: string = selectedPass.price;
+  const selectedPass = useSelector((state: RootState) => {
+    return _.find(state.pass.allPasses, (obj) => obj.passId === passId);
+  });
+
+  const { productCode, price } = React.useMemo(() => {
+    return {
+      price: selectedPass ? selectedPass.price : "0",
+      productCode: passId,
+    };
+  }, [selectedPass, passId]);
+
+  console.log({ selectedPass });
 
   async function getPassAccess() {
     if (getPassAccessInFlight) {
@@ -115,8 +124,6 @@ export function Payment() {
     }
   }
 
-  redirectIfUnauthorized("/payment");
-
   const accessToken = useSelector(
     (state: RootState) => state.account.accessToken
   );
@@ -131,6 +138,22 @@ export function Payment() {
   }, [accessToken, refreshToken]);
 
   const api = useRestAPI();
+
+  const createOrder = (data, actions) => {
+    // This function sets up the details of the transaction, including the amount and line item details.
+
+    const option: any = {
+      application_context: {
+        shipping_preference: "NO_SHIPPING",
+      },
+      purchase_units: [{ amount: { value: price } }],
+    };
+
+    return actions.order.create(option).then((orderID) => {
+      console.log({ orderID });
+      return orderID;
+    });
+  };
 
   return (
     <Container maxWidth={"lg"} style={{ margin: "auto 0" }}>
@@ -165,13 +188,18 @@ export function Payment() {
                   xs={12}
                   spacing={2}
                 >
-                  <img
-                    src={getImgByPassId(selectedPass.passId)}
-                    className={classes.productImg}
-                  />
-                  <Typography variant="h5">
-                    {formatCurrency(selectedPass.currency) + selectedPass.price}
-                  </Typography>
+                  {selectedPass && (
+                    <img
+                      src={getImgByPassId(selectedPass.passId)}
+                      className={classes.productImg}
+                    />
+                  )}
+                  {selectedPass && (
+                    <Typography variant="h5">
+                      {formatCurrency(selectedPass.currency) +
+                        selectedPass.price}
+                    </Typography>
+                  )}
                 </Grid>
                 <Grid item xs={12} className={classes.emptySpace} />
                 <Grid item xs={12}>
@@ -231,27 +259,29 @@ export function Payment() {
                     <PayPalButtons
                       style={{ layout: "vertical" }}
                       createOrder={(data, actions) => {
-                        // // This function sets up the details of the transaction, including the amount and line item details.
-                        // return actions.order.create({
-                        //   // application_context: {
-                        //   //   shipping_preference: "NO_SHIPPING",
-                        //   // },
-                        //   purchase_units: [{ amount: { value: price } }],
-                        // });
+                        const anyActions: any = actions;
+                        return anyActions.order.create({
+                          application_context: {
+                            shipping_preference: "NO_SHIPPING",
+                          },
+                          purchase_units: [{ amount: { value: price } }],
+                        });
                       }}
                       onApprove={async (data, actions) => {
-                        //   try {
-                        //     const details = await actions.order(); //.capture();
-                        //     console.log(details);
-                        //     console.log(data);
-                        //     await api.reportPaypalOrder(
-                        //       data.orderID,
-                        //       productCode
-                        //     );
-                        //     history.push("/payment-thankyou");
-                        //   } catch (e) {
-                        //     history.push("/payment-error");
-                        //   }
+                        const anyActions: any = actions;
+                        try {
+                          // setInFlight(true);
+                          const details = await anyActions.order.capture();
+                          // console.log(details);
+                          // console.log(data);
+                          await api.reportPaypalOrder(
+                            data.orderID,
+                            productCode
+                          );
+                          history.push("/payment-thankyou");
+                        } catch (e) {
+                          history.push("/payment-error");
+                        }
                       }}
                     />
                   </Grid>

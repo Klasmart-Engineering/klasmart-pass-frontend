@@ -335,8 +335,7 @@ export function Landing() {
               onClick={(e) => {
                 console.log({ pass });
                 history.push({
-                  pathname: "/payment",
-                  state: { passId: pass.passId },
+                  pathname: `/payment/${pass.passId}`,
                 });
               }}
             >

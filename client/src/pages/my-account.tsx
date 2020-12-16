@@ -10,12 +10,11 @@ import { FormattedMessage } from "react-intl";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 
-import { redirectIfUnauthorized } from "../components/authorized";
 import { Passes } from "../components/passes";
 import { Products } from "../components/products";
 import { Transactions } from "../components/transactions";
-import { RootState } from "../store/rootReducer";
 import { useRestAPI } from "../restapi";
+import { RootState } from "../store/rootReducer";
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme: Theme) =>
@@ -88,8 +87,6 @@ export function MyAccount() {
   const defaultEmail = useSelector(
     (state: RootState) => state.account.email || ""
   );
-
-  redirectIfUnauthorized("/my-account");
 
   async function getProductAccesses() {
     if (productsInFlight) {

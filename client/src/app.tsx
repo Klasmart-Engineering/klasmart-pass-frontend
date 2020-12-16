@@ -125,7 +125,7 @@ export function App() {
           <Route path="/verify_email" component={VerifyLink} />
           <Route path="/verify_email_with_token" component={VerifyLinkToken} />
 
-          <PrivateRoute path="/payment" redirectUrl="/login">
+          <PrivateRoute path="/payment/:passId" redirectUrl="/login">
             <Payment />
           </PrivateRoute>
 

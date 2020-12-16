@@ -25,41 +25,6 @@ export function useAuthState() {
   return { isLoggedIn, account };
 }
 
-export function redirectIfUnauthorized(returnRoute = "/") {
-  const { account } = useSelector((state: RootState) => {
-    return {
-      account: state.account,
-    };
-  }, shallowEqual);
-
-  const store = useStore();
-
-  const authorized = React.useMemo(() => {
-    return (
-      account != null &&
-      account.accessToken != null &&
-      account.refreshToken != null
-    );
-  }, [account]);
-
-  const history = useHistory();
-
-  React.useEffect(() => {
-    if (authorized) {
-      store.dispatch({
-        type: ActionTypes.POST_AUTHORIZATION_ROUTE,
-        payload: returnRoute,
-      });
-
-      if (!account.email) {
-        history.replace("/signup");
-      } else {
-        history.replace("/login");
-      }
-    }
-  }, [account, authorized]);
-}
-
 export function redirectIfAuthorized(defaultRoute = "/") {
   const history = useHistory();
   const accessToken = useSelector(
