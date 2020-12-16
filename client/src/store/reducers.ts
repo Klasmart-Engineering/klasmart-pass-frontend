@@ -121,14 +121,6 @@ export function pass(state = null, action: Actions) {
       return state;
   }
 }
-export function passes(state = null, action: Actions) {
-  switch (action.type) {
-    case ActionTypes.PASSES:
-      return action.payload;
-    default:
-      return state;
-  }
-}
 
 export function locale(state = getDefaultLanguageCode(), action: Actions) {
   switch (action.type) {
@@ -180,7 +172,6 @@ export const account = combineReducers({
   email,
   locale,
   pass,
-  passes,
   productId,
   refreshToken,
   refreshTokenExpire,

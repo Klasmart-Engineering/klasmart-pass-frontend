@@ -100,23 +100,35 @@ export function App() {
         <BrowserList />
       ) : (
         <Switch>
-          <Route path="/login" component={Login} />
-          <Route path="/signup" component={Signup} />
-          <Route path="/my-account" component={MyAccount} />
+          <PublicOnlyRoute path="/login">
+            <Login />
+          </PublicOnlyRoute>
+
+          <PublicOnlyRoute path="/signup">
+            <Signup />
+          </PublicOnlyRoute>
+
+          <PrivateRoute path="/my-account" redirectUrl="/login">
+            <MyAccount />
+          </PrivateRoute>
+
           <Route
             path="/verify-phone"
             render={(props) => <Verify type={IdentityType.Phone} {...props} />}
           />
+
           <Route
             path="/verify-email"
             render={(props) => <Verify type={IdentityType.Email} {...props} />}
           />
+
           <Route path="/verify_email" component={VerifyLink} />
           <Route path="/verify_email_with_token" component={VerifyLinkToken} />
 
           <PrivateRoute path="/payment">
             <Payment />
           </PrivateRoute>
+
           <Route path="/payment-thankyou" component={PaymentThankyou} />
           <Route path="/payment-error" component={PaymentError} />
           <Route path="/introduction" component={Introduction} />
@@ -126,6 +138,7 @@ export function App() {
           <Route path="/password-restore" component={PasswordRestore} />
           <Route path="/redeem-ticket" component={RedeemTicket} />
           <Route path="/redeem-event-ticket" component={RedeemEventTicket} />
+
           <Route path="/" component={Landing} />
         </Switch>
       )}
@@ -136,7 +149,7 @@ export function App() {
   );
 }
 
-const PrivateRoute = ({ children, ...rest }: any) => {
+const PrivateRoute = ({ children, redirectUrl = "/", ...rest }: any) => {
   const { isLoggedIn } = useAuthState();
 
   return (
@@ -148,7 +161,29 @@ const PrivateRoute = ({ children, ...rest }: any) => {
         ) : (
           <Redirect
             to={{
-              pathname: "/",
+              pathname: redirectUrl,
+              state: { from: location },
+            }}
+          />
+        )
+      }
+    />
+  );
+};
+
+const PublicOnlyRoute = ({ children, redirectUrl = "/", ...rest }: any) => {
+  const { isLoggedIn } = useAuthState();
+
+  return (
+    <Route
+      {...rest}
+      render={({ location }) =>
+        !isLoggedIn ? (
+          children
+        ) : (
+          <Redirect
+            to={{
+              pathname: redirectUrl,
               state: { from: location },
             }}
           />

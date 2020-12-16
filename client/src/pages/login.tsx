@@ -19,6 +19,7 @@ import PolicyLink from "../components/policyLinks";
 import BadanamuTextField from "../components/textfield";
 import BadanamuLogo from "../img/badanamu_logo.png";
 import { RootState } from "../redux-toolkit/rootReducer";
+import { updatePassAccesses } from "../redux-toolkit/slices/account";
 import { useRestAPI } from "../restapi";
 import { RestAPIError, RestAPIErrorType } from "../restapi_errors";
 import { ActionTypes } from "../store/actions";
@@ -95,7 +96,7 @@ export const Login: React.FC<{}> = () => {
       setInFlight(true);
       await restApi.login(email, password);
       const { passes: newPasses } = await restApi.getPassAccesses();
-      store.dispatch({ type: ActionTypes.PASSES, payload: newPasses });
+      store.dispatch(updatePassAccesses({ passAccesses: newPasses }));
     } catch (e) {
       handleError(e);
       setInFlight(false);

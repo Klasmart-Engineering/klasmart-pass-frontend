@@ -5,6 +5,7 @@ import Typography from "@material-ui/core/Typography";
 import React, { useEffect, useState } from "react";
 import { FormattedDate, FormattedMessage } from "react-intl";
 import { useStore } from "react-redux";
+import { updatePassAccesses } from "../redux-toolkit/slices/account";
 
 import { useRestAPI } from "../restapi";
 import { ActionTypes } from "../store/actions";
@@ -56,7 +57,7 @@ export function Passes() {
       setPassesInFlight(true);
       const { passes: newPasses } = await restApi.getPassAccesses();
       setPasses(newPasses);
-      store.dispatch({ type: ActionTypes.PASSES, payload: newPasses });
+      store.dispatch(updatePassAccesses({ passAccesses: newPasses }));
     } catch (e) {
       // TODO: More specific error message
       setGetPassesError(<FormattedMessage id="ERROR_UNKOWN" />);
