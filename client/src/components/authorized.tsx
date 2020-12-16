@@ -25,25 +25,6 @@ export function useAuthState() {
   return { isLoggedIn, account };
 }
 
-export function redirectIfAuthorized(defaultRoute = "/") {
-  const history = useHistory();
-  const accessToken = useSelector(
-    (state: RootState) => state.account.accessToken
-  );
-  const refreshToken = useSelector(
-    (state: RootState) => state.account.refreshToken
-  );
-  const postAuthorizationRoute = useSelector(
-    (state: RootState) => state.postAuthorizationRoute
-  );
-
-  React.useEffect(() => {
-    if (accessToken !== null || refreshToken !== null) {
-      history.replace(postAuthorizationRoute || defaultRoute);
-    }
-  }, [accessToken, refreshToken]);
-}
-
 export function redirectIfUnverifiable(defaultRoute = "/") {
   const store = useStore();
   const history = useHistory();

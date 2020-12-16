@@ -13,7 +13,6 @@ import { FormattedMessage } from "react-intl";
 import { useSelector, useStore } from "react-redux";
 import { useHistory } from "react-router";
 
-import { redirectIfAuthorized } from "../components/authorized";
 import BadanamuButton from "../components/button";
 import PolicyLink from "../components/policyLinks";
 import BadanamuTextField from "../components/textfield";
@@ -22,7 +21,6 @@ import { RootState } from "../store/rootReducer";
 import { updatePassAccesses } from "../store/slices/account";
 import { useRestAPI } from "../restapi";
 import { RestAPIError, RestAPIErrorType } from "../restapi_errors";
-import { ActionTypes } from "../store/actions";
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme) =>

@@ -10,7 +10,6 @@ import React, { useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { useHistory } from "react-router-dom";
 
-import { redirectIfAuthorized } from "../components/authorized";
 import BadanamuButton from "../components/button";
 import PolicyLink from "../components/policyLinks";
 import BadanamuTextField from "../components/textfield";
@@ -60,8 +59,6 @@ export function Signup() {
   const classes = useStyles();
   const history = useHistory();
   const restApi = useRestAPI();
-
-  redirectIfAuthorized();
 
   function checkPasswordMatch() {
     if (password === "") {
