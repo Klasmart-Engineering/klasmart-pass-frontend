@@ -2,20 +2,7 @@ export interface Action<T extends ActionTypes, P> {
   type: T;
   payload: P;
 }
-export type LoginAction = Action<
-  ActionTypes.LOGIN,
-  | {
-      sessionId?: string | any;
-      accountId?: string | any;
-      email?: string | any;
-      refreshToken?: string | any;
-      refreshTokenExpire?: number | any;
-      accessToken?: string | any;
-      accessTokenExpire?: number | any;
-    }
-  | any
-  | undefined
->;
+
 export interface LogoutAction {
   type: ActionTypes.LOGOUT;
 }
@@ -86,7 +73,6 @@ export type VerificationToken = Action<
 >;
 
 export enum ActionTypes {
-  LOGIN,
   LOGOUT,
   SIGNUP,
   REFRESH_SESSION,
@@ -107,7 +93,6 @@ export enum ActionTypes {
 }
 
 export type Actions =
-  | LoginAction
   | LogoutAction
   | SignUpAction
   | RefreshSessionAction

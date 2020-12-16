@@ -14,14 +14,6 @@ export function postAuthorizationRoute(state = null, action: Actions) {
 
 export function sessionId(state = null, action: Actions) {
   switch (action.type) {
-    case ActionTypes.LOGIN:
-      if (
-        typeof action.payload === "object" &&
-        typeof action.payload.sessionId === "string"
-      ) {
-        return action.payload.sessionId;
-      }
-    // Fall through
     case ActionTypes.LOGOUT:
       return null;
     default:
@@ -31,7 +23,6 @@ export function sessionId(state = null, action: Actions) {
 
 export function accountId(state = null, action: Actions) {
   switch (action.type) {
-    case ActionTypes.LOGIN:
     case ActionTypes.SIGNUP:
     case ActionTypes.ACCOUNT_ID:
       if (
@@ -49,14 +40,6 @@ export function accountId(state = null, action: Actions) {
 
 export function email(state = null, action: Actions) {
   switch (action.type) {
-    case ActionTypes.LOGIN:
-      if (
-        typeof action.payload === "object" &&
-        typeof action.payload.email === "string"
-      ) {
-        return action.payload.email;
-      }
-      return null;
     case ActionTypes.EMAIL:
       return action.payload;
     case ActionTypes.LOGOUT:
@@ -67,14 +50,6 @@ export function email(state = null, action: Actions) {
 
 export function refreshToken(state = null, action: Actions) {
   switch (action.type) {
-    case ActionTypes.LOGIN:
-      if (
-        typeof action.payload === "object" &&
-        typeof action.payload.refreshToken === "string"
-      ) {
-        return action.payload.refreshToken;
-      }
-    // Fall through
     case ActionTypes.LOGOUT:
     case ActionTypes.EXPIRED_REFRESH_TOKEN:
       return null;
@@ -85,14 +60,6 @@ export function refreshToken(state = null, action: Actions) {
 
 export function refreshTokenExpire(state = null, action: Actions) {
   switch (action.type) {
-    case ActionTypes.LOGIN:
-      if (
-        typeof action.payload === "object" &&
-        typeof action.payload.refreshTokenExpire === "number"
-      ) {
-        return action.payload.refreshTokenExpire;
-      }
-    // Fall through
     case ActionTypes.LOGOUT:
     case ActionTypes.EXPIRED_REFRESH_TOKEN:
       return null;
@@ -103,7 +70,6 @@ export function refreshTokenExpire(state = null, action: Actions) {
 
 export function accessToken(state = null, action: Actions) {
   switch (action.type) {
-    case ActionTypes.LOGIN:
     case ActionTypes.REFRESH_SESSION:
       if (
         typeof action.payload === "object" &&
@@ -122,7 +88,6 @@ export function accessToken(state = null, action: Actions) {
 
 export function accessTokenExpire(state = null, action: Actions) {
   switch (action.type) {
-    case ActionTypes.LOGIN:
     case ActionTypes.REFRESH_SESSION:
       if (
         typeof action.payload === "object" &&

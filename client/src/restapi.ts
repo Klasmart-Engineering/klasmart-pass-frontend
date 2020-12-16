@@ -13,7 +13,7 @@ import { RestAPIError, RestAPIErrorType } from "./restapi_errors";
 import { ActionTypes } from "./store/actions";
 import Store from "./redux-toolkit/store";
 import { IdentityType } from "./utils/accountType";
-import { logout, setDeviceId } from "./redux-toolkit/slices/account";
+import { login, logout, setDeviceId } from "./redux-toolkit/slices/account";
 import { RootState } from "./redux-toolkit/rootReducer";
 
 function phoneOrEmail(str: string): { phoneNr?: string; email?: string } {
@@ -180,7 +180,8 @@ export class RestAPI {
       if (phoneNr) {
         body.email = phoneNr;
       }
-      this.store.dispatch({ type: ActionTypes.LOGIN, payload: body });
+      // this.store.dispatch({ type: ActionTypes.LOGIN, payload: body });
+      this.store.dispatch(login(body));
       // if (typeof this.state.accessTokenExpire === "number" &&
       //     typeof this.state.refreshToken === "string") {
       //         // Try to refresh the token 5 minutes before expiry

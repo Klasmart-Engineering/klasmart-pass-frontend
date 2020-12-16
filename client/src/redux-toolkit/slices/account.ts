@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { account } from "../../store/reducers";
+import _ from "lodash";
 
 interface AccountState {
   pass?: any;
@@ -25,7 +25,7 @@ const AccountSlice = createSlice({
   initialState,
   reducers: {
     login(state, action: PayloadAction<AccountState>) {
-      state = action.payload;
+      state = _.merge(state, action.payload);
     },
     setDeviceId(state, action: PayloadAction<{ deviceId: string }>) {
       state.deviceId = action.payload.deviceId;
