@@ -87,7 +87,6 @@ export enum ActionTypes {
 }
 
 export type Actions =
-  | LogoutAction
   | SignUpAction
   | RefreshSessionAction
   | AccessTokenExpiredAction

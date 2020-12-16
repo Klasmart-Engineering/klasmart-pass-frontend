@@ -14,8 +14,6 @@ export function postAuthorizationRoute(state = null, action: Actions) {
 
 export function sessionId(state = null, action: Actions) {
   switch (action.type) {
-    case ActionTypes.LOGOUT:
-      return null;
     default:
       return state;
   }
@@ -32,7 +30,6 @@ export function accountId(state = null, action: Actions) {
         return action.payload.accountId;
       }
       return null;
-    case ActionTypes.LOGOUT:
     default:
       return state;
   }
@@ -42,7 +39,6 @@ export function email(state = null, action: Actions) {
   switch (action.type) {
     case ActionTypes.EMAIL:
       return action.payload;
-    case ActionTypes.LOGOUT:
     default:
       return state;
   }
@@ -50,7 +46,6 @@ export function email(state = null, action: Actions) {
 
 export function refreshToken(state = null, action: Actions) {
   switch (action.type) {
-    case ActionTypes.LOGOUT:
     case ActionTypes.EXPIRED_REFRESH_TOKEN:
       return null;
     default:
@@ -60,7 +55,6 @@ export function refreshToken(state = null, action: Actions) {
 
 export function refreshTokenExpire(state = null, action: Actions) {
   switch (action.type) {
-    case ActionTypes.LOGOUT:
     case ActionTypes.EXPIRED_REFRESH_TOKEN:
       return null;
     default:
@@ -78,7 +72,6 @@ export function accessToken(state = null, action: Actions) {
         return action.payload.accessToken;
       }
     // Fall Through
-    case ActionTypes.LOGOUT:
     case ActionTypes.EXPIRED_ACCESS_TOKEN:
       return null;
     default:
@@ -96,7 +89,6 @@ export function accessTokenExpire(state = null, action: Actions) {
         return action.payload.accessTokenExpire;
       }
     // Fall Through
-    case ActionTypes.LOGOUT:
     case ActionTypes.EXPIRED_ACCESS_TOKEN:
       return null;
     default:
