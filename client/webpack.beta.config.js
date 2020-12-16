@@ -7,12 +7,13 @@ const output_file_name = 'bundle.[chunkhash].js'
 module.exports = {
     mode: 'development',
     entry: ['./src/client-entry.tsx'],
+    devtool: "inline-source-map",
     module: {
         rules: [
             {
                 test: /\.(j|t)sx?$/,
                 use: {
-                    loader: 'babel-loader',
+                    loader: 'ts-loader',
                 }
             },
             {
