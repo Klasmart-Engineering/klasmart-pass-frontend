@@ -45,7 +45,6 @@ export interface RefreshTokenExpiredAction {
   type: ActionTypes.EXPIRED_REFRESH_TOKEN;
 }
 
-export type DeviceIdAction = Action<ActionTypes.DEVICE_ID, string>;
 export type AccountIdAction = Action<
   ActionTypes.ACCOUNT_ID,
   | {
@@ -114,7 +113,6 @@ export type Actions =
   | RefreshSessionAction
   | AccessTokenExpiredAction
   | RefreshTokenExpiredAction
-  | DeviceIdAction
   | AccountIdAction
   | PostAuthorizationRouteAction
   | PassAction

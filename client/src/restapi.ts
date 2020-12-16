@@ -13,7 +13,8 @@ import { RestAPIError, RestAPIErrorType } from "./restapi_errors";
 import { ActionTypes } from "./store/actions";
 import Store from "./redux-toolkit/store";
 import { IdentityType } from "./utils/accountType";
-import { logout } from "./redux-toolkit/slices/account";
+import { logout, setDeviceId } from "./redux-toolkit/slices/account";
+import { RootState } from "./redux-toolkit/rootReducer";
 
 function phoneOrEmail(str: string): { phoneNr?: string; email?: string } {
   if (str.indexOf("@") === -1) {
@@ -590,20 +591,24 @@ export class RestAPI {
   }
 
   private async deviceId() {
-    const state = this.store.getState();
-    if (state.account.deviceId !== null) {
+    const state: RootState = this.store.getState();
+
+    if (state.account.deviceId) {
       return state.account.deviceId;
     }
+
     return new Promise<string>(async (resolve) => {
       let deviceId = "";
+
       const characters =
         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
       for (let i = 0; i < 64; i++) {
         deviceId += characters.charAt(
           Math.floor(Math.random() * characters.length)
         );
       }
-      this.store.dispatch({ type: ActionTypes.DEVICE_ID, payload: deviceId });
+      this.store.dispatch(setDeviceId({ deviceId }));
       resolve(deviceId);
     });
   }

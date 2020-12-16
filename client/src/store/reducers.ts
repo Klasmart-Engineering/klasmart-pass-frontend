@@ -139,15 +139,6 @@ export function accessTokenExpire(state = null, action: Actions) {
   }
 }
 
-export function deviceId(state = null, action: Actions) {
-  switch (action.type) {
-    case ActionTypes.DEVICE_ID:
-      return action.payload;
-    default:
-      return state;
-  }
-}
-
 export function productId(state = null, action: Actions) {
   switch (action.type) {
     case ActionTypes.PRODUCT_ID:
@@ -221,7 +212,6 @@ export const account = combineReducers({
   accessToken,
   accessTokenExpire,
   accountId,
-  deviceId,
   email,
   locale,
   pass,

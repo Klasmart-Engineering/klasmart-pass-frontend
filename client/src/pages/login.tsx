@@ -64,8 +64,6 @@ export const Login: React.FC<{}> = () => {
   const history = useHistory();
   const restApi = useRestAPI();
 
-  redirectIfAuthorized();
-
   const accessToken = useSelector(
     (state: RootState) => state.account.accessToken
   );

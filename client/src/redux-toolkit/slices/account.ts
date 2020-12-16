@@ -27,13 +27,16 @@ const AccountSlice = createSlice({
     login(state, action: PayloadAction<AccountState>) {
       state = action.payload;
     },
+    setDeviceId(state, action: PayloadAction<{ deviceId: string }>) {
+      state.deviceId = action.payload.deviceId;
+    },
     logout(state) {
       state = {};
     },
   },
 });
 
-export const { login, logout } = AccountSlice.actions;
+export const { login, logout, setDeviceId } = AccountSlice.actions;
 
 AccountSlice.actions.login;
 
