@@ -15,6 +15,7 @@ import Store from "./store/store";
 import { IdentityType } from "./utils/accountType";
 import { login, logout, setDeviceId } from "./store/slices/account";
 import { RootState } from "./store/rootReducer";
+import { Pass } from "./store/slices/pass";
 
 function phoneOrEmail(str: string): { phoneNr?: string; email?: string } {
   if (str.indexOf("@") === -1) {
@@ -375,11 +376,11 @@ export class RestAPI {
         "v1/pass" + requestQueryParams
       );
       const body = await response.json();
-      return body;
+      return body.passes as Pass[];
     } else {
       const response = await this.productCall("GET", "v1/pass/list");
       const body = await response.json();
-      return body;
+      return body.passes as Pass[];
     }
   }
 

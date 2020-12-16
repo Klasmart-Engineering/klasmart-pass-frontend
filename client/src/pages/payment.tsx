@@ -13,7 +13,7 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { useSelector, useStore } from "react-redux";
-import { useHistory } from "react-router";
+import { useHistory, useParams } from "react-router";
 
 import { redirectIfUnauthorized } from "../components/authorized";
 import BadanamuButton from "../components/button";
@@ -82,6 +82,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export function Payment() {
   const store = useStore();
+  const { passId } = useParams();
   const history = useHistory();
   const classes = useStyles();
   const restApi = useRestAPI();

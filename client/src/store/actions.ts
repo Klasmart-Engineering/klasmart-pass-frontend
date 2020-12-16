@@ -46,7 +46,6 @@ export type PostAuthorizationRouteAction = Action<
   string
 >;
 export type ProductIdAction = Action<ActionTypes.PRODUCT_ID, string>;
-export type PassAction = Action<ActionTypes.PASS, any>;
 
 export type SetEMailAction = Action<ActionTypes.EMAIL, string>;
 export type SetLocale = Action<ActionTypes.LOCALE, string>;
@@ -78,7 +77,6 @@ export enum ActionTypes {
   ACCOUNT_ID,
   DEVICE_ID,
   POST_AUTHORIZATION_ROUTE,
-  PASS,
   PRODUCT_ID,
   EMAIL,
   LOCALE,
@@ -96,7 +94,6 @@ export type Actions =
   | RefreshTokenExpiredAction
   | AccountIdAction
   | PostAuthorizationRouteAction
-  | PassAction
   | ProductIdAction
   | SetEMailAction
   | SetLocale

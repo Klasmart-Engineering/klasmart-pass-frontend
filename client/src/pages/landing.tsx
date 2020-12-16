@@ -17,14 +17,15 @@ import CheckRoundedIcon from "@material-ui/icons/CheckRounded";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import HelpRounded from "@material-ui/icons/HelpRounded";
 import clsx from "clsx";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { FormattedMessage } from "react-intl";
-import { useStore } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
 
 import BadanamuButton from "../components/button";
 import { useRestAPI } from "../restapi";
-import { ActionTypes } from "../store/actions";
+import { RootState } from "../store/rootReducer";
+import { Pass, setAllPasses } from "../store/slices/pass";
 import { getDetailsByPass, getImgByPassId } from "./../config";
 
 // tslint:disable:object-literal-sort-keys
@@ -152,15 +153,11 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-type Plan = JSX.Element | string | number;
-
-// tslint:enable:object-literal-sort-keys
-function createData(name: string, blp: Plan, blpPlus: Plan) {
-  return { name, blp, blpPlus };
-}
-
 export function Landing() {
-  const store = useStore();
+  const { allPasses: passList } = useSelector((state: RootState) => state.pass);
+
+  const dispatch = useDispatch();
+
   const history = useHistory();
   const classes = useStyles();
   const restApi = useRestAPI();
@@ -258,31 +255,17 @@ export function Landing() {
     },
   ];
 
-  const [selected, setSelected] = useState(true);
-  const [selectedPlan, setPlan] = useState("BLPPremium");
-  const [pressedTicketButton, setTicketButton] = useState(false);
-  const [open, setOpen] = useState(false);
+  const passDetails = useMemo(
+    () => passList.map((pass) => getDetailsByPass(pass)),
+    [passList]
+  );
 
-  const [passList, setPassList] = useState<any[] | undefined>(undefined);
+  const [pressedTicketButton, setTicketButton] = useState(false);
+
   const [passListError, setPassListError] = useState<JSX.Element | undefined>(
     undefined
   );
   const [passListInFlight, setPassListInFlight] = useState(false);
-
-  const handleTooltipClose = () => {
-    setOpen(false);
-  };
-
-  const handleTooltipOpen = () => {
-    setOpen(true);
-  };
-
-  async function getProductListByIds(ids: string[]) {
-    // const response = await restApi.getProductInfoByIds(ids);
-    const products = whitelist;
-    // products.sort((productA: any, productB: any) => productB.title - productA.title);
-    return products;
-  }
 
   async function getPassList() {
     if (passListInFlight) {
@@ -290,14 +273,13 @@ export function Landing() {
     }
     try {
       setPassListInFlight(true);
-      const response = await restApi.getPassList();
-      const passes = response.passes;
-      passes.sort((passA: any, passB: any) => passA.price - passB.price);
-      for (let i = 0; i < passes.length; ++i) {
-        passes[i].productInfoList = whitelist;
-        passes[i].details = getDetailsByPass(passes[i]);
-      }
-      setPassList(passes);
+      const passes: Pass[] = await restApi.getPassList();
+      passes.sort(
+        (passA: Pass, passB: Pass) =>
+          parseInt(passA.price) - parseInt(passB.price)
+      );
+
+      dispatch(setAllPasses({ allPasses: passes }));
     } catch (e) {
       // TODO: More specific error message
       setPassListError(<FormattedMessage id="ERROR_UNKOWN" />);
@@ -310,7 +292,7 @@ export function Landing() {
     getPassList();
   }, []);
 
-  function createPassDetailsRow(detail: any) {
+  function createPassDetailsRow(detail) {
     return (
       <React.Fragment key={detail.name}>
         <Grid container spacing={2} className={classes.row}>
@@ -328,7 +310,7 @@ export function Landing() {
     );
   }
 
-  function createPassPresentation(pass: any) {
+  function createPassPresentation(pass: Pass, idx: number) {
     return (
       <React.Fragment key={pass.passId}>
         <Grid item xs={12} className={classes.emptySpace} />
@@ -351,8 +333,11 @@ export function Landing() {
               fullWidth
               size="large"
               onClick={(e) => {
-                store.dispatch({ type: ActionTypes.PASS, payload: pass });
-                history.push("/payment");
+                console.log({ pass });
+                history.push({
+                  pathname: "/payment",
+                  state: { passId: pass.passId },
+                });
               }}
             >
               <FormattedMessage id="learning_pass_continue_btn" />
@@ -469,33 +454,28 @@ export function Landing() {
             </ExpansionPanelSummary>
             <ExpansionPanelDetails className={classes.details}>
               <Grid container spacing={1} className={classes.noIconPadding}>
-                {pass.productInfoList !== undefined
-                  ? pass.productInfoList.map((product: any) => (
-                      <React.Fragment key={product.prodId}>
-                        <Grid item xs={12} md={10}>
-                          <Typography
-                            className={clsx(
-                              classes.heading,
-                              classes.headingInner
-                            )}
-                          >
-                            {product.title}
-                          </Typography>
-                        </Grid>
-                        <Grid item xs={6} md={2}>
-                          <Typography className={classes.selected}>
-                            <CheckRoundedIcon />
-                          </Typography>
-                        </Grid>
-                      </React.Fragment>
-                    ))
-                  : null}
+                {whitelist.map((product: any) => (
+                  <React.Fragment key={product.prodId}>
+                    <Grid item xs={12} md={10}>
+                      <Typography
+                        className={clsx(classes.heading, classes.headingInner)}
+                      >
+                        {product.title}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={6} md={2}>
+                      <Typography className={classes.selected}>
+                        <CheckRoundedIcon />
+                      </Typography>
+                    </Grid>
+                  </React.Fragment>
+                ))}
               </Grid>
             </ExpansionPanelDetails>
           </ExpansionPanel>
           <Divider />
-          {pass.details !== undefined
-            ? pass.details.map((detail: any) => createPassDetailsRow(detail))
+          {passDetails[idx] && passDetails[idx].length > 0
+            ? passDetails[idx].map((detail) => createPassDetailsRow(detail))
             : null}
         </Grid>
       </React.Fragment>
@@ -531,7 +511,9 @@ export function Landing() {
             {passListInFlight ? (
               <CircularProgress />
             ) : passList !== undefined ? (
-              passList.map((pass: any) => createPassPresentation(pass))
+              passList.map((pass: Pass, idx) =>
+                createPassPresentation(pass, idx)
+              )
             ) : (
               <Typography>{passListError}</Typography>
             )}
