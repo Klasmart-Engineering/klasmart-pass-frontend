@@ -19,8 +19,9 @@ import { Dev } from "./components/dev/dev";
 import NavBar from "./components/navbar";
 // import { createDefaultStore, State } from "./store/store";
 import { getLanguage } from "./utils/locale";
-import store from "./store/store";
+import store, { persistor } from "./store/store";
 import { RootState } from "./store/rootReducer";
+import { PersistGate } from "redux-persist/integration/react";
 
 // LogRocket.init("8qowji/badanamu-learning-pass");
 
@@ -105,7 +106,7 @@ function ClientSide() {
 async function main() {
   // const store = await createDefaultStore();
 
-  console.log(store);
+  console.log(process.env.PAYPAL_CLIENT_ID);
   const div = document.getElementById("app");
   ReactDOM.render(
     <HashRouter>
@@ -113,7 +114,9 @@ async function main() {
         options={{ "client-id": process.env.PAYPAL_CLIENT_ID! }}
       >
         <Provider store={store}>
-          <ClientSide />
+          <PersistGate loading={null} persistor={persistor}>
+            <ClientSide />
+          </PersistGate>
         </Provider>
       </PayPalScriptProvider>
     </HashRouter>,
