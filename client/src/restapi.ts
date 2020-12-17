@@ -13,7 +13,12 @@ import { RestAPIError, RestAPIErrorType } from "./restapi_errors";
 import { ActionTypes } from "./store/actions";
 import Store from "./store/store";
 import { IdentityType } from "./utils/accountType";
-import { login, logout, setDeviceId } from "./store/slices/account";
+import {
+  login,
+  logout,
+  refreshAccessToken,
+  setDeviceId,
+} from "./store/slices/account";
 import { RootState } from "./store/rootReducer";
 import { Pass } from "./store/slices/pass";
 
@@ -212,6 +217,7 @@ export class RestAPI {
       throw e;
     }
   }
+
   public async refreshSession() {
     // TODO: Create promise that other api calls can wait on for refresh
     const state = this.store.getState();
@@ -228,6 +234,7 @@ export class RestAPI {
     if (typeof deviceId !== "string") {
       throw new Error("Could not refresh session - 'deviceId' is missing");
     }
+
     if (
       typeof state.account.refreshTokenExpire === "number" &&
       state.account.refreshTokenExpire < Date.now()
@@ -249,10 +256,46 @@ export class RestAPI {
     if (response.status !== 200) {
       return false;
     }
+
     const body = await response.json();
-    this.store.dispatch({ type: ActionTypes.REFRESH_SESSION, payload: body });
+    // this.store.dispatch({ type: ActionTypes.REFRESH_SESSION, payload: body });
     return true;
   }
+
+  public async refreshAccessToken() {
+    const { account } = this.store.getState();
+    const dispatch = this.store.dispatch;
+
+    if (
+      typeof account.refreshTokenExpire === "number" &&
+      account.refreshTokenExpire < Date.now()
+    ) {
+      console.log("It seems that the refresh token has expired, so logout.");
+      dispatch(logout());
+
+      return;
+    }
+
+    const params = {
+      sessionId: account.sessionId,
+      accountId: account.accountId,
+      deviceId: account.deviceId,
+      refreshToken: account.refreshToken,
+    };
+
+    const res = await fetch(`${getAuthEndpoint()}v1/token`, {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(params),
+    });
+
+    const result = await res.json();
+
+    this.store.dispatch(refreshAccessToken(result));
+  }
+
   public async endSession(): Promise<undefined> {
     const state = this.store.getState();
     const deviceId = state.account.deviceId!;
@@ -431,15 +474,6 @@ export class RestAPI {
     return body;
   }
 
-  private async autoRefreshSesion() {
-    try {
-      await this.refreshSession();
-      // TODO: implement retry
-    } catch (e) {
-      console.log("failed to autorefresh session");
-    }
-  }
-
   private paymentCall(
     method: "POST" | "GET" | "DELETE",
     route: string,
@@ -502,18 +536,18 @@ export class RestAPI {
       const response = await this.fetchRoute(method, prefix, route, body);
       return response;
     } catch (e) {
-      if (e instanceof RestAPIError) {
-        switch (e.getErrorMessageType()) {
-          case RestAPIErrorType.EXPIRED_ACCESS_TOKEN:
-            this.store.dispatch({ type: ActionTypes.EXPIRED_ACCESS_TOKEN });
-            if (refresh) {
-              await this.refreshSession();
-              return this.fetchRoute(method, prefix, route, body);
-            }
-          case RestAPIErrorType.EXPIRED_REFRESH_TOKEN:
-            this.store.dispatch({ type: ActionTypes.EXPIRED_REFRESH_TOKEN });
-        }
-      }
+      // if (e instanceof RestAPIError) {
+      //   switch (e.getErrorMessageType()) {
+      //     case RestAPIErrorType.EXPIRED_ACCESS_TOKEN:
+      //       this.store.dispatch({ type: ActionTypes.EXPIRED_ACCESS_TOKEN });
+      //       if (refresh) {
+      //         await this.refreshSession();
+      //         return this.fetchRoute(method, prefix, route, body);
+      //       }
+      //     case RestAPIErrorType.EXPIRED_REFRESH_TOKEN:
+      //       this.store.dispatch({ type: ActionTypes.EXPIRED_REFRESH_TOKEN });
+      //   }
+      // }
       throw e;
     }
   }

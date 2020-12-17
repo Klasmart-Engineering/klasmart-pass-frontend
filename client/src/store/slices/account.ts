@@ -6,16 +6,16 @@ interface AccountState {
   passes?: any[];
   fakeNonce?: any;
   unstableConnection?: any;
-  accessTokenExpire?: any;
   locale?: string;
-  accessToke?: string;
   accessToken?: string;
+  accessTokenExpire?: any;
   accountId?: string;
   email?: string;
   refreshToken?: string;
   refreshTokenExpire?: string;
   sessionId?: string;
   deviceId?: string;
+  loginCount?: number;
 }
 
 const initialState: AccountState = {};
@@ -33,8 +33,22 @@ const AccountSlice = createSlice({
     updatePassAccesses(state, action: PayloadAction<{ passAccesses: any[] }>) {
       state.passes = action.payload.passAccesses;
     },
+    refreshAccessToken(
+      state,
+      action: PayloadAction<{ accessToken: string; accessTokenExpire: number }>
+    ) {
+      state.accessToken = action.payload.accessToken;
+      state.accessTokenExpire = action.payload.accessTokenExpire;
+    },
     logout(state) {
-      state = {};
+      state.accountId = undefined;
+      state.sessionId = undefined;
+      state.email = undefined;
+      state.accessToken = undefined;
+      state.accessTokenExpire = undefined;
+      state.refreshToken = undefined;
+      state.refreshTokenExpire = undefined;
+      state.loginCount = undefined;
     },
   },
 });
@@ -43,6 +57,7 @@ export const {
   login,
   logout,
   setDeviceId,
+  refreshAccessToken,
   updatePassAccesses,
 } = AccountSlice.actions;
 

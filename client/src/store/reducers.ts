@@ -44,58 +44,6 @@ export function email(state = null, action: Actions) {
   }
 }
 
-export function refreshToken(state = null, action: Actions) {
-  switch (action.type) {
-    case ActionTypes.EXPIRED_REFRESH_TOKEN:
-      return null;
-    default:
-      return state;
-  }
-}
-
-export function refreshTokenExpire(state = null, action: Actions) {
-  switch (action.type) {
-    case ActionTypes.EXPIRED_REFRESH_TOKEN:
-      return null;
-    default:
-      return state;
-  }
-}
-
-export function accessToken(state = null, action: Actions) {
-  switch (action.type) {
-    case ActionTypes.REFRESH_SESSION:
-      if (
-        typeof action.payload === "object" &&
-        typeof action.payload.accessToken === "string"
-      ) {
-        return action.payload.accessToken;
-      }
-    // Fall Through
-    case ActionTypes.EXPIRED_ACCESS_TOKEN:
-      return null;
-    default:
-      return state;
-  }
-}
-
-export function accessTokenExpire(state = null, action: Actions) {
-  switch (action.type) {
-    case ActionTypes.REFRESH_SESSION:
-      if (
-        typeof action.payload === "object" &&
-        typeof action.payload.accessTokenExpire === "number"
-      ) {
-        return action.payload.accessTokenExpire;
-      }
-    // Fall Through
-    case ActionTypes.EXPIRED_ACCESS_TOKEN:
-      return null;
-    default:
-      return state;
-  }
-}
-
 export function productId(state = null, action: Actions) {
   switch (action.type) {
     case ActionTypes.PRODUCT_ID:
@@ -149,14 +97,10 @@ export function verificationToken(state = null, action: Actions) {
 }
 
 export const account = combineReducers({
-  accessToken,
-  accessTokenExpire,
   accountId,
   email,
   locale,
   productId,
-  refreshToken,
-  refreshTokenExpire,
   sessionId,
   verificationToken,
   // Testing

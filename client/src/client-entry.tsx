@@ -103,6 +103,10 @@ function ClientSide() {
   );
 }
 
+const Loading: React.FC<{}> = () => {
+  return <div>Loading </div>;
+};
+
 async function main() {
   // const store = await createDefaultStore();
 
@@ -114,7 +118,7 @@ async function main() {
         options={{ "client-id": process.env.PAYPAL_CLIENT_ID! }}
       >
         <Provider store={store}>
-          <PersistGate loading={null} persistor={persistor}>
+          <PersistGate loading={<Loading />} persistor={persistor}>
             <ClientSide />
           </PersistGate>
         </Provider>

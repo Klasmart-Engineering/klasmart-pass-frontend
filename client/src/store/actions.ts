@@ -3,10 +3,6 @@ export interface Action<T extends ActionTypes, P> {
   payload: P;
 }
 
-export interface LogoutAction {
-  type: ActionTypes.LOGOUT;
-}
-
 export type SignUpAction = Action<
   ActionTypes.SIGNUP,
   | {
@@ -15,22 +11,6 @@ export type SignUpAction = Action<
   | any
   | undefined
 >;
-export type RefreshSessionAction = Action<
-  ActionTypes.REFRESH_SESSION,
-  | {
-      accessToken?: string | any;
-      accessTokenExpire?: number | any;
-    }
-  | any
-  | undefined
->;
-
-export interface AccessTokenExpiredAction {
-  type: ActionTypes.EXPIRED_ACCESS_TOKEN;
-}
-export interface RefreshTokenExpiredAction {
-  type: ActionTypes.EXPIRED_REFRESH_TOKEN;
-}
 
 export type AccountIdAction = Action<
   ActionTypes.ACCOUNT_ID,
@@ -69,11 +49,7 @@ export type VerificationToken = Action<
 >;
 
 export enum ActionTypes {
-  LOGOUT,
   SIGNUP,
-  REFRESH_SESSION,
-  EXPIRED_ACCESS_TOKEN,
-  EXPIRED_REFRESH_TOKEN,
   ACCOUNT_ID,
   DEVICE_ID,
   POST_AUTHORIZATION_ROUTE,
@@ -88,9 +64,6 @@ export enum ActionTypes {
 
 export type Actions =
   | SignUpAction
-  | RefreshSessionAction
-  | AccessTokenExpiredAction
-  | RefreshTokenExpiredAction
   | AccountIdAction
   | PostAuthorizationRouteAction
   | ProductIdAction

@@ -10,6 +10,7 @@ import { FormattedMessage } from "react-intl";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 
+import { useAuthState } from "../components/authorized";
 import { Passes } from "../components/passes";
 import { Products } from "../components/products";
 import { Transactions } from "../components/transactions";
@@ -82,6 +83,7 @@ export function MyAccount() {
   const classes = useStyles();
   const history = useHistory();
   const restApi = useRestAPI();
+  const { isAccessTokenExpired, account } = useAuthState();
 
   // const selectedProduct = useSelector((state: State) => state.account.productId);
   const defaultEmail = useSelector(
@@ -133,10 +135,29 @@ export function MyAccount() {
       setTransactionsInFlight(false);
     }
   }
+
+  const api = useRestAPI();
+
   useEffect(() => {
-    getTransactionHistory();
-    getProductAccesses();
-  }, []);
+    const start = async () => {
+      if (
+        account.accessTokenExpire &&
+        parseInt(account.accessTokenExpire) < Date.now()
+      ) {
+        await api.refreshAccessToken();
+      }
+
+      getTransactionHistory();
+      getProductAccesses();
+    };
+
+    if (account.refreshToken) {
+      console.log("fetch started");
+
+      start();
+    }
+  }, [account.refreshToken]);
+
   return (
     <Container maxWidth="lg">
       <div className={classes.emptySpace} />

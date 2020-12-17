@@ -10,6 +10,7 @@ import { updatePassAccesses } from "../store/slices/account";
 import { useRestAPI } from "../restapi";
 import { ActionTypes } from "../store/actions";
 import { getImgByPassId } from "./../config";
+import { useAuthState } from "./authorized";
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme: Theme) =>
@@ -48,6 +49,7 @@ export function Passes() {
 
   const store = useStore();
   const restApi = useRestAPI();
+  // const { isAccessTokenExpired } = useAuthState();
 
   async function getPasses() {
     if (getPassesInFlight) {
@@ -65,9 +67,12 @@ export function Passes() {
       setPassesInFlight(false);
     }
   }
-  useEffect(() => {
-    getPasses();
-  }, []);
+
+  // useEffect(() => {
+  //   if (!isAccessTokenExpired) {
+  //     getPasses();
+  //   }
+  // }, [isAccessTokenExpired]);
 
   return (
     <React.Fragment>

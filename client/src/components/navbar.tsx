@@ -20,7 +20,7 @@ import LanguageIcon from "@material-ui/icons/Translate";
 import { useState } from "react";
 import * as React from "react";
 import { FormattedMessage } from "react-intl";
-import { shallowEqual, useSelector, useStore } from "react-redux";
+import { shallowEqual, useDispatch, useSelector, useStore } from "react-redux";
 import { useHistory } from "react-router-dom";
 
 import Logo from "../img/logo_learning_pass_header.png";
@@ -28,6 +28,7 @@ import { useRestAPI } from "../restapi";
 import { ActionTypes } from "../store/actions";
 import { useAuthState } from "./authorized";
 import { RootState } from "../store/rootReducer";
+import { logout } from "../store/slices/account";
 
 const LANGUAGES_LABEL = [
   {
@@ -123,6 +124,7 @@ export default function NavBar() {
 
   const history = useHistory();
   const api = useRestAPI();
+  const dispatch = useDispatch();
 
   const { isLoggedIn } = useAuthState();
 
@@ -131,13 +133,14 @@ export default function NavBar() {
     setLanguageMenuElement(null);
   }
 
-  async function logout() {
+  async function onLogoutClicked() {
     if (logoutInFlight) {
       return;
     }
     try {
       setLogoutInFlight(true);
-      await api.endSession();
+      // await api.endSession();
+      dispatch(logout());
     } finally {
       setLogoutInFlight(false);
     }
@@ -221,7 +224,7 @@ export default function NavBar() {
                   color="inherit"
                   className={classes.appBarBtn}
                   disabled={logoutInFlight}
-                  onClick={() => logout()}
+                  onClick={onLogoutClicked}
                 >
                   {logoutInFlight ? (
                     <CircularProgress size={15} />
