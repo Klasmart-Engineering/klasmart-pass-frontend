@@ -49,12 +49,28 @@ export class RestAPI {
         pw,
       })
     );
-    if (result.status !== 200) {
-      return false;
-    }
+
     const body = await result.json();
-    this.store.dispatch({ type: ActionTypes.SIGNUP, payload: body });
-    return;
+
+    return body;
+  }
+
+  public async signup2(id: string, pw: string, lang: string) {
+    const { phoneNr, email } = phoneOrEmail(id);
+    const result = await this.accountCall(
+      "POST",
+      "v2/signup/request",
+      JSON.stringify({
+        email,
+        lang,
+        phoneNr,
+        pw,
+      })
+    );
+
+    const body = await result.json();
+
+    return body;
   }
 
   public verify(verificationCode: string, type: IdentityType) {

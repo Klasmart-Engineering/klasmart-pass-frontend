@@ -97,20 +97,16 @@ export function Signup() {
     if (accountType === undefined) {
       return;
     }
+
     try {
       setInFlight(true);
       // TODO: Get Locale
-      await restApi.signup(email, password, "en");
-      switch (accountType) {
-        case IdentityType.Email:
-          history.push("/verify-email");
-          break;
-        case IdentityType.Phone:
-          history.push("/verify-phone");
-          break;
-        default:
-          throw new Error("Unknown Account Type");
-      }
+
+      const result = await restApi.signup2(email, password, "en");
+
+      console.log({ result });
+
+      history.push("/verify_email_with_token");
     } catch (e) {
       handleError(e);
     } finally {

@@ -3,15 +3,6 @@ export interface Action<T extends ActionTypes, P> {
   payload: P;
 }
 
-export type SignUpAction = Action<
-  ActionTypes.SIGNUP,
-  | {
-      accountId?: string | any;
-    }
-  | any
-  | undefined
->;
-
 export type AccountIdAction = Action<
   ActionTypes.ACCOUNT_ID,
   | {
@@ -39,15 +30,6 @@ export type SetFakeNonce = Action<
   undefined | null | string
 >;
 
-export type VerificationToken = Action<
-  ActionTypes.VERIFICATION_TOKEN,
-  | {
-      verificationToken?: string | any;
-    }
-  | any
-  | undefined
->;
-
 export enum ActionTypes {
   SIGNUP,
   ACCOUNT_ID,
@@ -56,14 +38,12 @@ export enum ActionTypes {
   PRODUCT_ID,
   EMAIL,
   LOCALE,
-  VERIFICATION_TOKEN,
   // Testing
   FAKE_NONCE,
   SIMULATE_UNSTABLE_CONNECTION,
 }
 
 export type Actions =
-  | SignUpAction
   | AccountIdAction
   | PostAuthorizationRouteAction
   | ProductIdAction
@@ -72,5 +52,4 @@ export type Actions =
   // Testing
   | SetFakeNonce
   | SimulateUnstableConnection
-  | VerificationToken
   | never;

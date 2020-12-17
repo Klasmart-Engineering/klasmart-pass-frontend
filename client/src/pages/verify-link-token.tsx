@@ -17,7 +17,6 @@ import BadanamuButton from "../components/button";
 import BadanamuLogo from "../img/badanamu_logo.png";
 import { useRestAPI } from "../restapi";
 import { RestAPIError } from "../restapi_errors";
-import { ActionTypes } from "../store/actions";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -53,12 +52,6 @@ export function VerifyLinkToken(props: RouteComponentProps) {
   const classes = useStyles();
   const history = useHistory();
   const params = QueryString.parse(props.location.search);
-  if (typeof params.verificationToken === "string") {
-    store.dispatch({
-      type: ActionTypes.VERIFICATION_TOKEN,
-      payload: { verificationToken: params.verificationToken },
-    });
-  }
 
   const [error, setError] = React.useState<JSX.Element | null>(null);
   const [targetLink, setTargetLink] = React.useState<string>("/login");
@@ -78,10 +71,6 @@ export function VerifyLinkToken(props: RouteComponentProps) {
     try {
       setVerifyInFlight(true);
       const accountId = await restApi.verifyWithToken(verificationToken, code);
-      store.dispatch({
-        type: ActionTypes.VERIFICATION_TOKEN,
-        payload: { accountId },
-      });
     } catch (e) {
       if (e instanceof RestAPIError) {
         const errParams = e.getBody();

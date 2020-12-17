@@ -73,8 +73,6 @@ export function Verify(props: Props & RouteComponentProps) {
     });
   }
 
-  redirectIfUnverifiable();
-
   async function verify(code = verificationCode) {
     if (code === "") {
       return;

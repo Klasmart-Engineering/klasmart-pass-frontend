@@ -21,7 +21,6 @@ export function sessionId(state = null, action: Actions) {
 
 export function accountId(state = null, action: Actions) {
   switch (action.type) {
-    case ActionTypes.SIGNUP:
     case ActionTypes.ACCOUNT_ID:
       if (
         typeof action.payload === "object" &&
@@ -81,28 +80,12 @@ export function unstableConnection(state = false, action: Actions) {
   }
 }
 
-export function verificationToken(state = null, action: Actions) {
-  switch (action.type) {
-    case ActionTypes.VERIFICATION_TOKEN:
-      if (
-        typeof action.payload === "object" &&
-        typeof action.payload.verificationToken === "string"
-      ) {
-        return action.payload.verificationToken;
-      }
-      return null;
-    default:
-      return state;
-  }
-}
-
 export const account = combineReducers({
   accountId,
   email,
   locale,
   productId,
   sessionId,
-  verificationToken,
   // Testing
   // tslint:disable:object-literal-sort-keys
   unstableConnection,
