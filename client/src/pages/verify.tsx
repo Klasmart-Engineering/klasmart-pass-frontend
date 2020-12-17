@@ -15,12 +15,10 @@ import { FormattedMessage } from "react-intl";
 import { useStore } from "react-redux";
 import { RouteComponentProps, useHistory } from "react-router-dom";
 
-import { redirectIfUnverifiable } from "../components/authorized";
 import BadanamuTextField from "../components/textfield";
 import BadanamuLogo from "../img/badanamu_logo.png";
 import { useRestAPI } from "../restapi";
 import { RestAPIError } from "../restapi_errors";
-import { ActionTypes } from "../store/actions";
 import { IdentityType } from "../utils/accountType";
 
 const useStyles = makeStyles((theme) =>
@@ -66,12 +64,6 @@ export function Verify(props: Props & RouteComponentProps) {
   const history = useHistory();
 
   const params = QueryString.parse(props.location.search);
-  if (typeof params.accountId === "string") {
-    store.dispatch({
-      type: ActionTypes.ACCOUNT_ID,
-      payload: { accountId: params.accountId },
-    });
-  }
 
   async function verify(code = verificationCode) {
     if (code === "") {

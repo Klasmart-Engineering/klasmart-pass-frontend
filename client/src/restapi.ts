@@ -10,7 +10,6 @@ import {
   getRegionEndpoint,
 } from "./config";
 import { RestAPIError, RestAPIErrorType } from "./restapi_errors";
-import { ActionTypes } from "./store/actions";
 import Store from "./store/store";
 import { IdentityType } from "./utils/accountType";
 import {
@@ -220,16 +219,6 @@ export class RestAPI {
       // }
       return true;
     } catch (e) {
-      if (e instanceof RestAPIError) {
-        switch (e.getErrorMessageType()) {
-          case RestAPIErrorType.EMAIL_NOT_VERIFIED:
-            const body = e.getBody();
-            this.store.dispatch({
-              type: ActionTypes.ACCOUNT_ID,
-              payload: body,
-            });
-        }
-      }
       throw e;
     }
   }

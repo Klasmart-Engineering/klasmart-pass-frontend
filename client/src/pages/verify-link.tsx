@@ -13,12 +13,10 @@ import { useStore } from "react-redux";
 import { useHistory } from "react-router";
 import { RouteComponentProps } from "react-router-dom";
 
-import { redirectIfUnverifiable } from "../components/authorized";
 import BadanamuButton from "../components/button";
 import BadanamuLogo from "../img/badanamu_logo.png";
 import { useRestAPI } from "../restapi";
 import { RestAPIError } from "../restapi_errors";
-import { ActionTypes } from "../store/actions";
 import { IdentityType } from "../utils/accountType";
 
 const useStyles = makeStyles((theme) =>
@@ -55,12 +53,6 @@ export function VerifyLink(props: RouteComponentProps) {
   const classes = useStyles();
   const history = useHistory();
   const params = QueryString.parse(props.location.search);
-  if (typeof params.accountId === "string") {
-    store.dispatch({
-      type: ActionTypes.ACCOUNT_ID,
-      payload: { accountId: params.accountId },
-    });
-  }
 
   const [error, setError] = React.useState<JSX.Element | null>(null);
   const [verifyInFlight, setVerifyInFlight] = React.useState(false);
@@ -91,8 +83,6 @@ export function VerifyLink(props: RouteComponentProps) {
       verify(params.code);
     }
   }, []);
-
-  redirectIfUnverifiable();
 
   return (
     <Container maxWidth="xs" style={{ margin: "auto 0" }}>

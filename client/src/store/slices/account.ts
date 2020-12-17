@@ -4,7 +4,6 @@ import _ from "lodash";
 interface AccountState {
   pass?: any;
   passes?: any[];
-  fakeNonce?: any;
   unstableConnection?: any;
   locale?: string;
   accessToken?: string;
@@ -30,6 +29,9 @@ const AccountSlice = createSlice({
     setDeviceId(state, action: PayloadAction<{ deviceId: string }>) {
       state.deviceId = action.payload.deviceId;
     },
+    setLocale(state, action: PayloadAction<{ locale: string }>) {
+      state.locale = action.payload.locale;
+    },
     updatePassAccesses(state, action: PayloadAction<{ passAccesses: any[] }>) {
       state.passes = action.payload.passAccesses;
     },
@@ -41,6 +43,7 @@ const AccountSlice = createSlice({
       state.accessTokenExpire = action.payload.accessTokenExpire;
     },
     logout(state) {
+      state.locale = undefined;
       state.accountId = undefined;
       state.sessionId = undefined;
       state.email = undefined;
@@ -57,10 +60,9 @@ export const {
   login,
   logout,
   setDeviceId,
+  setLocale,
   refreshAccessToken,
   updatePassAccesses,
 } = AccountSlice.actions;
-
-AccountSlice.actions.login;
 
 export default AccountSlice.reducer;

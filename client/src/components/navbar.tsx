@@ -25,10 +25,9 @@ import { useHistory } from "react-router-dom";
 
 import Logo from "../img/logo_learning_pass_header.png";
 import { useRestAPI } from "../restapi";
-import { ActionTypes } from "../store/actions";
 import { useAuthState } from "./authorized";
 import { RootState } from "../store/rootReducer";
-import { logout } from "../store/slices/account";
+import { logout, setLocale } from "../store/slices/account";
 
 const LANGUAGES_LABEL = [
   {
@@ -129,7 +128,7 @@ export default function NavBar() {
   const { isLoggedIn } = useAuthState();
 
   function languageSelect(code: string) {
-    store.dispatch({ type: ActionTypes.LOCALE, payload: code });
+    store.dispatch(setLocale({ locale: code }));
     setLanguageMenuElement(null);
   }
 

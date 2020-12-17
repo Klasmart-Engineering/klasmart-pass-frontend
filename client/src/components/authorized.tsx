@@ -69,22 +69,3 @@ export function useAuthState() {
 
   return { isLoggedIn, isAccessTokenExpired, account };
 }
-
-export function redirectIfUnverifiable(defaultRoute = "/") {
-  const store = useStore();
-  const history = useHistory();
-  const accountId = useSelector((state: RootState) => state.account.accountId);
-  const accessToken = useSelector(
-    (state: RootState) => state.account.accessToken
-  );
-  const refreshToken = useSelector(
-    (state: RootState) => state.account.refreshToken
-  );
-  const postAuthorizationRoute = useSelector(
-    (state: RootState) => state.postAuthorizationRoute
-  );
-
-  if (accessToken !== null || refreshToken !== null || accountId === null) {
-    history.replace(postAuthorizationRoute || defaultRoute);
-  }
-}

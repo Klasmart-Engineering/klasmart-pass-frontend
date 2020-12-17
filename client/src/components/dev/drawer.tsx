@@ -28,7 +28,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 
 import { useRestAPI } from "../../restapi";
-import { Actions, ActionTypes } from "../../store/actions";
 import AccountInfo from "./accountInfo";
 import { RootState } from "../../store/rootReducer";
 
@@ -101,19 +100,6 @@ export function DeveloperDrawer(props: Props) {
   const classes = useStyles();
   const history = useHistory();
   const api = useRestAPI();
-
-  const simulateUnstableConnection = useSelector(
-    (state: RootState) => state.account.unstableConnection
-  );
-  const fakeNonce = useSelector((state: RootState) => state.account.fakeNonce);
-  const dispatch = useDispatch<(action: Actions) => void>();
-
-  function toggleSimulateUnstableConnection() {
-    dispatch({
-      payload: !simulateUnstableConnection,
-      type: ActionTypes.SIMULATE_UNSTABLE_CONNECTION,
-    });
-  }
 
   function navigate(path: string) {
     if (open) {
@@ -191,16 +177,6 @@ export function DeveloperDrawer(props: Props) {
       </div>
       <Divider />
 
-      <FormControlLabel
-        control={
-          <Switch
-            checked={simulateUnstableConnection}
-            onChange={() => toggleSimulateUnstableConnection()}
-          />
-        }
-        label="Simulate Unstable Connection"
-      />
-      <Divider />
       <List>
         <ListItem
           button
@@ -304,14 +280,6 @@ export function DeveloperDrawer(props: Props) {
           </ListItemIcon>
           <ListItemText primary={<FormattedMessage id="verify_phone" />} />
         </ListItem>
-        <Divider />
-        <TextField
-          label="Payment Fake Nonce"
-          value={fakeNonce}
-          onChange={(e) =>
-            dispatch({ type: ActionTypes.FAKE_NONCE, payload: e.target.value })
-          }
-        />
       </List>
       <Divider />
       <Button

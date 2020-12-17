@@ -8,9 +8,7 @@ import { useStore } from "react-redux";
 import { updatePassAccesses } from "../store/slices/account";
 
 import { useRestAPI } from "../restapi";
-import { ActionTypes } from "../store/actions";
 import { getImgByPassId } from "./../config";
-import { useAuthState } from "./authorized";
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme: Theme) =>
