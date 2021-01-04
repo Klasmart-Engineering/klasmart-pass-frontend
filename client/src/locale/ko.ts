@@ -162,10 +162,8 @@ const messages: Record<string, string> = {
   verify_phone_input: "문자메세지(SMS)로 발송된 인증 코드를 입력하세요.",
   verify_phone_success: "휴대폰 번호가 인증되었습니다.",
   verify_account_failed: "계정 인증에 실패하였습니다. 다시 시도해 주세요",
-  verify_token_expired:
-    "인증 시간이 만료 되었습니다. 확인 후 다시 시도해 주세요.",
-  verify_account_is_already_verified:
-    "인증이 완료 된 계정 입니다. 계정을 확인해 주세요",
+  verify_token_expired: "인증 시간이 만료 되었습니다. 확인 후 다시 시도해 주세요.",
+  verify_account_is_already_verified: "인증이 완료 된 계정 입니다. 계정을 확인해 주세요",
 };
 
 export default messages;
