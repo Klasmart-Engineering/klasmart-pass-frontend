@@ -161,10 +161,8 @@ const messages: Record<string, string> = {
   verify_phone_input: "Please enter the SMS verification code",
   verify_phone_success: "Your phone has been verified",
   verify_account_failed: "Your account has not been verified. Please try again",
-  verify_token_expired:
-    "Sorry, this link has been expired. Please check and try again.",
-  verify_account_is_already_verified:
-    "Already verified account. Please check your account again.",
+  verify_token_expired: "Sorry, the verification link has expired. Please request a new verification link.",
+  verify_account_is_already_verified: "This account has already been verified.",
 };
 
 export default messages;
