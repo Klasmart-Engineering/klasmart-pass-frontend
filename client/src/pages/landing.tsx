@@ -338,25 +338,9 @@ export function Landing() {
               src={getImgByPassId(pass.passId)}
               className={classes.productImg}
             />
-            <BadanamuButton
-              className={
-                pressedTicketButton
-                  ? clsx(classes.inactiveSelectBtn, classes.spacingBtn)
-                  : clsx(
-                      classes.activeSelectBtn,
-                      classes.activeSelectedBtn,
-                      classes.spacingBtn
-                    )
-              }
-              fullWidth
-              size="large"
-              onClick={(e) => {
-                store.dispatch({ type: ActionTypes.PASS, payload: pass });
-                history.push("/payment");
-              }}
-            >
-              <FormattedMessage id="learning_pass_continue_btn" />
-            </BadanamuButton>
+            <br></br>
+            <br></br>
+            <br></br>
             <Typography variant="body1" align="center">
               <FormattedMessage id="landing_tooltip_label" />
             </Typography>
@@ -433,17 +417,17 @@ export function Landing() {
                 </Grid>
               </Grid>
             ) : (
-              <BadanamuButton
-                className={clsx(classes.inactiveSelectBtn, classes.spacingBtn)}
-                fullWidth
-                size="large"
-                onClick={(e) => {
-                  setTicketButton(true);
-                }}
-              >
-                <FormattedMessage id="landing_event_ticket_redeem_here_btn" />
-              </BadanamuButton>
-            )}
+                <BadanamuButton
+                  className={clsx(classes.inactiveSelectBtn, classes.spacingBtn)}
+                  fullWidth
+                  size="large"
+                  onClick={(e) => {
+                    setTicketButton(true);
+                  }}
+                >
+                  <FormattedMessage id="landing_event_ticket_redeem_here_btn" />
+                </BadanamuButton>
+              )}
           </Grid>
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -471,24 +455,24 @@ export function Landing() {
               <Grid container spacing={1} className={classes.noIconPadding}>
                 {pass.productInfoList !== undefined
                   ? pass.productInfoList.map((product: any) => (
-                      <React.Fragment key={product.prodId}>
-                        <Grid item xs={12} md={10}>
-                          <Typography
-                            className={clsx(
-                              classes.heading,
-                              classes.headingInner
-                            )}
-                          >
-                            {product.title}
-                          </Typography>
-                        </Grid>
-                        <Grid item xs={6} md={2}>
-                          <Typography className={classes.selected}>
-                            <CheckRoundedIcon />
-                          </Typography>
-                        </Grid>
-                      </React.Fragment>
-                    ))
+                    <React.Fragment key={product.prodId}>
+                      <Grid item xs={12} md={10}>
+                        <Typography
+                          className={clsx(
+                            classes.heading,
+                            classes.headingInner
+                          )}
+                        >
+                          {product.title}
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={6} md={2}>
+                        <Typography className={classes.selected}>
+                          <CheckRoundedIcon />
+                        </Typography>
+                      </Grid>
+                    </React.Fragment>
+                  ))
                   : null}
               </Grid>
             </ExpansionPanelDetails>
@@ -533,8 +517,8 @@ export function Landing() {
             ) : passList !== undefined ? (
               passList.map((pass: any) => createPassPresentation(pass))
             ) : (
-              <Typography>{passListError}</Typography>
-            )}
+                  <Typography>{passListError}</Typography>
+                )}
           </Grid>
         </CardContent>
       </Card>
