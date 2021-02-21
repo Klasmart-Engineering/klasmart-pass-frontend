@@ -67,14 +67,14 @@ module.exports = {
             template: 'src/index_prod.html',
         }),
         new webpack.EnvironmentPlugin({
-            "PAYMENT_ENDPOINT": "https://prod-test.payment.badanamu.net/",
-            "AUTH_ENDPOINT": "https://prod-test.auth.badanamu.net/",
-            "ACCOUNT_ENDPOINT": "https://prod-test.account.badanamu.net/",
-            "PRODUCT_ENDPOINT": "https://prod-test.product.badanamu.net/",
-            "REGION_ENDPOINT": "https://prod-test.region.badanamu.net/",
-            "ORGANIZATION_SEOUL_ENDPOINT": "https://seoul-test.organization-api.badanamu.net/",
+            "PAYMENT_ENDPOINT": "https://ams-payment.badanamu.net/",
+            "AUTH_ENDPOINT": "https://ams-auth.badanamu.net/",
+            "ACCOUNT_ENDPOINT": "https://ams-account.badanamu.net/",
+            "PRODUCT_ENDPOINT": "https://ams-product.badanamu.net/",
+            "REGION_ENDPOINT": "https://prod.region.badanamu.net/",
+            "ORGANIZATION_SEOUL_ENDPOINT": "https://seoul.organization-api.badanamu.net/",
             "PASS_FILTER": ["com.calmid.badanamu.esl.premium"],
-            "AUTH_RETURN_LINK": "http://auth.kidsloop.net/",
+            "AUTH_RETURN_LINK": "https://auth.kidsloop.co.uk/",
         })
     ],
     optimization: {

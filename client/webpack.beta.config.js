@@ -1,7 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack');
-const Visualizer = require('webpack-visualizer-plugin');
 const output_file_name = 'bundle.[chunkhash].js'
 
 module.exports = {
@@ -67,10 +66,6 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: 'src/index.html',
         }),
-        new webpack.ProvidePlugin({
-            'fetch': 'imports-loader?this=>global!exports-loader?global.fetch!whatwg-fetch'
-        }),
-        new Visualizer({ filename: '../webpack-stats.html' }),
         new webpack.EnvironmentPlugin({
             "PAYMENT_ENDPOINT": "https://payment.dev.badanamu.net/",
             "AUTH_ENDPOINT": "https://auth.dev.badanamu.net/",

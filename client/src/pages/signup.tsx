@@ -17,6 +17,7 @@ import BadanamuTextField from "../components/textfield";
 import { useRestAPI } from "../restapi";
 import { RestAPIError, RestAPIErrorType } from "../restapi_errors";
 import { getIdentityType, IdentityType } from "../utils/accountType";
+import { getAuthLink } from "../config";
 
 import KidsloopIcon from "../../../../../../../assets/img/kidsloop_icon.svg";
 
@@ -62,7 +63,9 @@ export function Signup() {
   const history = useHistory();
   const restApi = useRestAPI();
 
-  redirectIfAuthorized();
+    const authLink = getAuthLink();
+
+    redirectIfAuthorized();
 
   function checkPasswordMatch() {
     if (password === "") {
@@ -234,7 +237,10 @@ export function Signup() {
                                     <Link
                                         href="#"
                                         variant="subtitle2"
-                                        onClick={(e: React.MouseEvent) => { window.location.href="https://auth.kidsloop.net/"; e.preventDefault(); }}
+                                        onClick={(e: React.MouseEvent) => { 
+                                            window.location.href = authLink; 
+                                            e.preventDefault(); 
+                                        }}
                                     >
                                         <FormattedMessage id="sign_up_already" />
                                     </Link>

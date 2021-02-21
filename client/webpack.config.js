@@ -66,9 +66,6 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: 'src/index.html',
         }),
-        new webpack.ProvidePlugin({
-            //'fetch': 'imports-loader?this=>global!exports-loader?global.fetch!whatwg-fetch'
-        }),
         new webpack.EnvironmentPlugin({
             "PAYMENT_ENDPOINT": "http://localhost:8092/",
             "AUTH_ENDPOINT": "http://localhost:8080/",
@@ -76,6 +73,7 @@ module.exports = {
             "PRODUCT_ENDPOINT": "http://localhost:8044/",
             "REGION_ENDPOINT": "http://localhost:8094/",
             "ORGANIZATION_ENDPOINT": "http://localhost:8084/",
+            "AUTH_RETURN_LINK": "http://auth.kidsloop.net/",
         })
     ],
     devServer: {

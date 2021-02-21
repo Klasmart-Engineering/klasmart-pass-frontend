@@ -65,9 +65,6 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: 'src/index.html',
         }),
-        new webpack.ProvidePlugin({
-            //'fetch': 'imports-loader?this=>global!exports-loader?global.fetch!whatwg-fetch'
-        }),
         new webpack.EnvironmentPlugin({
             "PAYMENT_ENDPOINT": "https://payment.internal.badanamu.net/",
             "AUTH_ENDPOINT": "https://auth.internal.badanamu.net/",
@@ -75,6 +72,7 @@ module.exports = {
             "PRODUCT_ENDPOINT": "https://product.internal.badanamu.net/",
             "REGION_ENDPOINT": "https://region.internal.badanamu.net/",
             "ORGANIZATION_ENDPOINT": "https://organization-api.internal.badanamu.net",
+            "AUTH_RETURN_LINK": "http://auth.kidsloop.net/",
         })
     ],
     devServer: {

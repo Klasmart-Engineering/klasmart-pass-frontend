@@ -1,7 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack');
-const Visualizer = require('webpack-visualizer-plugin');
 const output_file_name = 'bundle.[chunkhash].js'
 
 module.exports = {
@@ -67,10 +66,6 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: 'src/index_prod.html',
         }),
-        new webpack.ProvidePlugin({
-            'fetch': 'imports-loader?this=>global!exports-loader?global.fetch!whatwg-fetch'
-        }),
-        new Visualizer({ filename: '../webpack-stats.html' }),
         new webpack.EnvironmentPlugin({
             "PAYMENT_ENDPOINT": "https://ams-payment.badanamu.net/",
             "AUTH_ENDPOINT": "https://ams-auth.badanamu.net/",
@@ -79,6 +74,7 @@ module.exports = {
             "REGION_ENDPOINT": "https://prod.region.badanamu.net/",
             "ORGANIZATION_SEOUL_ENDPOINT": "https://seoul.organization-api.badanamu.net/",
             "PASS_FILTER": ["com.calmid.badanamu.esl.premium"],
+            "AUTH_RETURN_LINK": "http://auth.kidsloop.net/",
         })
     ],
     optimization: {

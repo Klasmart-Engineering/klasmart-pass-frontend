@@ -32,7 +32,7 @@ export class RestAPI {
 
     public async signup(id: string, pw: string, lang: string) {
         const { phoneNr, email } = phoneOrEmail(id);
-        const result = await this.accountCall("POST", "v1/signup", JSON.stringify({
+        const result = await this.accountCall("POST", "v2/signup/request", JSON.stringify({
             email,
             lang,
             phoneNr,

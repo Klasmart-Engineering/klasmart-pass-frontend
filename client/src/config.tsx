@@ -27,6 +27,10 @@ export function getRegionEndpoint() {
     return "" + process.env.REGION_ENDPOINT
 }
 
+export function getAuthLink() {
+    return "" + process.env.AUTH_RETURN_LINK
+}
+
 export function getOrganizationEndpoint(regionId: string) {
     switch (regionId.toLowerCase()) {
         case "seoul": {
