@@ -21,6 +21,7 @@ import { ActionTypes } from "../store/actions";
 import { IdentityType } from "../utils/accountType";
 
 import KidsloopIcon from "../../../../../../../assets/img/kidsloop_icon.svg";
+import { getAuthLink } from "../config";
 
 const useStyles = makeStyles((theme) => createStyles({
     card: {
@@ -54,6 +55,9 @@ export function VerifyLink(props: RouteComponentProps) {
   const store = useStore();
   const classes = useStyles();
   const history = useHistory();
+
+  const authLink = getAuthLink();
+
   const params = QueryString.parse(props.location.search);
   if (typeof params.accountId === "string") {
     store.dispatch({
@@ -121,8 +125,9 @@ export function VerifyLink(props: RouteComponentProps) {
                             <BadanamuButton
                                 fullWidth
                                 size="large"
-                                onClick={(e) => {
-                                    window.location.href="https://auth.kidsloop.net/";
+                                onClick={(e: React.MouseEvent) => { 
+                                    window.location.href = authLink; 
+                                    e.preventDefault(); 
                                 }}
                             >
                                 <FormattedMessage id="login_button" />

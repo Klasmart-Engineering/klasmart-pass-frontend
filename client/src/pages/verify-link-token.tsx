@@ -20,6 +20,7 @@ import { ActionTypes } from "../store/actions";
 
 import KidsloopIcon from "../../../../../../../assets/img/kidsloop_icon.svg";
 import { redirectIfUnverifiable } from "../components/authorized";
+import { getAuthLink } from "../config";
 
 const useStyles = makeStyles((theme) => createStyles({
     card: {
@@ -53,6 +54,9 @@ export function VerifyLinkToken(props: RouteComponentProps) {
   const store = useStore();
   const classes = useStyles();
   const history = useHistory();
+
+  const authLink = getAuthLink();
+
   const params = QueryString.parse(props.location.search);
   if (typeof params.verificationToken === "string") {
     store.dispatch({
@@ -147,8 +151,9 @@ export function VerifyLinkToken(props: RouteComponentProps) {
                             <BadanamuButton
                                 fullWidth
                                 size="large"
-                                onClick={(e) => {
-                                    window.location.href="https://auth.kidsloop.net/";
+                                onClick={(e: React.MouseEvent) => { 
+                                    window.location.href = authLink; 
+                                    e.preventDefault(); 
                                 }}
                             >
                                 <FormattedMessage id="login_button" />
