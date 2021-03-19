@@ -110,9 +110,11 @@ export function Signup() {
       await restApi.signup(email, password, "en");
       switch (accountType) {
         case IdentityType.Email:
+          console.log(`email`);
           history.push("/verify-email");
           break;
         case IdentityType.Phone:
+          console.log(`phone`);
           history.push("/verify-phone");
           break;
         default:

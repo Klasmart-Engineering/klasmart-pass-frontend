@@ -74,8 +74,6 @@ export function Verify(props: Props) {
     });
   }
 
-  redirectIfUnverifiable();
-
   async function verify(code = verificationCode) {
     if (code === "") {
       return;
