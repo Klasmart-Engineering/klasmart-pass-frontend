@@ -13,7 +13,7 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { useStore } from "react-redux";
-import { RouteComponentProps, useHistory } from "react-router-dom";
+import { RouteComponentProps, useHistory, useLocation } from "react-router-dom";
 
 import { redirectIfUnverifiable } from "../components/authorized";
 import BadanamuTextField from "../components/textfield";
@@ -56,7 +56,7 @@ interface Props {
   type: IdentityType;
 }
 
-export function Verify(props: Props & RouteComponentProps) {
+export function Verify(props: Props) {
   const store = useStore();
   const classes = useStyles();
   const [verificationCode, setVerificationCode] = useState("");
@@ -64,8 +64,9 @@ export function Verify(props: Props & RouteComponentProps) {
   const [verifyInFlight, setVerifyInFlight] = useState(false);
   const restApi = useRestAPI();
   const history = useHistory();
+  const location = useLocation();
 
-  const params = QueryString.parse(props.location.search);
+  const params = QueryString.parse(location.search);
   if (typeof params.accountId === "string") {
     store.dispatch({
       type: ActionTypes.ACCOUNT_ID,

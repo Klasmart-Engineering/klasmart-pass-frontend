@@ -87,8 +87,12 @@ export function App() {
                     :
                     <Switch>
                         <Route path="/signup" component={Signup} />
-                        <Route path="/verify-phone" render={(props) => <Verify type={IdentityType.Phone} {...props} />} />
-                        <Route path="/verify-email" render={(props) => <Verify type={IdentityType.Email} {...props} />} />
+                        <Route path="/verify-phone">
+                            <Verify type={IdentityType.Phone} />
+                        </Route>
+                        <Route path="/verify-email">
+                            <Verify type={IdentityType.Email} />
+                        </Route>
                         <Route path="/verify_email" component={VerifyLink} />
                         <Route path="/verify_email_with_token" component={VerifyLinkToken} />
                         <Route path="/password-change" component={PasswordChange} />
