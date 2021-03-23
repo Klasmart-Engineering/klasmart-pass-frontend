@@ -20,6 +20,7 @@ import { getIdentityType, IdentityType } from "../utils/accountType";
 import { getAuthLink } from "../config";
 
 import KidsloopIcon from "../../../../../../../assets/img/kidsloop_icon.svg";
+import { useCookies } from "react-cookie";
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme: Theme) =>
@@ -49,6 +50,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const phoneRegex = /^(\+[1-9][0-9]*)?[0-9\- ]*$/;
 export function Signup() {
   const [inFlight, setInFlight] = useState(false);
+  const [cookies, setCookie] = useCookies(['verificationToken']);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -107,7 +109,8 @@ export function Signup() {
     try {
       setInFlight(true);
       // TODO: Get Locale
-      await restApi.signup(email, password, "en");
+      const response = await restApi.signup(email, password, "en");
+      setCookie('verificationToken', response.verificationToken, { path: `/` });
       switch (accountType) {
         case IdentityType.Email:
           console.log(`email`);

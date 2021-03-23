@@ -12,6 +12,7 @@ import * as ReactDOM from 'react-dom';
 import { RawIntlProvider } from 'react-intl';
 import { Provider, useSelector } from 'react-redux';
 import { HashRouter } from 'react-router-dom';
+import { CookiesProvider } from 'react-cookie';
 
 import App from './app';
 import { Dev } from './components/dev/dev';
@@ -92,9 +93,11 @@ async function main() {
     const div = document.getElementById("app");
     ReactDOM.render(
         <HashRouter>
+            <CookiesProvider>
             <Provider store={store}>
                 <ClientSide />
             </Provider>
+            </CookiesProvider>
         </HashRouter>,
         div);
 }

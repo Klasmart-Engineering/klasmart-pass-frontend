@@ -23,7 +23,7 @@ export interface LogoutAction {
 export type SignUpAction = Action<
   ActionTypes.SIGNUP,
   | {
-      accountId?: string | any;
+    verificationToken?: string | any;
     }
   | any
   | undefined
@@ -78,7 +78,7 @@ export type SetFakeNonce = Action<
 >;
 
 export type VerificationToken = Action<
-  ActionTypes.REFRESH_SESSION,
+  ActionTypes.VERIFICATION_TOKEN,
   | {
       verificationToken?: string | any;
     }

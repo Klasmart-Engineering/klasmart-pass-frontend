@@ -23,6 +23,7 @@ import { ActionTypes } from "../store/actions";
 import { IdentityType } from "../utils/accountType";
 
 import KidsloopIcon from "../../../../../../../assets/img/kidsloop_icon.svg";
+import { useCookies } from "react-cookie";
 
 const useStyles = makeStyles((theme) => createStyles({
     card: {
@@ -58,8 +59,13 @@ interface Props {
 
 export function Verify(props: Props) {
   const store = useStore();
+  const state = store.getState();
   const classes = useStyles();
+
+  const [cookies] = useCookies(['verificationToken']);
+
   const [verificationCode, setVerificationCode] = useState("");
+  const [verificationToken, setVerificationToken] = useState(state.account.verificationToken);
   const [error, setError] = useState<JSX.Element | null>(null);
   const [verifyInFlight, setVerifyInFlight] = useState(false);
   const restApi = useRestAPI();
@@ -74,17 +80,18 @@ export function Verify(props: Props) {
     });
   }
 
-  async function verify(code = verificationCode) {
-    if (code === "") {
-      return;
-    }
-    if (verifyInFlight) {
-      return;
-    }
+  console.log(`verify type: `, props.type);
+  console.log(`verifyToken: `, verificationToken);
+
+  async function verify() {
+    if (verificationCode === "") return;
+    if (verifyInFlight) return;
+    console.log(cookies.verificationToken);
+
     try {
       setVerifyInFlight(true);
-      await restApi.verify(code, props.type);
-      history.replace("/login");
+      await restApi.verifyWithToken(cookies.verificationToken, verificationCode);
+      cookies.removeCookie(`verificationToken`);
     } catch (e) {
       if (e instanceof RestAPIError) {
         const id = e.getErrorMessageID();
@@ -93,12 +100,15 @@ export function Verify(props: Props) {
     } finally {
       setVerifyInFlight(false);
     }
+
+    window.location.href = window.location.origin;
+    // history.replace("/login");
   }
 
   useEffect(() => {
     if (typeof params.code === "string") {
       setVerificationCode(params.code);
-      verify(params.code);
+      verify();
     }
   }, []);
 
@@ -107,7 +117,7 @@ export function Verify(props: Props) {
     try {
       const verified = await restApi.verifyCheck(props.type);
       if (verified) {
-        history.replace("/login");
+        history.replace("/");
       }
     } catch (e) {
     } finally {

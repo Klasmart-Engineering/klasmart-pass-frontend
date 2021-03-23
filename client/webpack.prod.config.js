@@ -4,7 +4,7 @@ const webpack = require('webpack');
 const output_file_name = 'bundle.[chunkhash].js'
 
 module.exports = {
-    mode: 'production',
+    mode: 'development',
     entry: ['./src/client-entry.tsx'],
     module: {
         rules: [

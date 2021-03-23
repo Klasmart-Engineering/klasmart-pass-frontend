@@ -23,7 +23,6 @@ function phoneOrEmail(str: string): { phoneNr?: string, email?: string } {
 }
 
 export class RestAPI {
-
     private store: Store;
 
     constructor(store: ReturnType<typeof useStore>) {
@@ -40,13 +39,14 @@ export class RestAPI {
         }));
         if (result.status !== 200) { return false; }
         const body = await result.json();
-        this.store.dispatch({ type: ActionTypes.SIGNUP, payload: body });
-        return;
+        console.log(`signup body: `, body);
+        return body;
     }
 
     public verify(verificationCode: string, type: IdentityType) {
         const state = this.store.getState();
         const accountId = state.account.accountId;
+        console.log(`verificationCode: `, accountId);
         if (accountId === null) { throw new Error("Unknown AccountID"); }
         switch (type) {
             case IdentityType.Phone:
@@ -59,6 +59,8 @@ export class RestAPI {
     }
 
     public async verifyWithToken(verificationToken: string, verificationCode: string) {
+        console.log(`verifyWithToken: `, verificationToken);
+        console.log(`verifyWithToken: `, verificationCode);
         const response = await this.accountCall("POST", "v2/signup/confirm", JSON.stringify({ verificationToken, verificationCode }));
         const body = await response.json();
         if (typeof body === "object" && typeof body.accoundId === "string") {
