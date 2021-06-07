@@ -64,6 +64,7 @@ export class RestAPI {
         lang,
         phoneNr,
         pw,
+        template: "learnandplay",
       })
     );
 
