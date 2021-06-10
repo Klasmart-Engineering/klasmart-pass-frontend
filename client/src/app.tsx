@@ -24,6 +24,7 @@ import { Verify } from "./pages/verify";
 import { VerifyLink } from "./pages/verify-link";
 import { VerifyLinkToken } from "./pages/verify-link-token";
 import { IdentityType } from "./utils/accountType";
+import { Verify as V2Verify } from "./pages/v2/verify";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -111,6 +112,8 @@ export function App() {
           <PrivateRoute path="/my-account" redirectUrl="/login">
             <MyAccount />
           </PrivateRoute>
+
+          <Route path="/v2/verify" component={V2Verify} />
 
           <Route
             path="/verify-phone"

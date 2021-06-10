@@ -106,7 +106,7 @@ export function Signup() {
 
       console.log({ result });
 
-      history.push("/verify_email_with_token");
+      history.push(`/v2/verify?verificationToken=${result.verificationToken}`);
     } catch (e) {
       handleError(e);
     } finally {

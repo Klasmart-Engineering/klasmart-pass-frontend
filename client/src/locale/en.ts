@@ -7,9 +7,10 @@ const messages: Record<string, string> = {
   ERROR_INVALID_LOGIN: "Invalid Login",
   ERROR_INVALID_PASSWORD: "Invalid Password",
   ERROR_INVALID_VERIFICATION_CODE: "Invalid verification code",
+  ERROR_EXPIRED_VERIFICATION_TOKEN: "Verification token is expired",
+  ERROR_VERIFICATION_NOT_FOUND: "Verification not found",
   ERROR_MOCK: "The rest api simulated a mock error",
   ERROR_UNKOWN: "An unexpected error occurred",
-  ERROR_VERIFICATION_NOT_FOUND: "Verification not found",
   LocaleName: "English",
   button_select: "Select",
   copyright: "Copyright",
@@ -161,7 +162,8 @@ const messages: Record<string, string> = {
   verify_phone_input: "Please enter the SMS verification code",
   verify_phone_success: "Your phone has been verified",
   verify_account_failed: "Your account has not been verified. Please try again",
-  verify_token_expired: "Sorry, the verification link has expired. Please request a new verification link.",
+  verify_token_expired:
+    "Sorry, the verification link has expired. Please request a new verification link.",
   verify_account_is_already_verified: "This account has already been verified.",
 };
 
