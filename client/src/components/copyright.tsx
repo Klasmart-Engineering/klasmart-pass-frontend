@@ -10,6 +10,7 @@ import Typography from "@material-ui/core/Typography";
 import * as React from "react";
 import { FormattedMessage } from "react-intl";
 import { brandingConfig } from "../config";
+import { SecondaryPolicyLink } from "./PolicyLink";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -24,24 +25,6 @@ const styles = (theme: Theme) =>
       },
     },
   });
-
-type PolicyLinkProps = {
-  href: URL;
-  messageId: string;
-};
-
-function PolicyLink({ href, messageId }: PolicyLinkProps) {
-  return (
-    <Link
-      color="inherit"
-      target="_blank"
-      href={href.toString()}
-      style={{ textDecoration: "underline" }}
-    >
-      <FormattedMessage id={messageId} />
-    </Link>
-  );
-}
 
 type Props = WithStyles<typeof styles>;
 
@@ -72,19 +55,19 @@ class Copyright extends React.PureComponent<Props, any> {
           color="textSecondary"
           className={this.props.classes.responsiveTypography}
         >
-          <PolicyLink
+          <SecondaryPolicyLink
             href={brandingConfig.policies.privacy}
             messageId={"copyright_privacy"}
           />
           {" | "}
-          <PolicyLink
+          <SecondaryPolicyLink
             href={brandingConfig.policies.termsAndConditions}
             messageId={"copyright_terms"}
           />
           {brandingConfig.policies?.refund && (
             <>
               {" | "}
-              <PolicyLink
+              <SecondaryPolicyLink
                 href={brandingConfig.policies?.refund}
                 messageId={"copyright_refund"}
               />
