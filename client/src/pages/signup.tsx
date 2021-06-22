@@ -17,7 +17,7 @@ import BadanamuTextField from "../components/textfield";
 import { useRestAPI } from "../restapi";
 import { RestAPIError, RestAPIErrorType } from "../restapi_errors";
 import { getIdentityType, IdentityType } from "../utils/accountType";
-import { getAuthLink } from "../config";
+import { brandingConfig, getAuthLink } from "../config";
 
 import LogoBanner from "../components/LogoBanner"
 import { useCookies } from "react-cookie";
@@ -166,7 +166,7 @@ export function Signup() {
                             <Typography variant="h5">
                                 <FormattedMessage
                                     id="create_account"
-                                    values={{ b: (...chunks: any[]) => <strong>{chunks}</strong> }}
+                                    values={{ b: (...chunks: any[]) => <strong>{chunks}</strong>, companyName: brandingConfig.company.name }}
                                 />
                             </Typography>
                         </Grid>

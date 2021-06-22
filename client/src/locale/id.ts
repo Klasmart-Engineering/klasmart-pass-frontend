@@ -2,7 +2,7 @@ const messages: Record<string, string> = {
     ERROR_MOCK: "Restapi mensimulasikan kesalahan tiruan",
     ERROR_UNKOWN: "Terjadi kesalahan tak terduga",
     copyright: "Hak cipta",
-    create_account: "Buat <b>Akun KidsLoop Anda.</b>",
+    create_account: "Buat <b>Akun {companyName} Anda.</b>",
     email: "Surel",
     login: "Gabung",
     password: "Kata sandi",
