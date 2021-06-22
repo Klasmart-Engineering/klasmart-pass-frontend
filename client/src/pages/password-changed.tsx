@@ -10,7 +10,7 @@ import { useHistory } from "react-router";
 
 import BadanamuButton from "../components/button";
 
-import KidsloopIcon from "../../../../../../../assets/img/kidsloop_icon.svg";
+import LogoBanner from "../components/LogoBanner"
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -31,9 +31,7 @@ export function PasswordChanged() {
             <Card>
                 <CardContent className={classes.card}>
                     <Grid container justify="center" spacing={4}>
-                        <Grid item xs={12} style={{ textAlign: "center" }}>
-                            <img src={KidsloopIcon} style={{ marginBottom: 12 }} height="50px" />
-                        </Grid>
+                        <LogoBanner/>
                         <Grid item xs={12}>
                             <Typography variant="h5" align="center">
                                 <FormattedMessage id="password_changed" />

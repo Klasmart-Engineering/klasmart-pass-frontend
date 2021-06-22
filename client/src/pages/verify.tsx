@@ -22,7 +22,7 @@ import { RestAPIError } from "../restapi_errors";
 import { ActionTypes } from "../store/actions";
 import { IdentityType } from "../utils/accountType";
 
-import KidsloopIcon from "../../../../../../../assets/img/kidsloop_icon.svg";
+import LogoBanner from "../components/LogoBanner"
 import { useCookies } from "react-cookie";
 
 const useStyles = makeStyles((theme) => createStyles({
@@ -142,9 +142,7 @@ export function Verify(props: Props) {
             <Card>
                 <CardContent className={classes.card}>
                     <Grid container justify="center" spacing={4}>
-                        <Grid item xs={12} align="center">
-                            <img src={KidsloopIcon} style={{ marginBottom: 12 }} height="50px" />
-                        </Grid>
+                        <LogoBanner/>
                         <Grid item xs={12}>
                             <Typography variant="h5" align="center">
                                 <FormattedMessage id={`verify_${type}`} />

@@ -20,7 +20,7 @@ import { RestAPIError } from "../restapi_errors";
 import { ActionTypes } from "../store/actions";
 import { IdentityType } from "../utils/accountType";
 
-import KidsloopIcon from "../../../../../../../assets/img/kidsloop_icon.svg";
+import LogoBanner from "../components/LogoBanner"
 import { getAuthLink } from "../config";
 
 const useStyles = makeStyles((theme) => createStyles({
@@ -101,9 +101,7 @@ export function VerifyLink(props: RouteComponentProps) {
             <Card>
                 <CardContent className={classes.card}>
                     <Grid container direction="row" justify="center" alignItems="center" spacing={4}>
-                        <Grid item xs={12} style={{ textAlign: "center" }}>
-                            <img src={KidsloopIcon} style={{ marginBottom: 12 }} height="50px" />
-                        </Grid>
+                        <LogoBanner/>
                         <Grid item xs={12} style={{ textAlign: "center" }}>
                             <Typography component="h1" variant="h5">
                                 <FormattedMessage id="verify_email" />
@@ -125,9 +123,9 @@ export function VerifyLink(props: RouteComponentProps) {
                             <BadanamuButton
                                 fullWidth
                                 size="large"
-                                onClick={(e: React.MouseEvent) => { 
-                                    window.location.href = authLink; 
-                                    e.preventDefault(); 
+                                onClick={(e: React.MouseEvent) => {
+                                    window.location.href = authLink;
+                                    e.preventDefault();
                                 }}
                             >
                                 <FormattedMessage id="login_button" />
