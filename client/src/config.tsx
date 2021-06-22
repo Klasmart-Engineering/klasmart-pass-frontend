@@ -7,6 +7,8 @@ import BLPPremium from './img/com_calmid_badanamu_esl_premium.png';
 import BLPTrial from './img/com_calmid_badanamu_esl_trial.png';
 import BLP from './img/com_calmid_learnandplay_blp_standard.png';
 
+export {brandingConfig} from "@branding"
+
 export function getPaymentEndpoint() {
     return "" + process.env.PAYMENT_ENDPOINT
 }
