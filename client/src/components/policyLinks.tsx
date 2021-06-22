@@ -1,5 +1,4 @@
 import Grid from "@material-ui/core/Grid";
-import Link from "@material-ui/core/Link";
 import {
   createStyles,
   Theme,
@@ -7,7 +6,8 @@ import {
   withStyles,
 } from "@material-ui/core/styles";
 import * as React from "react";
-import { FormattedMessage } from "react-intl";
+import { brandingConfig } from "../config";
+import { PrimaryPolicyLink } from "./PolicyLink";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -22,7 +22,7 @@ const styles = (theme: Theme) =>
 
 type Props = WithStyles<typeof styles>;
 
-class PolicyLink extends React.PureComponent<Props, any> {
+class PolicyLinks extends React.PureComponent<Props, any> {
   public render() {
     return (
       <Grid
@@ -31,36 +31,29 @@ class PolicyLink extends React.PureComponent<Props, any> {
         justify="flex-end"
         className={this.props.classes.links}
       >
+        {brandingConfig.policies?.help && (
+          <Grid item xs={4} sm={2}>
+            <PrimaryPolicyLink
+              href={brandingConfig.policies?.help}
+              messageId="login_help"
+            />
+          </Grid>
+        )}
         <Grid item xs={4} sm={2}>
-          <Link
-            href="https://kidsloop.net/en/faq"
-            target="_blank"
-            variant="subtitle2"
-          >
-            <FormattedMessage id="login_help" />
-          </Link>
+          <PrimaryPolicyLink
+            href={brandingConfig.policies.privacy}
+            messageId="login_privacy"
+          />
         </Grid>
         <Grid item xs={4} sm={2}>
-          <Link
-            href="https://kidsloop.net/en/policies/privacy-notice"
-            target="_blank"
-            variant="subtitle2"
-          >
-            <FormattedMessage id="login_privacy" />
-          </Link>
-        </Grid>
-        <Grid item xs={4} sm={2}>
-          <Link
-            href="https://kidsloop.net/en/policies/terms"
-            target="_blank"
-            variant="subtitle2"
-          >
-            <FormattedMessage id="login_terms" />
-          </Link>
+          <PrimaryPolicyLink
+            href={brandingConfig.policies.termsAndConditions}
+            messageId="login_terms"
+          />
         </Grid>
       </Grid>
     );
   }
 }
 
-export default withStyles(styles)(PolicyLink);
+export default withStyles(styles)(PolicyLinks);

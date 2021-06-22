@@ -12,7 +12,7 @@ import { useHistory } from "react-router-dom";
 
 import { redirectIfAuthorized } from "../components/authorized";
 import BadanamuButton from "../components/button";
-import PolicyLink from "../components/policyLinks";
+import PolicyLinks from "../components/policyLinks";
 import BadanamuTextField from "../components/textfield";
 import { useRestAPI } from "../restapi";
 import { RestAPIError, RestAPIErrorType } from "../restapi_errors";
@@ -253,7 +253,7 @@ export function Signup() {
                     </Grid>
                 </CardContent>
             </Card>
-            <PolicyLink />
+            <PolicyLinks />
         </Container>
     );
 }

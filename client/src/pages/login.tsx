@@ -15,7 +15,7 @@ import { useHistory } from "react-router";
 
 import { redirectIfAuthorized } from "../components/authorized";
 import BadanamuButton from "../components/button";
-import PolicyLink from "../components/policyLinks";
+import PolicyLinks from "../components/policyLinks";
 import BadanamuTextField from "../components/textfield";
 import BadanamuLogo from "../img/badanamu_logo.png";
 import { useRestAPI } from "../restapi";
@@ -230,7 +230,7 @@ export const Login: React.FC<{}> = () => {
           </Grid>
         </CardContent>
       </Card>
-      <PolicyLink />
+      <PolicyLinks />
     </Container>
   );
 };
