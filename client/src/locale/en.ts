@@ -14,7 +14,6 @@ const messages: Record<string, string> = {
     button_select: "Select",
     copyright: "Copyright",
     copyright_arr: "All rights reserved.",
-    copyright_company: "Kidsloop Limited.",
     copyright_privacy: "Privacy Notice",
     copyright_refund: "Refund Policy",
     copyright_terms: "Terms of Use",
