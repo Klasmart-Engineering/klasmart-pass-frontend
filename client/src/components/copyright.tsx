@@ -41,12 +41,8 @@ class Copyright extends React.PureComponent<Props, any> {
           {" © "}
           {new Date().getFullYear()}
           {". "}
-          <Link
-            color="inherit"
-            target="_blank"
-            href={brandingConfig.company.website}
-          >
-            {brandingConfig.company.officialName}
+          <Link color="inherit" target="_blank" href="https://badanamu.com/">
+            <FormattedMessage id="copyright_company" />
           </Link>{" "}
           <FormattedMessage id="copyright_arr" />{" "}
         </Typography>
