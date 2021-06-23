@@ -1,6 +1,6 @@
-dist
-node_modules
+dist/
+node_modules/
 webpack-stats.html
 *.log
-.vscode
+.vscode/
 .env
