@@ -18,7 +18,7 @@ import { RestAPIError } from "../restapi_errors";
 import { ActionTypes } from "../store/actions";
 import { State } from "../store/store";
 
-import KidsloopIcon from "../../../../../../../assets/img/kidsloop_icon.svg";
+import LogoBanner from "../components/LogoBanner"
 
 // tslint:disable:object-literal-sort-keys
 const useStyles = makeStyles((theme: Theme) =>
@@ -76,9 +76,7 @@ export function PasswordForgot() {
             <Card>
                 <CardContent className={classes.card}>
                     <Grid container direction="column" justify="center" alignItems="center" spacing={4}>
-                        <Grid item xs={12}>
-                            <img src={KidsloopIcon} style={{ marginBottom: 12 }} height="50px" />
-                        </Grid>
+                        <LogoBanner/>
                         <Grid item xs={12}>
                             <Typography variant="h5">
                                 <FormattedMessage

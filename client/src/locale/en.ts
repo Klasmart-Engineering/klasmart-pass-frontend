@@ -18,7 +18,7 @@ const messages: Record<string, string> = {
     copyright_privacy: "Privacy Notice",
     copyright_refund: "Refund Policy",
     copyright_terms: "Terms of Use",
-    create_account: "Create your <b>KidsLoop Account.</b>",
+    create_account: "Create your <b>{companyName} Account.</b>",
     create_account_empty_email: "Email / Phone Number cannot be blank",
     create_account_empty_pass: "Password cannot be blank",
     create_account_invalid_email: "Not a valid email or phone number",

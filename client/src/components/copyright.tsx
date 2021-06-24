@@ -9,6 +9,8 @@ import {
 import Typography from "@material-ui/core/Typography";
 import * as React from "react";
 import { FormattedMessage } from "react-intl";
+import { brandingConfig } from "../config";
+import { SecondaryPolicyLink } from "./PolicyLink";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -49,32 +51,24 @@ class Copyright extends React.PureComponent<Props, any> {
           color="textSecondary"
           className={this.props.classes.responsiveTypography}
         >
-          <Link
-            color="inherit"
-            target="_blank"
-            href="https://kidsloop.net/en/policies/privacy-notice"
-            style={{ textDecoration: "underline" }}
-          >
-            <FormattedMessage id="copyright_privacy" />
-          </Link>
+          <SecondaryPolicyLink
+            href={brandingConfig.policies.privacy}
+            messageId={"copyright_privacy"}
+          />
           {" | "}
-          <Link
-            color="inherit"
-            target="_blank"
-            href="https://kidsloop.net/en/policies/terms/"
-            style={{ textDecoration: "underline" }}
-          >
-            <FormattedMessage id="copyright_terms" />
-          </Link>
-          {" | "}
-          <Link
-            color="inherit"
-            target="_blank"
-            href="https://kidsloop.net/en/policies/return-policy/"
-            style={{ textDecoration: "underline" }}
-          >
-            <FormattedMessage id="copyright_refund" />
-          </Link>
+          <SecondaryPolicyLink
+            href={brandingConfig.policies.termsAndConditions}
+            messageId={"copyright_terms"}
+          />
+          {brandingConfig.policies?.refund && (
+            <>
+              {" | "}
+              <SecondaryPolicyLink
+                href={brandingConfig.policies?.refund}
+                messageId={"copyright_refund"}
+              />
+            </>
+          )}
         </Typography>
       </Grid>
     );

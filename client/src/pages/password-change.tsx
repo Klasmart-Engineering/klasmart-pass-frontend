@@ -14,7 +14,7 @@ import BadanamuTextField from "../components/textfield";
 import { useRestAPI } from "../restapi";
 import { RestAPIError } from "../restapi_errors";
 
-import KidsloopIcon from "../../../../../../../assets/img/kidsloop_icon.svg";
+import LogoBanner from "../components/LogoBanner"
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
     card: {
@@ -102,9 +102,7 @@ export function PasswordChange() {
             <Card>
                 <CardContent className={classes.card}>
                     <Grid container direction="column" justify="center" alignItems="center" spacing={4}>
-                        <Grid item xs={12}>
-                            <img src={KidsloopIcon} style={{ marginBottom: 12 }} height="50px" />
-                        </Grid>
+                        <LogoBanner/>
                         <Grid item xs={12}>
                             <Typography variant="h5">
                                 <FormattedMessage

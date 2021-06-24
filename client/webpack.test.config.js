@@ -3,6 +3,10 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack');
 const output_file_name = 'bundle.[chunkhash].js'
 
+const { loadBrandingOptions } = require("kidsloop-branding");
+
+const brandingOptions = loadBrandingOptions(process.env.BRAND);
+
 module.exports = {
     mode: 'production',
     entry: ['./src/client-entry.tsx'],
@@ -55,6 +59,10 @@ module.exports = {
         ],
     },
     resolve: {
+        alias: {
+            react: path.resolve("./node_modules/react"),
+            ...brandingOptions.webpack.resolve.alias
+        },
         extensions: ['.js', '.jsx', '.tsx', '.ts'],
     },
     output: {
@@ -65,6 +73,7 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             template: 'src/index_prod.html',
+            ...brandingOptions.webpack.html,
         }),
         new webpack.EnvironmentPlugin({
             "PAYMENT_ENDPOINT": "https://prod-test.payment.badanamu.net/",

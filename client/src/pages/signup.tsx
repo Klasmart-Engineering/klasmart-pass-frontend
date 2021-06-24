@@ -12,14 +12,14 @@ import { useHistory } from "react-router-dom";
 
 import { redirectIfAuthorized } from "../components/authorized";
 import BadanamuButton from "../components/button";
-import PolicyLink from "../components/policyLinks";
+import PolicyLinks from "../components/policyLinks";
 import BadanamuTextField from "../components/textfield";
 import { useRestAPI } from "../restapi";
 import { RestAPIError, RestAPIErrorType } from "../restapi_errors";
 import { getIdentityType, IdentityType } from "../utils/accountType";
-import { getAuthLink } from "../config";
+import { brandingConfig, getAuthLink } from "../config";
 
-import KidsloopIcon from "../../../../../../../assets/img/kidsloop_icon.svg";
+import LogoBanner from "../components/LogoBanner"
 import { useCookies } from "react-cookie";
 
 // tslint:disable:object-literal-sort-keys
@@ -161,14 +161,12 @@ export function Signup() {
             <Card>
                 <CardContent className={classes.card}>
                     <Grid container direction="column" justify="center" alignItems="center" spacing={4}>
-                        <Grid item xs={12}>
-                            <img src={KidsloopIcon} style={{ marginBottom: 12 }} height="50px" />
-                        </Grid>
+                        <LogoBanner/>
                         <Grid item xs={12}>
                             <Typography variant="h5">
                                 <FormattedMessage
                                     id="create_account"
-                                    values={{ b: (...chunks: any[]) => <strong>{chunks}</strong> }}
+                                    values={{ b: (...chunks: any[]) => <strong>{chunks}</strong>, companyName: brandingConfig.company.name }}
                                 />
                             </Typography>
                         </Grid>
@@ -242,9 +240,9 @@ export function Signup() {
                                     <Link
                                         href="#"
                                         variant="subtitle2"
-                                        onClick={(e: React.MouseEvent) => { 
-                                            window.location.href = authLink; 
-                                            e.preventDefault(); 
+                                        onClick={(e: React.MouseEvent) => {
+                                            window.location.href = authLink;
+                                            e.preventDefault();
                                         }}
                                     >
                                         <FormattedMessage id="sign_up_already" />
@@ -255,7 +253,7 @@ export function Signup() {
                     </Grid>
                 </CardContent>
             </Card>
-            <PolicyLink />
+            <PolicyLinks />
         </Container>
     );
 }
