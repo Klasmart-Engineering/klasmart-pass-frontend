@@ -8,7 +8,7 @@ const { loadBrandingOptions } = require("kidsloop-branding");
 const brandingOptions = loadBrandingOptions(process.env.BRAND);
 
 module.exports = {
-    mode: 'development',
+    mode: 'production',
     entry: ['./src/client-entry.tsx'],
     module: {
         rules: [
