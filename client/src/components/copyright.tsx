@@ -38,12 +38,9 @@ class Copyright extends React.PureComponent<Props, any> {
           className={this.props.classes.responsiveTypography}
         >
           <FormattedMessage id="copyright" />
-          {" © "}
-          {new Date().getFullYear()}
-          {". "}
-          <Link color="inherit" target="_blank" href="https://badanamu.com/">
-            <FormattedMessage id="copyright_company" />
-          </Link>{" "}
+          {` © ${new Date().getFullYear()}. ${
+            brandingConfig.company.copyrightAuthor
+          }. `}
           <FormattedMessage id="copyright_arr" />{" "}
         </Typography>
         <Typography
