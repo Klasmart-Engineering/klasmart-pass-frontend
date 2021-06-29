@@ -159,7 +159,7 @@ export const Login: React.FC<{}> = () => {
                       required
                       fullWidth
                       value={email}
-                      label={<FormattedMessage id="email" />}
+                      label={<FormattedMessage id="emailOrPhone.label" />}
                       autoComplete="email"
                       error={emailError !== null}
                       helperText={emailError}

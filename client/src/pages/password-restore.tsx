@@ -131,7 +131,7 @@ export function PasswordRestore(props: RouteComponentProps) {
                                             required
                                             fullWidth
                                             autoComplete="email"
-                                            label={<FormattedMessage id="email" />}
+                                            label={<FormattedMessage id="emailOrPhone.label" />}
                                             value={email}
                                             onChange={(e) => setEmail(e.target.value)}
                                         />

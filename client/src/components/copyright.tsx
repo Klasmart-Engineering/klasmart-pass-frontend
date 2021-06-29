@@ -37,7 +37,7 @@ class Copyright extends React.PureComponent<Props, any> {
           className={this.props.classes.responsiveTypography}
         >
           <FormattedMessage id="copyright" />
-          {". "}
+          {" "}
         </Typography>
         <Typography
           variant="caption"
