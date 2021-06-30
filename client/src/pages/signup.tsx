@@ -86,11 +86,11 @@ export function Signup() {
       return;
     }
     if (email === "") {
-      setEmailError(<FormattedMessage id="create_account_empty_email" />);
+      setEmailError(<FormattedMessage id="emailOrPhone.required" />);
       return;
     }
     if (email.indexOf("@") === -1 && !phoneRegex.test(email)) {
-      setEmailError(<FormattedMessage id="create_account_invalid_email" />);
+      setEmailError(<FormattedMessage id="emailOrPhone.invalid" />);
       return;
     }
     if (password === "") {
@@ -178,7 +178,7 @@ export function Signup() {
                                             required
                                             fullWidth
                                             autoComplete="email"
-                                            label={<FormattedMessage id="email" />}
+                                            label={<FormattedMessage id="emailOrPhone.label" />}
                                             value={email}
                                             error={emailError !== null}
                                             helperText={emailError}

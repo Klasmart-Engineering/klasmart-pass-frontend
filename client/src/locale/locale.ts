@@ -4,6 +4,14 @@ import english from "./en";
 import indonesian from "./id";
 import korean from "./ko";
 
+import brandedEnglish from "@branding/locale/en.json";
+import brandedIndonesian from "@branding/locale/id.json";
+import brandedKorean from "@branding/locale/ko.json";
+
+Object.assign(english, brandedEnglish);
+Object.assign(indonesian, brandedIndonesian);
+Object.assign(korean, brandedKorean);
+
 export const localeCodes = ["en", "ko", "id"];
 const intlCache = createIntlCache();
 export const fallbackLocale = createIntl(

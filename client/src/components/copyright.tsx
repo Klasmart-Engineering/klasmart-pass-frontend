@@ -1,5 +1,4 @@
 import Grid from "@material-ui/core/Grid";
-import Link from "@material-ui/core/Link";
 import {
   createStyles,
   Theme,
@@ -38,10 +37,7 @@ class Copyright extends React.PureComponent<Props, any> {
           className={this.props.classes.responsiveTypography}
         >
           <FormattedMessage id="copyright" />
-          {` © ${new Date().getFullYear()}. ${
-            brandingConfig.company.copyrightAuthor
-          }. `}
-          <FormattedMessage id="copyright_arr" />{" "}
+          {" "}
         </Typography>
         <Typography
           variant="caption"
