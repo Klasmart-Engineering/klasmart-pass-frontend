@@ -1,8 +1,8 @@
 import { createIntl, createIntlCache } from "react-intl";
 
-import english from "./en";
-import indonesian from "./id";
-import korean from "./ko";
+import english from "./en.json";
+import indonesian from "./id.json";
+import korean from "./ko.json";
 
 import brandedEnglish from "@branding/locale/en.json";
 import brandedIndonesian from "@branding/locale/id.json";
@@ -22,7 +22,7 @@ export function getIntl(locale: string) {
   switch (locale) {
     case "id":
       return createIntl(
-        { locale: "id", messages: indonesian, onError: () => {} },
+        { locale: "id", messages: indonesian, onError: () => { } },
         intlCache
       );
     case "ko":

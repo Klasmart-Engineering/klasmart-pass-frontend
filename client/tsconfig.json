@@ -2,6 +2,7 @@
   "compilerOptions": {
     "outDir": "./dist/",
     "noEmit": true,
+    "resolveJsonModule": true,
     "noImplicitAny": true,
     "module": "commonjs",
     "target": "esnext",
