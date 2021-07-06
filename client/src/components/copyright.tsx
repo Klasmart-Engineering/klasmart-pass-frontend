@@ -11,6 +11,8 @@ import { FormattedMessage } from "react-intl";
 import { brandingConfig } from "../config";
 import { SecondaryPolicyLink } from "./PolicyLink";
 
+const currentYear = new Date().getFullYear();
+
 const styles = (theme: Theme) =>
   createStyles({
     responsiveTypography: {
@@ -36,8 +38,7 @@ class Copyright extends React.PureComponent<Props, any> {
           color="textSecondary"
           className={this.props.classes.responsiveTypography}
         >
-          <FormattedMessage id="copyright" />
-          {" "}
+          <FormattedMessage id="copyright" values={{ year: currentYear }} />{" "}
         </Typography>
         <Typography
           variant="caption"
