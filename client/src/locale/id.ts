@@ -1,7 +1,7 @@
 const messages: Record<string, string> = {
     ERROR_MOCK: "Restapi mensimulasikan kesalahan tiruan",
     ERROR_UNKOWN: "Terjadi kesalahan tak terduga",
-    copyright: "Powered by Kidsloop.",
+    copyright: "Copyright © {year}. Kidsloop Limited. All rights reserved.",
     create_account: "Buat <b>Akun {companyName} Anda.</b>",
     "emailOrPhone.label": "Surel",
     "emailOrPhone.required": "Email / Phone Number cannot be blank",

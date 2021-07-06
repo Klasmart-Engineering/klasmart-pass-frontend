@@ -12,7 +12,7 @@ const messages: Record<string, string> = {
     ERROR_VERIFICATION_NOT_FOUND: "Verification not found",
     LocaleName: "English",
     button_select: "Select",
-    copyright: "Powered by Kidsloop.",
+    copyright: "Copyright © {year}. Kidsloop Limited. All rights reserved.",
     copyright_privacy: "Privacy Notice",
     copyright_refund: "Refund Policy",
     copyright_terms: "Terms of Use",
