@@ -81,7 +81,7 @@ module.exports = {
             "PRODUCT_ENDPOINT": "https://product.internal.badanamu.net/",
             "REGION_ENDPOINT": "https://region.internal.badanamu.net/",
             "ORGANIZATION_ENDPOINT": "https://organization-api.internal.badanamu.net",
-            "AUTH_RETURN_LINK": "http://auth.kidsloop.net/",
+            "AUTH_RETURN_LINK": "https://auth.kidsloop.live/",
         })
     ],
     devServer: {

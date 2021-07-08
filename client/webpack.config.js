@@ -82,7 +82,7 @@ module.exports = {
             "PRODUCT_ENDPOINT": "http://localhost:8044/",
             "REGION_ENDPOINT": "http://localhost:8094/",
             "ORGANIZATION_ENDPOINT": "http://localhost:8084/",
-            "AUTH_RETURN_LINK": "http://auth.kidsloop.net/",
+            "AUTH_RETURN_LINK": "https://auth.kidsloop.live/",
         })
     ],
     devServer: {
