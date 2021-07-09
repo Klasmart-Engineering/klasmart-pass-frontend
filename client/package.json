@@ -10,7 +10,7 @@
     "build:prod-vn": "rm dist/*;webpack --config webpack.prod.vn.config.js",
     "build:prod-id": "rm dist/*;webpack --config webpack.prod.id.config.js",
     "build:prod-in": "rm dist/*;webpack --config webpack.prod.in.config.js",
-    "build:prod-rk": "rm dist/*;BRAND=RUMAH_KISAH AUTH_RETURN_LINK=https://auth.rumahkisah.net/ webpack --config webpack.prod.config.js",
+    "build:prod-rk": "rm dist/*;BRAND=RUMAH_KISAH AUTH_RETURN_LINK=https://auth.rumahkisah.net/ webpack --config webpack.prod.rk.config.js",
     "build:prod-cn": "rm dist/*;AUTH_RETURN_LINK=https://login.kidsloop.cn/ webpack --config webpack.prod.config.js",
     "build:kl-alpha": "rm dist/*;AUTH_RETURN_LINK=https://auth.alpha.kidsloop.net/ webpack --config webpack.prod.config.js",
     "backup:beta": "tempdir=`date '+%Y-%m-%d_%H:%M:%S_beta'` && mkdir -p backup/$tempdir && aws s3 sync s3://badanamu-beta-pass-site backup/$tempdir",
