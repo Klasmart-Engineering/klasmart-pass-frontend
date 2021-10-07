@@ -74,6 +74,11 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: 'src/index_prod.html',
             ...brandingOptions.webpack.html,
+            newRelicAccountID: `3286825`,
+            newRelicAgentID: `322534651`,
+            newRelicTrustKey: `3286825`,
+            newRelicLicenseKey: `NRJS-eff8c9c844416a5083f`,
+            newRelicApplicationID: `322534651`,
         }),
         new webpack.EnvironmentPlugin({
             "PAYMENT_ENDPOINT": "https://prod-test.payment.badanamu.net/",
