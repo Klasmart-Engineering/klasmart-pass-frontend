@@ -5,6 +5,7 @@
   "scripts": {
     "build:beta": "rm dist/*;webpack --config webpack.beta.config.js",
     "build:test": "rm dist/*;webpack --config webpack.test.config.js",
+    "build:global-loadtest-k8s": "rm dist/*;webpack --config webpack.global.loadtest_k8s.config.js",
     "build:prod": "rm dist/*;webpack --config webpack.prod.config.js",
     "build:prod-uk": "rm dist/*;webpack --config webpack.prod.uk.config.js",
     "build:prod-pk": "rm dist/*;webpack --config webpack.prod.pk.config.js",
