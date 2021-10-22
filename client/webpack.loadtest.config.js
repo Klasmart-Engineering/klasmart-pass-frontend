@@ -88,7 +88,7 @@ module.exports = {
             "REGION_ENDPOINT": "https://prod.region.badanamu.net/",
             "ORGANIZATION_SEOUL_ENDPOINT": "https://seoul.organization-api.badanamu.net/",
             "PASS_FILTER": ["com.calmid.badanamu.esl.premium"],
-            "AUTH_RETURN_LINK": "https://auth.loadtest-k8s.kidsloop.live/",
+            "AUTH_RETURN_LINK": "https://auth.loadtest.kidsloop.live/",
         })
     ],
     optimization: {

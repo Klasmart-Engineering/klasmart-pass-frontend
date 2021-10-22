@@ -6,7 +6,7 @@
     "build:beta": "rm dist/*;webpack --config webpack.beta.config.js",
     "build:test": "rm dist/*;webpack --config webpack.test.config.js",
     "build:global-loadtest-k8s": "rm dist/*;AUTH_RETURN_LINK=https://auth.loadtest-k8s.kidsloop.live/ webpack --config webpack.loadtest.config.js",
-    "build:global-loadtest": "rm dist/*;AUTH_RETURN_LINK=https://auth.loadtest.kidsloop.live/ webpack --config webpack.loadtest.config.js",
+    "build:global-loadtest": "rm dist/*;webpack --config webpack.loadtest.config.js",
     "build:prod": "rm dist/*;webpack --config webpack.prod.config.js",
     "build:prod-uk": "rm dist/*;webpack --config webpack.prod.uk.config.js",
     "build:prod-pk": "rm dist/*;webpack --config webpack.prod.pk.config.js",
