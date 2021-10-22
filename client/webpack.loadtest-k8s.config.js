@@ -81,10 +81,10 @@ module.exports = {
             newRelicApplicationID: `322534651`,
         }),
         new webpack.EnvironmentPlugin({
-            "PAYMENT_ENDPOINT": "https://payment.badanamu.net/",
+            "PAYMENT_ENDPOINT": "https://payment.dev.badanamu.net/",
             "AUTH_ENDPOINT": "https://auth.dev.badanamu.net/",
             "ACCOUNT_ENDPOINT": "https://account.dev.badanamu.net/",
-            "PRODUCT_ENDPOINT": "https://product.badanamu.net/",
+            "PRODUCT_ENDPOINT": "https://product.dev.badanamu.net/",
             "REGION_ENDPOINT": "https://prod.region.badanamu.net/",
             "ORGANIZATION_SEOUL_ENDPOINT": "https://seoul.organization-api.badanamu.net/",
             "PASS_FILTER": ["com.calmid.badanamu.esl.premium"],
