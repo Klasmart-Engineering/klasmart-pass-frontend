@@ -5,7 +5,7 @@ import Typography from "@material-ui/core/Typography";
 import * as QueryString from "query-string";
 import React, { useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
-import { RouteComponentProps, useHistory } from "react-router";
+import { RouteComponentProps, useHistory } from "react-router-dom";
 
 import { redirectIfUnauthorized } from "../components/authorized";
 import BadanamuButton from "../components/button";

@@ -6,7 +6,7 @@ import { createStyles, makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import * as React from "react";
 import { FormattedMessage } from "react-intl";
-import { useHistory } from "react-router";
+import { useHistory } from "react-router-dom";
 
 import BadanamuButton from "../components/button";
 import BadanamuLogo from "../img/badanamu_logo.png";

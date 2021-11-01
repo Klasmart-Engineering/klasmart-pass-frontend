@@ -20,7 +20,7 @@ import clsx from "clsx";
 import React, { useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { useStore } from "react-redux";
-import { useHistory } from "react-router";
+import { useHistory } from "react-router-dom";
 
 import BadanamuButton from "../components/button";
 import { useRestAPI } from "../restapi";

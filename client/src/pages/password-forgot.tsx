@@ -9,7 +9,7 @@ import * as React from "react";
 import { useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { useSelector, useStore } from "react-redux";
-import { useHistory } from "react-router";
+import { useHistory } from "react-router-dom";
 
 import BadanamuButton from "../components/button";
 import BadanamuTextField from "../components/textfield";

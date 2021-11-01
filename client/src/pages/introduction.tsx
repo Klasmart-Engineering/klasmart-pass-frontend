@@ -8,7 +8,7 @@ import TabletIcon from "@material-ui/icons/Tablet";
 import React from "react";
 import { FormattedMessage } from "react-intl";
 import { useStore } from "react-redux";
-import { useHistory } from "react-router";
+import { useHistory } from "react-router-dom";
 
 import BadanamuButton from "../components/button";
 

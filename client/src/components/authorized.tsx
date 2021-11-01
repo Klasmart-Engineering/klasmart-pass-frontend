@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector, useStore } from "react-redux";
-import { useHistory } from "react-router";
+import { useHistory } from "react-router-dom";
 
 import { ActionTypes } from "../store/actions";
 import { State } from "../store/store";

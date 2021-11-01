@@ -10,7 +10,7 @@ import * as React from "react";
 import { useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { useSelector } from "react-redux";
-import { RouteComponentProps, useHistory } from "react-router";
+import { RouteComponentProps, useHistory } from "react-router-dom";
 
 import BadanamuButton from "../components/button";
 import BadanamuTextField from "../components/textfield";

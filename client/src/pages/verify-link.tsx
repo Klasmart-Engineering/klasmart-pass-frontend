@@ -10,7 +10,7 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { useStore } from "react-redux";
-import { useHistory } from "react-router";
+import { useHistory } from "react-router-dom";
 import { RouteComponentProps } from "react-router-dom";
 
 import { redirectIfUnverifiable } from "../components/authorized";
