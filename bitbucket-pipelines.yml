@@ -1,4 +1,4 @@
-image: node:10.15.3
+image: node:lts
 
 pipelines:
   default:
@@ -7,6 +7,6 @@ pipelines:
           - node
         script:
           - cd client
-          - npm install
+          - npm ci
           - npm run build:beta
           - npm run build:prod
